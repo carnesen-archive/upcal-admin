@@ -111,7 +111,7 @@ const swaggerSpec = {
  * @param route
  */
 function addApiRoute(route) {
-  app[route.method](C.apiBasePath + '/' + route.path, route.handler);
+  app[route.method](C.apiBasePath + route.path, route.handler);
   if (!(route.path in paths)) {
     paths[route.path] = {};
   }
