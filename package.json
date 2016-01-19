@@ -1,0 +1,53 @@
+{
+  "name": "union-park",
+  "description": "A web application for Union Park",
+  "version": "0.0.1",
+  "contributors": [
+    {
+      "name": "Chris Arnesen",
+      "email": "chris.arnesen@gmail.com"
+    },
+    {
+      "name": "John Crimmings",
+      "email": "john.crimmings@gmail.com"
+    },
+    {
+      "name": "Ashley Steele"
+    },
+    {
+      "name": "Andrew Dourgarian"
+    }
+  ],
+  "scripts": {
+    "lint": "eslint server",
+    "start": "node server/start.js",
+    "start:debug": "DEBUG=* npm run start",
+    "start:watch": "nodemon server/server.js",
+    "test": "npm run lint; mocha --opts .mocha.opts",
+    "test:watch": "mocha --opts .mocha.opts --watch"
+  },
+  "dependencies": {
+    "angular": "1.4.8",
+    "body-parser": "1.13.2",
+    "express": "4.13.1",
+    "jade": "1.11.0",
+    "loglevel": "1.4.0",
+    "morgan": "1.6.1"
+  },
+  "devDependencies": {
+    "chai": "3.4.1",
+    "eslint": "1.9.0",
+    "mocha": "2.3.4",
+    "nodemon": "1.8.1",
+    "supertest": "1.1.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carnesen/union-park.git"
+  },
+  "bugs": {
+    "url": "https://github.com/carnesen/union-park/issues"
+  },
+  "homepage": "https://github.com/carnesen/union-park#readme"
+}

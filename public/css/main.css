@@ -1,0 +1,18 @@
+body {
+  padding: 50px;
+}
+
+.page {
+  margin: auto;
+  background-image: url(/img/confectionary.png);
+}
+
+.logo {
+  width: 60%;
+}
+
+input {
+  padding: 1%;
+  margin: 1% auto;
+  display: block;
+}
