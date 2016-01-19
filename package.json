@@ -23,12 +23,13 @@
     "start": "node server/start.js",
     "start:debug": "DEBUG=* npm run start",
     "start:watch": "nodemon server/server.js",
-    "test": "npm run lint; mocha --opts .mocha.opts",
+    "test": "npm run lint; NODE_ENV=test mocha --opts .mocha.opts",
     "test:watch": "mocha --opts .mocha.opts --watch"
   },
   "dependencies": {
     "angular": "1.4.8",
     "body-parser": "1.13.2",
+    "config": "1.19.0",
     "express": "4.13.1",
     "jade": "1.11.0",
     "loglevel": "1.4.0",

@@ -10,23 +10,26 @@ var path = require('path');
 
 // Installed dependencies
 var express = require('express');
-var logger = require('morgan');
+var morgan = require('morgan');
 var bodyParser = require('body-parser');
+
+// Local dependencies
+const log = require('./Logger');
+const C = require('./Constants');
 
 /**
  * Module variables
  */
 var app = express();
 var server = http.createServer(app);
-const PORT = process.env.PORT || 3000;
 var routes = [];
 
 /**
  * Configure the express app
  */
 
-// Console log all http requests
-app.use(logger('dev'));
+// log all http requests
+app.use(morgan('dev', { stream: log.stream }));
 
 // view engine setup. Looks for "views" subdirectory in current working directory
 app.set('view engine', 'jade');
@@ -43,18 +46,18 @@ server.on('error', (error) => {
     throw error;
   }
 
-  var portString = 'Port ' + PORT;
+  var portString = 'Port ' + C.port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
 
     case 'EACCES':
-      console.error(portString + ' requires elevated privileges');
+      log.error(portString + ' requires elevated privileges');
       process.exit(1);
       break;
 
     case 'EADDRINUSE':
-      console.error(portString + ' is already in use');
+      log.error(portString + ' is already in use');
       process.exit(1);
       break;
 
@@ -66,7 +69,7 @@ server.on('error', (error) => {
 
 // attach "listening" handler to http server
 server.on('listening', () => {
-  console.log('Listening on port ' + PORT);
+  log.info('Listening on port ' + C.port);
 });
 
 /**
@@ -93,7 +96,7 @@ function start(done) {
     });
   });
 
-  server.listen(app.get('port'), done);
+  server.listen(C.port, done);
 
 }
 

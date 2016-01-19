@@ -1,0 +1,5 @@
+---
+
+port: 52345
+
+logLevel: error
