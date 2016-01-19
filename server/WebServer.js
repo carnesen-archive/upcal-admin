@@ -31,9 +31,9 @@ var routes = [];
 // log all http requests
 app.use(morgan('dev', { stream: log.stream }));
 
-// view engine setup. Looks for "views" subdirectory in current working directory
+// view engine setup
 app.set('view engine', 'jade');
-app.set('views', path.join(process.cwd(), 'views'));
+app.set('views', path.join(__dirname, 'views'));
 
 // Put POST data into request.body
 app.use(bodyParser.json());

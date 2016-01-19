@@ -10,4 +10,6 @@ Logger.stream = {
   }
 };
 
+Logger.debug(C);
+
 module.exports = Logger;
