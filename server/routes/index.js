@@ -1,13 +1,9 @@
 'use strict';
 
+var router = require('express').Router();
+
 const C = require('../Constants');
 
-var context = { title: C.name };
+router.get('/', (req, res) => res.render('index', { title: C.name }));
 
-module.exports = {
-  path: '/',
-  method: 'get',
-  handler(req, res) {
-    res.render('index', context);
-  }
-};
+module.exports = router;

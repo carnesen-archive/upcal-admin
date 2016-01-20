@@ -12,8 +12,6 @@ var path = require('path');
 var express = require('express');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
-var initializeSwagger = require('swagger-tools').initializeMiddleware;
-
 
 // Local dependencies
 const log = require('./Logger');
@@ -24,7 +22,6 @@ const C = require('./Constants');
  */
 var app = express();
 var server = http.createServer(app);
-var paths = {};
 
 /**
  * Configure the express app
@@ -86,90 +83,38 @@ function stop(done) {
 }
 
 /**
- *
- * @param url
- * @param path
- */
-function addStatic(url, path) {
-  app.use(url, express.static(path));
-}
-
-const swaggerSpec = {
-  swagger: '2.0',
-  info: {
-    description: C.description,
-    version: C.gitVersion,
-    title: C.name
-  },
-  basePath: C.apiBasePath,
-  schemes: ['http'],
-  paths: paths
-};
-
-/**
- *
- * @param route
- */
-function addApiRoute(route) {
-  app[route.method](C.apiBasePath + route.path, route.handler);
-  if (!(route.path in paths)) {
-    paths[route.path] = {};
-  }
-
-  paths[route.path][route.method] = {
-    description: route.description || '',
-    summary: route.summary || '',
-    parameters: route.parameters || [],
-    produces: ['application/json'],
-    responses: route.responses
-  };
-}
-
-function addRoute(route) {
-  app[route.method](route.path, route.handler);
-}
-
-/**
  * Applies 404 and 505 catchall routes (must go last) and starts the server
  * @param done
  */
 function start(done) {
 
-  done = done || function() {};
+  done = done || function () {};
 
-  initializeSwagger(swaggerSpec, swaggerMiddleware => {
-    app.use(swaggerMiddleware.swaggerUi({apiDocs: '/api/swagger'}));
-
-    // catch requests for non-existent routes and respond with 404 "not found"
-    app.use((req, res) => {
-      res.status(404);
-      res.render('404', {
-        path: req.url,
-        method: req.method
-      });
+  // catch requests for non-existent routes and respond with 404 "not found"
+  app.use((req, res) => {
+    res.status(404);
+    res.render('404', {
+      path: req.url,
+      method: req.method
     });
-
-    // Internal server error
-    app.use((err, req, res) => {
-      res.status(err.status || 500);
-      res.render('500', {
-        message: err.message,
-        error: err
-      });
-    });
-
-    server.listen(C.port, done);
   });
 
+  // Internal server error
+  app.use((err, req, res) => {
+    res.status(err.status || 500);
+    res.render('500', {
+      message: err.message,
+      error: err
+    });
+  });
+
+  server.listen(C.port, done);
 }
 
 module.exports = {
 
   app,
   server,
-  addApiRoute,
-  addRoute,
-  addStatic,
   start,
   stop
 

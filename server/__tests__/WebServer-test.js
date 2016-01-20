@@ -1,6 +1,4 @@
-var request = require('supertest');
-
-process.env.PORT = 34031;
+//var request = require('supertest');
 
 var ws = require('../WebServer');
 
@@ -12,12 +10,6 @@ describe('WebServer', () => {
 
       ws.stop(done);
 
-    });
-  });
-
-  ws.routes.forEach(route => {
-    it(route.method + ' ' + route.path, (done) => {
-      request(ws.app)[route.method](route.path).expect(200, done);
     });
   });
 

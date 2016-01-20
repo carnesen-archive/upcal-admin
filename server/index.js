@@ -2,20 +2,22 @@
 
 var path = require('path');
 
+const express = require('express');
+
 var WebServer = require('./WebServer');
 const indexRoute = require('./routes/index');
 const apiRoutes = require('./apiRoutes/index');
 const C = require('./Constants');
 
 // Mount static "public" directory
-WebServer.addStatic('/', path.join(C.topDir, 'public'));
+WebServer.app.use(express.static(path.join(C.topDir, 'public')));
 
 // Mount static "dist" directory
-WebServer.addStatic('/', path.join(C.topDir, 'dist'));
+WebServer.app.use(express.static(path.join(C.topDir, 'public')));
 
-WebServer.addRoute(indexRoute);
+WebServer.app.use(indexRoute);
 
-apiRoutes.forEach(WebServer.addApiRoute);
+apiRoutes.forEach(router => WebServer.app.use('/api', router));
 
 module.exports = {
   WebServer
