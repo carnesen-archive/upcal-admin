@@ -16,6 +16,8 @@ var bodyParser = require('body-parser');
 // Local dependencies
 const log = require('./Logger');
 const C = require('./Constants');
+const indexRouter = require('./routes/index');
+const apiRoutes = require('./apiRoutes/index');
 
 /**
  * Module variables
@@ -40,6 +42,12 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 // pretty print JSON responses
 app.set('json spaces', 2);
+
+// Mount routes
+app.use(express.static(path.join(C.topDir, 'public')));
+app.use(express.static(path.join(C.topDir, 'dist')));
+app.use(indexRouter);
+apiRoutes.forEach(router => app.use('/api', router));
 
 // attach error handler for http server
 server.on('error', (error) => {

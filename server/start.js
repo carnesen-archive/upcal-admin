@@ -1,5 +1,5 @@
 'use strict';
 
-var unionPark = require('./index');
+var WebServer = require('./WebServer');
 
-unionPark.WebServer.start();
+WebServer.start();
