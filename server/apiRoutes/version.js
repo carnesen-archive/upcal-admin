@@ -2,7 +2,7 @@
 
 var router = require('express').Router();
 
-var C = require('../constants');
+var C = require('../Constants');
 
 router.get('/version', (req, res) => {
   res.send({
