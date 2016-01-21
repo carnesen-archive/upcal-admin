@@ -11,5 +11,7 @@ module.exports = {
   gitVersion: process.env.npm_package_gitHead,
   topDir: path.join(__dirname, '..'),
   port: process.env.PORT || 3000,
-  logLevel: process.env.LOG_LEVEL || 'debug'
+  logLevel: process.env.LOG_LEVEL || 'debug',
+  googleApiKey: process.env.GOOGLE_API_KEY,
+  node_env: process.env.NODE_ENV || 'development'
 };

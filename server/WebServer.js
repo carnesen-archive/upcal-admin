@@ -115,14 +115,25 @@ function start(done) {
   });
 
   // Internal server error
-  app.use(function(err, req, res) {
-    res.status(err.status || 500);
-    res.render('500', {
-      message: err.message,
-      error: err
+  if (C.node_env === 'production') {
+    // no stack traces leaked to user
+    app.use(function(err, req, res) {
+      res.status(err.status || 500);
+      res.render('500', {
+        message: err.message,
+        error: {}
+      });
     });
-  });
-
+  } else {
+    // will print stacktrace
+    app.use(function(err, req, res) {
+      res.status(err.status || 500);
+      res.render('500', {
+        message: err.message,
+        error: err
+      });
+    });
+  }
   server.listen(C.port, done);
 }
 
