@@ -12,10 +12,11 @@
       "email": "john.crimmings@gmail.com"
     },
     {
-      "name": "Ashley Steele"
+      "name": "Andrew Dourgarian"
     },
     {
-      "name": "Andrew Dourgarian"
+      "name": "Ashley Steele",
+      "email": "aasteele10@yahoo.com"
     }
   ],
   "scripts": {
@@ -44,6 +45,7 @@
   "devDependencies": {
     "chai": "3.4.1",
     "eslint": "1.9.0",
+    "karma": "0.13.19",
     "mocha": "2.3.4",
     "nock": "5.2.1",
     "nodemon": "1.8.1",

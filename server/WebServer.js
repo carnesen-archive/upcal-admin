@@ -14,10 +14,10 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 
 // Local dependencies
-const log = require('./Logger');
-const C = require('./Constants');
-const indexRouter = require('./routes/index');
-const apiRoutes = require('./apiRoutes/index');
+var log = require('./Logger');
+var C = require('./Constants');
+var indexRouter = require('./routes/index');
+var apiRoutes = require('./apiRoutes/index');
 
 /**
  * Module variables
@@ -47,10 +47,12 @@ app.set('json spaces', 2);
 app.use(express.static(path.join(C.topDir, 'public')));
 app.use(express.static(path.join(C.topDir, 'dist')));
 app.use(indexRouter);
-apiRoutes.forEach(router => app.use('/api', router));
+apiRoutes.forEach(function(router) {
+  app.use('/api', router);
+});
 
 // attach error handler for http server
-server.on('error', (error) => {
+server.on('error', function(error) {
 
   if (error.syscall !== 'listen') {
     throw error;
@@ -78,7 +80,7 @@ server.on('error', (error) => {
 });
 
 // attach "listening" handler to http server
-server.on('listening', () => {
+server.on('listening', function() {
   log.info('Listening on port ' + C.port);
 });
 
@@ -96,10 +98,10 @@ function stop(done) {
  */
 function start(done) {
 
-  done = done || function () {};
+  done = done || function() {};
 
   // catch requests for non-existent routes and respond with 404 "not found"
-  app.use((req, res) => {
+  app.use(function(req, res) {
     res.status(404);
     res.render('404', {
       path: req.url,
@@ -108,7 +110,7 @@ function start(done) {
   });
 
   // Internal server error
-  app.use((err, req, res) => {
+  app.use(function(err, req, res) {
     res.status(err.status || 500);
     res.render('500', {
       message: err.message,
@@ -121,11 +123,9 @@ function start(done) {
 
 module.exports = {
 
-  app,
-  server,
-  start,
-  stop
+  app: app,
+  server: server,
+  start: start,
+  stop: stop
 
 };
-
-

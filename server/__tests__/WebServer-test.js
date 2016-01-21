@@ -2,11 +2,11 @@
 
 var ws = require('../WebServer');
 
-describe('WebServer', () => {
+describe('WebServer', function() {
 
-  it('starts and stops', (done) => {
+  it('starts and stops', function(done) {
 
-    ws.start(() => {
+    ws.start(function() {
 
       ws.stop(done);
 

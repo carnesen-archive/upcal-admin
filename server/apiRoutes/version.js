@@ -4,7 +4,7 @@ var router = require('express').Router();
 
 var C = require('../Constants');
 
-router.get('/version', (req, res) => {
+router.get('/version', function(req, res) {
   res.send({
     git: C.gitVersion,
     npm: C.npmVersion
