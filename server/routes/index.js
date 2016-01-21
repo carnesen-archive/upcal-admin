@@ -2,8 +2,10 @@
 
 var router = require('express').Router();
 
-const C = require('../Constants');
+var C = require('../Constants');
 
-router.get('/', (req, res) => res.render('index', { title: C.name }));
+router.get('/', function(req, res) {
+  res.render('index', { title: C.name });
+});
 
 module.exports = router;

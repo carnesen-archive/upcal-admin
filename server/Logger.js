@@ -1,6 +1,6 @@
 var Logger = require('loglevel');
 
-const C = require('./Constants');
+var C = require('./Constants');
 
 Logger.setLevel(C.logLevel);
 

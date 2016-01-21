@@ -1,10 +1,10 @@
 'use strict';
 
-const path = require('path');
+var path = require('path');
 
-const config = require('config');
+var config = require('config');
 
-const pkg = require('../package.json');
+var pkg = require('../package.json');
 
 module.exports = {
   name: pkg.name,
