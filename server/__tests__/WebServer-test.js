@@ -1,16 +1,34 @@
-//var request = require('supertest');
+'use strict';
 
-var ws = require('../WebServer');
+var request = require('supertest');
+
+var WebServer = require('../WebServer');
 
 describe('WebServer', function() {
 
   it('starts and stops', function(done) {
 
-    ws.start(function() {
+    WebServer.start(function() {
 
-      ws.stop(done);
+      WebServer.stop(done);
 
     });
+  });
+
+  it('get /', function(done) {
+    request(WebServer.app).get('/').expect(200, done);
+  });
+
+  it('get /lib/angular.min.js', function(done) {
+    request(WebServer.app).get('/lib/angular.min.js').expect(200, done);
+  });
+
+  it('get /api/version', function(done) {
+    request(WebServer.app).get('/api/version').expect(200, done);
+  });
+
+  it('404\'s on non-existent path', function(done) {
+    request(WebServer.app).get('/non-existent-path').expect(404, done);
   });
 
 });
