@@ -45,10 +45,15 @@ app.set('json spaces', 2);
 
 // Mount routes
 app.use(express.static(path.join(C.topDir, 'public')));
-app.use(express.static(path.join(C.topDir, 'dist')));
+
 app.use(indexRouter);
+
 apiRoutes.forEach(function(router) {
   app.use('/api', router);
+});
+
+app.get('/lib/angular.min.js', function(req, res) {
+  res.sendFile(path.join(C.topDir, 'node_modules', 'angular', 'angular.min.js'));
 });
 
 // attach error handler for http server
