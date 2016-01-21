@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "angular": "1.4.8",
+    "angular-route": "^1.4.9",
     "angular-router": "0.0.2",
     "body-parser": "1.13.2",
     "bookshelf": "0.9.1",
