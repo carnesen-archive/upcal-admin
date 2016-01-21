@@ -2,8 +2,6 @@
 
 var path = require('path');
 
-var config = require('config');
-
 var pkg = require('../package.json');
 
 module.exports = {
@@ -12,6 +10,6 @@ module.exports = {
   npmVersion: pkg.version,
   gitVersion: process.env.npm_package_gitHead,
   topDir: path.join(__dirname, '..'),
-  port: process.env.port || config.get('port'),
-  logLevel: config.get('logLevel')
+  port: process.env.PORT || 3000,
+  logLevel: process.env.LOG_LEVEL || 'debug'
 };
