@@ -33,11 +33,11 @@
   },
   "dependencies": {
     "angular": "1.4.8",
-    "angular-route": "^1.4.9",
-    "angular-router": "0.0.2",
+    "angular-route": "1.4.9",
     "body-parser": "1.13.2",
     "bookshelf": "0.9.1",
     "config": "1.19.0",
+    "dotenv": "2.0.0",
     "express": "4.13.1",
     "jade": "1.11.0",
     "karma": "0.13.19",

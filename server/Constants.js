@@ -2,6 +2,11 @@
 
 var path = require('path');
 
+require('dotenv').config({
+  path: path.join(__dirname, '..', '.env'),
+  silent: true
+});
+
 var pkg = require('../package.json');
 
 module.exports = {
