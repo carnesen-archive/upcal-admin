@@ -2,16 +2,15 @@ doctype html
 html(ng-app="unionPark")
   head
     title= title
-    link(rel='stylesheet', href='/css/main.css')
     script(src='lib/angular.min.js')
-    script(src='vendors/angular-route.min.js')
+    script(src='lib/angular-route.min.js')
     script(src="/scripts/appConfig.js")
     script(src='/scripts/factoriesServices/ccFactory.js')
     script(src='/scripts/factoriesServices/loginFactory.js')
     script(src='/scripts/controllers/ccTableCtrl.js')
     script(src='/scripts/controllers/editDataCtrl.js')
     script(src='/scripts/controllers/loginCtrl.js')
-    base(href='/')
+    link(rel='stylesheet', href='/css/main.css')
   body
     .page
       header

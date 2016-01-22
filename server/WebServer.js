@@ -56,6 +56,18 @@ app.get('/lib/angular.min.js', function(req, res) {
   res.sendFile(path.join(C.topDir, 'node_modules', 'angular', 'angular.min.js'));
 });
 
+app.get('/lib/angular.min.js.map', function(req, res) {
+  res.sendFile(path.join(C.topDir, 'node_modules', 'angular', 'angular.min.js.map'));
+});
+
+app.get('/lib/angular-route.min.js', function(req, res) {
+  res.sendFile(path.join(C.topDir, 'node_modules', 'angular-route', 'angular-route.min.js'));
+});
+
+app.get('/lib/angular-route.min.js.map', function(req, res) {
+  res.sendFile(path.join(C.topDir, 'node_modules', 'angular-route', 'angular-route.min.js.map'));
+});
+
 
 
 // attach error handler for http server
