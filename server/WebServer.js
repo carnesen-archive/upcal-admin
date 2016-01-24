@@ -129,7 +129,7 @@ function start(done) {
   });
 
   // Internal server error
-  if (C.node_env === 'production') {
+  if (C.env === 'production') {
     // no stack traces leaked to user
     app.use(function(err, req, res) {
       res.status(err.status || 500);
