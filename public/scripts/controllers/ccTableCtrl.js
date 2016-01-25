@@ -23,4 +23,6 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
     console.log('my new tag:',newTag);
     $scope.currentCue.tags.push(newTag);
   };
+
+
 }]);
