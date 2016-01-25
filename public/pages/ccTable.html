@@ -1,1 +1,14 @@
 <h1>ccTable</h1>
+<table>
+  <tr ng-repeat="cue in cues" ng-click="openEdit(cue.id)">
+    <td>cue.name</td>
+    <td>cue.status</td>
+    <td>cue.startDate</td>
+    <td>cue.endDate</td>
+    <td>cue.tags</td>
+  </tr>
+</table>
+<form ng-show="formOpen=true">
+  <lable for="Name">Name</lable>
+  <input type="text" name="name" ng-model="name">
+</form>
