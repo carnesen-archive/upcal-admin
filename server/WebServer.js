@@ -68,7 +68,9 @@ app.get('/lib/angular-route.min.js.map', function(req, res) {
   res.sendFile(path.join(C.topDir, 'node_modules', 'angular-route', 'angular-route.min.js.map'));
 });
 
-
+app.get('/lib/ng-tags-input/build/ng-tags-input.min.js', function(req, res) {
+  res.sendFile(path.join(C.topDir, 'node_modules', 'ng-tags-input', 'build', 'ng-tags-input.min.js'));
+});
 
 // attach error handler for http server
 server.on('error', function(error) {

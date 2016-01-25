@@ -24,7 +24,7 @@ app.factory('ccFactory', ['$http', function($http){
 
   // returns opposite of bool
   myService.toggle = function(bool){
-    !bool;
+    return !bool;
   };
 
 

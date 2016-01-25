@@ -1,14 +1,14 @@
 <h1>ccTable</h1>
 <table>
   <tr ng-repeat="cue in cues" ng-click="openEdit(cue)">
-    <td>cue.name</td>
-    <td>cue.status</td>
-    <td>cue.startDate</td>
-    <td>cue.endDate</td>
-    <td>cue.tags</td>
+    <td>{{cue.name}}</td>
+    <td>{{cue.status}}</td>
+    <td>{{cue.startDate.toDateString()}}</td>
+    <td>{{cue.endDate.toDateString()}}</td>
+    <td><p class="tag" ng-repeat="tag in cue.tags">{{tag}}</td>
   </tr>
 </table>
-<form ng-show="editForm===true">
+<form ng-show="editForm">
   <lable for="Name">Name</lable>
   <input type="text" name="name" ng-model="currentCue.name">
   <lable for="status">Status</lable>
@@ -19,6 +19,6 @@
   <input type="date" name="endDate" ng-model="endDate">
   <label for="description">Description</label>
   <input type="text" name="description" ng-model="currentCue.description">
-  <lable for="tags">Tags</lable>
-  <input type="text" name="tags" ng-model="currentCue.tags">
-</form>
+  <h4>Tags</h4>
+  <tags-input type="text" class="editTags" ng-model="currentCue.tags">
+</form>nodem
