@@ -68,6 +68,10 @@ app.get('/lib/angular-route.min.js.map', function(req, res) {
   res.sendFile(path.join(C.topDir, 'node_modules', 'angular-route', 'angular-route.min.js.map'));
 });
 
+app.get('/lib/angular-material.css', function(req, res) {
+  res.sendFile(path.join(C.topDir, 'node_modules', 'angular-material', 'angular-material.css'));
+});
+
 
 
 // attach error handler for http server

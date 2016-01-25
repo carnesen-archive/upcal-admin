@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "angular": "1.4.8",
+    "angular-material": "1.0.2",
     "angular-route": "1.4.9",
     "bluebird": "3.1.1",
     "body-parser": "1.13.2",
@@ -46,8 +47,8 @@
     "karma": "0.13.19",
     "knex": "0.9.0",
     "loglevel": "1.4.0",
-    "moment": "2.11.1",
     "mkdirp": "0.5.1",
+    "moment": "2.11.1",
     "morgan": "1.6.1",
     "passport": "0.3.2",
     "passport-google-oauth": "0.2.0",
