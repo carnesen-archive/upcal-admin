@@ -34,6 +34,17 @@ var Schema = {
         id: {type: 'increments', nullable: false, primary: true},
         name: {type: 'string', maxlength: 30, nullable: false}
         }
+
+
+    // a table for many-to-many relation between tags table & consumer cues
+    cues_tags: {
+    id: {type: 'increments', nullable: false, primary: true},
+    cue_id: {type: 'integer', nullable: false, unsigned: true, reference: 'consumercues.id'}, // check this
+    tag_id: {type: "integer", nullable: false, unsigned: true, references: "tags.id"}
+    }
+
 }//end of schema
+
+module.exports = Schema;
 
  */
