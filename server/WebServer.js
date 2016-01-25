@@ -68,6 +68,10 @@ app.get('/lib/ng-tags-input.min.css', function(req, res) {
   res.sendFile(path.join(C.topDir, 'node_modules', 'ng-tags-input', 'build', 'ng-tags-input.min.css'));
 });
 
+app.get('/lib/angular-material.css', function(req, res) {
+  res.sendFile(path.join(C.topDir, 'node_modules', 'angular-material', 'angular-material.css'));
+});
+
 // attach error handler for http server
 server.on('error', function(error) {
 
