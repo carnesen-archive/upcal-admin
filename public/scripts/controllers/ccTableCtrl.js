@@ -1,4 +1,6 @@
-app.controller('ccTableCtrl', ['$scope', function ($scope){
-  $scope.message = 'Welcome to the lkuawehflkhaefsklhksaef.';
-  console.log('aksheflkjsfle');
+app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactory){
+  ccFactory.getTable().then(function(data){
+    console.log(data);
+  })
+
 }]);
