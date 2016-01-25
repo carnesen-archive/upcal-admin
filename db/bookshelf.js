@@ -48,6 +48,7 @@ db.knex.schema.hasTable('tags').then(function(exists){
             "use strict";
             tag.increments('id').primary(); // id
             tag.string('tag_name'); // creates column for "tag name" w/ type string.
+            tab.integer('cue_id'); // creates column for "cue_id" with type integer.
         }).then(function(table){
             console.log('Created tags table', table);
         });
@@ -61,9 +62,11 @@ db.knex.schema.hasTable('calendars').then(function(exists){
         db.knex.schema.createTable('calendars', function(calendar){
             calendar.increments('id').primary(); // id
             calendar.string('calendar_name'); // creates column for "calendar name" with type string
+            calendar.integer('tag_id'); // creates column for 'tag_id" with type integer.
         }).then(function(table){
             console.log('Created calendar table', table);
         });
     }
 });
 
+module.exports = db;
