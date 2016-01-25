@@ -14,7 +14,8 @@ var knex = require('knex')({
         host: 'localhost',
         user: '',
         password: '',
-        database: 'unionpark'
+        database: 'unionparkmktg',
+        debug: true
     }
 });
 
@@ -48,7 +49,7 @@ db.knex.schema.hasTable('tags').then(function(exists){
             "use strict";
             tag.increments('id').primary(); // id
             tag.string('tag_name'); // creates column for "tag name" w/ type string.
-            tab.integer('cue_id'); // creates column for "cue_id" with type integer.
+            tag.integer('cue_id'); // creates column for "cue_id" with type integer.
         }).then(function(table){
             console.log('Created tags table', table);
         });
