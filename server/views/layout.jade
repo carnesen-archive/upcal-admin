@@ -4,14 +4,15 @@ html(ng-app="unionPark")
     title= title
     script(src='lib/angular.min.js')
     script(src='lib/angular-route.min.js')
-    script(src='/lib/ng-tags-input/build/ng-tags-input.min.js')
+    script(src='lib/ng-tags-input.min.js')
     script(src="/scripts/appConfig.js")
     script(src='/scripts/factoriesServices/ccFactory.js')
     script(src='/scripts/factoriesServices/loginFactory.js')
     script(src='/scripts/controllers/ccTableCtrl.js')
     script(src='/scripts/controllers/editDataCtrl.js')
     script(src='/scripts/controllers/loginCtrl.js')
-    link(rel='stylesheet', href='/css/main.css')
+    link(rel="stylesheet" href='/lib/ng-tags-input.min.css')
+    link(rel='stylesheet' href='/css/main.css')
   body
     .page
       header
