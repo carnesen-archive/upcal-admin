@@ -12,7 +12,7 @@
     </td>
   </tr>
 </table>
-<form ng-show="editForm">
+<form ng-show="editForm" ng-submit="saveCue()">
   <lable for="Name">Name</lable>
   <input type="text" name="name" ng-model="currentCue.name">
   <lable for="status">Status</lable>
@@ -25,4 +25,5 @@
   <input type="text" name="description" ng-model="currentCue.description">
   <h4>Tags</h4>
   <tags-input type="text" ng-model="currentCue.tags">
+  <input type="submit" value="Save Cue">
 </form>

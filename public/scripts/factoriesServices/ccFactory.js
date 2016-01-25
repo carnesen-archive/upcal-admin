@@ -27,6 +27,5 @@ app.factory('ccFactory', ['$http', function($http){
     return !bool;
   };
 
-
   return myService;
 }]);
