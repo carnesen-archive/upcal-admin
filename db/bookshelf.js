@@ -4,7 +4,7 @@
 
 /*
 
-Bookshelf library initiliazed by passing an initialized Knex client instance.
+Bookshelf library initialized by passing an initialized Knex client instance.
 Initialization should only happen once in app.
 */
 
@@ -28,7 +28,9 @@ db.knex.schema.hasTable('cues').then(function(exists){
     if(!exists){
         db.knex.schema.createTable('cues', function(cue){
             "use strict";
+            // source id for google calendar event as  string
             cue.increments('id').primary(); // id
+            cue.string('google_id'); // id tied to google calendar events
             cue.string('name'); // creates column for 'name' w/ type string.
             cue.enu('status', ['Committed', 'Pending','Deleted']); // creates column for status w/ enumeration for committed/pending/deleted
             cue.date('start_date'); // creates column for start_date with type date.
