@@ -1,5 +1,4 @@
 body {
-  padding: 50px;
 }
 
 .page {
@@ -15,4 +14,9 @@ input {
   padding: 1%;
   margin: 1% auto;
   display: block;
+}
+.md-toolbar-tools h1 {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: inherit;
 }

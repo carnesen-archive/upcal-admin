@@ -5,21 +5,30 @@ html(ng-app="unionPark")
     script(src='lib/angular.min.js')
     script(src='lib/angular-route.min.js')
     script(src='lib/ng-tags-input.min.js')
+    script(src='/lib/angular-material.min.js')
+    script(src='/lib/angular-aria.min.js')
+    script(src='/lib/angular-animate.min.js')
     script(src="/scripts/appConfig.js")
     script(src='/scripts/factoriesServices/ccFactory.js')
     script(src='/scripts/factoriesServices/loginFactory.js')
     script(src='/scripts/controllers/ccTableCtrl.js')
     script(src='/scripts/controllers/editDataCtrl.js')
     script(src='/scripts/controllers/loginCtrl.js')
+    script(src='/scripts/controllers/layoutCtrl.js')
     link(rel="stylesheet" href='/lib/ng-tags-input.min.css')
+    link(rel='stylesheet' href='/lib/angular-material.css')
     link(rel='stylesheet' href='/css/main.css')
   body
     .page
-      header
-        .row
-          .col-md-2
-          .col-md-2
+      header(ng-controller="layoutCtrl")
+        md-toolbar(layout="row")
+          .md-toolbar-tools
+            md-button( ng-click="toggleSidenav('left')" hide-gt-sm class="md-icon-buttonb")
+              md-icon(aria-label="menu" md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg")
             h1= title
-
+        //.row
+        //  .col-md-2
+        //  .col-md-2
+        //    h1= title
       block content
 

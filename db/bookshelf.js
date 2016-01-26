@@ -47,7 +47,7 @@ db.knex.schema.hasTable('tags').then(function(exists){
         db.knex.schema.createTable('tags', function(tag){
             "use strict";
             tag.increments('id').primary(); // id
-            tag.string('tag_name'); // creates column for "tag name" w/ type string.
+            tag.string('tag_name'); // creates column for "tag name" w/ type string. // pass in json object for each tag {text: 'name'}
             tab.integer('cue_id'); // creates column for "cue_id" with type integer.
         }).then(function(table){
             console.log('Created tags table', table);
