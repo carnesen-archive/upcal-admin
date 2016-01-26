@@ -72,6 +72,18 @@ app.get('/lib/angular-material.css', function(req, res) {
   res.sendFile(path.join(C.topDir, 'node_modules', 'angular-material', 'angular-material.css'));
 });
 
+app.get('/lib/angular-material.min.js', function(req, res) {
+  res.sendFile(path.join(C.topDir, 'node_modules', 'angular-material', 'angular-material.min.js'));
+});
+
+app.get('/lib/angular-aria.min.js', function(req, res) {
+  res.sendFile(path.join(C.topDir, 'node_modules', 'angular-aria', 'angular-aria.min.js'));
+});
+
+app.get('/lib/angular-animate.min.js', function(req, res) {
+  res.sendFile(path.join(C.topDir, 'node_modules', 'angular-animate', 'angular-animate.min.js'));
+});
+
 // attach error handler for http server
 server.on('error', function(error) {
 
