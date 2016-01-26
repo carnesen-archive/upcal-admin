@@ -4,7 +4,7 @@
 
 /*
 
-Bookshelf library initiliazed by passing an initialized Knex client instance.
+Bookshelf library initialized by passing an initialized Knex client instance.
 Initialization should only happen once in app.
 */
 
@@ -14,7 +14,8 @@ var knex = require('knex')({
         host: 'localhost',
         user: '',
         password: '',
-        database: 'unionpark'
+        database: 'unionparkmktg',
+        debug: true
     }
 });
 
@@ -27,7 +28,9 @@ db.knex.schema.hasTable('cues').then(function(exists){
     if(!exists){
         db.knex.schema.createTable('cues', function(cue){
             "use strict";
+            // source id for google calendar event as  string
             cue.increments('id').primary(); // id
+            cue.string('google_id'); // id tied to google calendar events
             cue.string('name'); // creates column for 'name' w/ type string.
             cue.enu('status', ['Committed', 'Pending','Deleted']); // creates column for status w/ enumeration for committed/pending/deleted
             cue.date('start_date'); // creates column for start_date with type date.
@@ -47,8 +50,8 @@ db.knex.schema.hasTable('tags').then(function(exists){
         db.knex.schema.createTable('tags', function(tag){
             "use strict";
             tag.increments('id').primary(); // id
-            tag.string('tag_name'); // creates column for "tag name" w/ type string. // pass in json object for each tag {text: 'name'}
-            tab.integer('cue_id'); // creates column for "cue_id" with type integer.
+            tag.string('tag_name'); // creates column for "tag name" w/ type string. pass in json object for each tag {text: 'name'}
+            tag.integer('cue_id'); // creates column for "cue_id" with type integer.
         }).then(function(table){
             console.log('Created tags table', table);
         });
