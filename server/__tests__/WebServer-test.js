@@ -1,5 +1,7 @@
 'use strict';
 
+var path = require('path');
+
 var request = require('supertest');
 
 var WebServer = require('../WebServer');
@@ -29,6 +31,13 @@ describe('WebServer', function() {
 
   it('404\'s on non-existent path', function(done) {
     request(WebServer.app).get('/non-existent-path').expect(404, done);
+  });
+
+  WebServer.libs.forEach(function(relativePath) {
+    var fileName = path.basename(relativePath);
+    it('get ' + '/lib/' + fileName, function(done) {
+      request(WebServer.app).get('/lib/' + fileName).expect(200, done);
+    })
   });
 
 });
