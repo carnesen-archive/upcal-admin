@@ -84,6 +84,21 @@ app.get('/lib/angular-animate.min.js', function(req, res) {
   res.sendFile(path.join(C.topDir, 'node_modules', 'angular-animate', 'angular-animate.min.js'));
 });
 
+// Configure session and session storage
+// MemoryStory isn't vaiable in a multi-server configuration, so we use
+// encrypted cookies.  Redis or Memcache is a great option for more secure sessions.
+
+app.use(session({
+  secret: config.secret,
+  signed: true
+}));
+
+//OAuth2
+
+var oauth2 = require('./lib/oauth2')(config.oauth2);
+app.use(oauth2.router);
+
+
 // attach error handler for http server
 server.on('error', function(error) {
 
