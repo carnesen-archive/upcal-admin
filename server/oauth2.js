@@ -146,7 +146,7 @@ module.exports = function(C){
     var stateToken = generateStateToken();
     var authorizeUrl = getClient().generateAuthUrl({
       access_type: 'offline',
-      scope: config.scopes || ['email', 'profile'],
+      scope: C.scopes || ['email', 'profile'],
       state: stateToken
     });
     req.session.oauth2statetoken = stateToken;
