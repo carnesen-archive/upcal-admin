@@ -1,41 +1,72 @@
-<div layout="row" flex>
-  <md-sidenav layout="column" class="sm-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+<body layout="column">
+  <div layout="row" flex>
+    <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2"
+                md-component-id="left"
+                ng-click="ul.toggleList()" aria-label="Show User List"
+                md-is-locked-open="$mdMedia('gt-sm')">
 
-  </md-sidenav>
-      <table md-colresize="md-colresize" class="md-table">
-        <thead>
+      <md-toolbar class="md-whiteframe-z1">
+        <h3>Filter</h3>
+      </md-toolbar>
+
+      <!--<md-list>-->
+        <!--<md-list-item ng-repeat="it in ul.users">-->
+          <!--<md-button ng-click="ul.selectUser(it)" ng-class="{'selected' : it === ul.selected }">-->
+            <!--<md-icon md-svg-icon="{{it.avatar}}" class="avatar"></md-icon>-->
+            <!--{{it.name}}-->
+          <!--</md-button>-->
+        <!--</md-list-item>-->
+      <!--</md-list>-->
+
+    </md-sidenav>
+    <div flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2">
+
+      <md-toolbar layout="row" class="md-whiteframe-z1">
+        <h3>Consumer Cues Table</h3>
+      </md-toolbar>
+
+      <md-content flex id="content">
+        <table md-colresize="md-colresize" class="md-table">
+          <thead>
           <th class="md-table-header">Name</th>
           <th class="md-table-header">Start Date</th>
           <th class="md-table-header">End Date</th>
           <th class="md-table-header">Tags</th>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           <tr ng-repeat="cue in cues" ng-click="openEdit(cue)">
             <td class="firstCol">{{cue.name}}</td>
             <td>{{cue.startDate.toDateString()}}</td>
             <td>{{cue.endDate.toDateString()}}</td>
             <td>
               <ul>
-                <li ng-repeat="tag in cue.tags">{{tag.text}}</li>
+                <li>{{cue.tags[0].text}}</li>
+                <li>{{cue.tags[1].text}}</li>
+                <li>{{cue.tags[2].text}}</li>
               </ul>
             </td>
           </tr>
-        </tbody>
-      </table>
-</div>
+          </tbody>
+        </table>
+      </md-content>
 
-<form ng-show="editForm" ng-submit="saveCue()">
-  <lable for="Name">Name</lable>
-  <input type="text" name="name" ng-model="currentCue.name">
-  <lable for="status">Status</lable>
-  <input type="text" name="status" ng-model="currentCue.status">
-  <lable for="startDate">Start Date</lable>
-  <input type="date" name="startDate" ng-model="currentCue.startDate">
-  <lable for="endDate">End Date</lable>
-  <input type="date" name="endDate" ng-model="endDate">
-  <label for="description">Description</label>
-  <input type="text" name="description" ng-model="currentCue.description">
-  <h4>Tags</h4>
-  <tags-input type="text" ng-model="currentCue.tags">
-    <input type="submit" value="Save Cue">
-</form>
+    </div>
+
+  </div>
+
+  <form ng-show="editForm" ng-submit="saveCue()">
+    <lable for="Name">Name</lable>
+    <input type="text" name="name" ng-model="currentCue.name">
+    <lable for="status">Status</lable>
+    <input type="text" name="status" ng-model="currentCue.status">
+    <lable for="startDate">Start Date</lable>
+    <input type="date" name="startDate" ng-model="currentCue.startDate">
+    <lable for="endDate">End Date</lable>
+    <input type="date" name="endDate" ng-model="endDate">
+    <label for="description">Description</label>
+    <input type="text" name="description" ng-model="currentCue.description">
+    <h4>Tags</h4>
+    <tags-input type="text" ng-model="currentCue.tags">
+      <input type="submit" value="Save Cue">
+  </form>
+</body>
