@@ -15,10 +15,17 @@ var C = require('../Constants');
 var log = require('../Logger');
 
 // Local constants
-var SCOPES = ['https://www.googleapis.com/auth/calendar'];
+var SCOPES = [
+  'https://www.googleapis.com/auth/calendar'
+];
 var TOKEN_DIR =  path.join(C.dataDir, 'credentials');
 var TOKEN_PATH = path.join(TOKEN_DIR, 'calendar.json');
 var CALENDAR = google.calendar('v3');
+var CALENDARS = [
+  'nt4onda377vop2r2ph07d8shig@group.calendar.google.com',
+  'en.usa#holiday@group.v.calendar.google.com',
+  'vvfgv249tf6u90hjc4e381g1a8@group.calendar.google.com'
+];
 
 // Module variables
 
@@ -96,6 +103,8 @@ function listEvents(calendarId, callback) {
     }
   });
 }
+
+
 
 module.exports = {
   listEvents: listEvents
