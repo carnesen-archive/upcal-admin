@@ -105,6 +105,20 @@ module.exports = function(config){
     }
   } // end of authAware
 
+  // Middleware that requires the user to be logged in.  If the user is not
+  // logged in, it will redirect the user to authorize the application and then
+  // return them to the original URL they requested.
+
+  function authRequired (req, res, next) {
+    authWare(req, res, function(){
+      if(!req.oauth2client){
+        req.session.oauth2return = req.originalUrl;
+        return res.redirect('/oauth2/authorize');
+      }
+      next();
+    });
+  }
+
   // Middleware that exposes the user's profile as well as login/logout URLs
   // to any templates.  These are available as 'profile', 'login', & 'logout'.
 

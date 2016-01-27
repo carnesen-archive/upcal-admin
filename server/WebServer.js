@@ -12,6 +12,7 @@ var path = require('path');
 var express = require('express');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
+var session = require('cookie-session');
 
 // Local dependencies
 var log = require('./Logger');
@@ -89,13 +90,13 @@ app.get('/lib/angular-animate.min.js', function(req, res) {
 // encrypted cookies.  Redis or Memcache is a great option for more secure sessions.
 
 app.use(session({
-  secret: config.secret,
+  secret: C.secret,
   signed: true
 }));
 
 //OAuth2
 
-var oauth2 = require('./lib/oauth2')(config.oauth2);
+var oauth2 = require('./oauth2')(C.oauth2);
 app.use(oauth2.router);
 
 

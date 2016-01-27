@@ -16,7 +16,7 @@ runtime: nodejs
 vm: true
 
 env_variables:
-  OAUTH2_CALLBACK: https://<project-name>.appspot.com/oauth2callback
+  OAUTH2_CALLBACK: https://driven-density-120118.appspot.com/oauth2callback
 
 # Temporary setting to keep gcloud from uploading node_modules
 skip_files:
