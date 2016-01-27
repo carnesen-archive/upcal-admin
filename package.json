@@ -26,7 +26,7 @@
     "start": "node server/start.js",
     "start:debug": "DEBUG=* npm run start",
     "start:watch": "nodemon server/start.js",
-    "test": "npm run lint:server; npm run test:server; npm run lint:browser; npm run test:browser",
+    "test": "npm run lint:server && npm run test:server && npm run lint:browser && npm run test:browser",
     "test:browser": "echo 'Not yet implemented'",
     "test:server": "PORT=52345 LOG_LEVEL=error mocha --opts .mocha.opts",
     "test:server:watch": "npm run test:server -- --watch"
