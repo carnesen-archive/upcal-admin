@@ -47,8 +47,9 @@ Basic usage:
 var crypto = require('crypto'); // check to see if this needs to be added
 var googleapis = require('googleapis');
 var express = require('express');
+var C = require('./Constants');
 
-module.exports = function(config){
+module.exports = function(C){
 
   var router = express.Router();
 
