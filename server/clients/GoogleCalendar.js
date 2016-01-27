@@ -6,6 +6,7 @@ var path = require('path');
 var querystring = require('querystring');
 
 // Installed modules
+var async = require('async');
 var mkdirp = require('mkdirp');
 var google = require('googleapis');
 var googleAuth = require('google-auth-library');
@@ -21,7 +22,7 @@ var SCOPES = [
 var TOKEN_DIR =  path.join(C.dataDir, 'credentials');
 var TOKEN_PATH = path.join(TOKEN_DIR, 'calendar.json');
 var CALENDAR = google.calendar('v3');
-var CALENDARS = [
+var CALENDAR_IDS = [
   'nt4onda377vop2r2ph07d8shig@group.calendar.google.com',
   'en.usa#holiday@group.v.calendar.google.com',
   'vvfgv249tf6u90hjc4e381g1a8@group.calendar.google.com'
@@ -87,25 +88,48 @@ function authorize(callback) {
 function listEvents(calendarId, callback) {
   authorize(function(err, client) {
     if (err) {
-      callback(err);
-    } else {
-      var queryOpts = {
-        auth: client,
-        calendarId: querystring.escape(calendarId)
-      };
-      CALENDAR.events.list(queryOpts, function(err, response) {
-        if (err) {
-          callback(err);
-        } else {
-          callback(null, response);
-        }
-      });
+      return callback(err);
     }
+    var queryOpts = {
+      auth: client,
+      calendarId: querystring.escape(calendarId)
+    };
+    CALENDAR.events.list(queryOpts, function(err, response) {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, response);
+      }
+    });
   });
 }
 
+function listAllEvents(callback) {
+  async.map(CALENDAR_IDS, listEvents, callback)
+}
 
+function addCalendar(id, done) {
+  authorize(function(err, client) {
+    if (err) {
+      return done(err);
+    }
+    var queryOpts = {
+      auth: client,
+      resource: {
+        id: id
+      }
+    };
+    CALENDAR.calendarList.insert(queryOpts, done);
+  });
+}
+
+function addCalendars(done) {
+  done = done || function() {};
+  async.each(CALENDAR_IDS, addCalendar, done)
+}
 
 module.exports = {
-  listEvents: listEvents
+  listEvents: listEvents,
+  listAllEvents: listAllEvents,
+  addCalendars: addCalendars
 };
