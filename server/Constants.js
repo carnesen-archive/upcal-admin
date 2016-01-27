@@ -42,10 +42,9 @@ module.exports = {
   },
   env: env,
   gcloud: {
-    projecteId: 'driven-density-120118'
+    projectId: 'driven-density-120118'
   },
   secret: process.env.GOOGLE_API_CLIENT_SECRET,
   cloudStorageBucket: 'driven-density-120118',
-  dataDir: dataDir,
-  dataBackend: 'datastore',
+  dataDir: dataDir
 };
