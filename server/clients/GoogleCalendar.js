@@ -21,14 +21,34 @@ var SCOPES = [
 ];
 var TOKEN_DIR =  path.join(C.dataDir, 'credentials');
 var TOKEN_PATH = path.join(TOKEN_DIR, 'calendar.json');
-var CALENDAR = google.calendar('v3');
-var CALENDAR_IDS = [
-  'nt4onda377vop2r2ph07d8shig@group.calendar.google.com',
-  'en.usa#holiday@group.v.calendar.google.com',
-  'vvfgv249tf6u90hjc4e381g1a8@group.calendar.google.com'
+var CALENDARS = [
+  {
+    name: 'National Health Observances',
+    id: 'nt4onda377vop2r2ph07d8shig@group.calendar.google.com',
+    tags: [
+      'health',
+      'observances'
+    ]
+  },
+  {
+    name: 'US Holidays',
+    id: 'en.usa#holiday@group.v.calendar.google.com',
+    tags: [
+      'holidays'
+    ]
+  },
+  {
+    name: 'Fashion Week',
+    id: 'vvfgv249tf6u90hjc4e381g1a8@group.calendar.google.com',
+    tags: [
+      'fashion',
+      'luxury'
+    ]
+  }
 ];
 
 // Module variables
+var calendarClient = google.calendar('v3');
 
 mkdirp.sync(TOKEN_DIR);
 
@@ -85,30 +105,50 @@ function authorize(callback) {
   });
 }
 
-function listEvents(calendarId, callback) {
+function transformRawEvent(event) {
+  return {
+    id: event.id,
+    htmlLink: event.htmlLink,
+    summary: event.summary,
+    description: event.description,
+    location: event.location,
+    startDate: event.start.date,
+    endDate: event.end.date
+  }
+}
+
+function transformRawCalendar(spec, data) {
+  return Object.assign({}, spec, {
+    summary: data.summary,
+    description: data.description,
+    events: data.items.map(transformRawEvent)
+  });
+}
+
+function listEvents(spec, callback) {
   authorize(function(err, client) {
     if (err) {
       return callback(err);
     }
     var queryOpts = {
       auth: client,
-      calendarId: querystring.escape(calendarId)
+      calendarId: querystring.escape(spec.id)
     };
-    CALENDAR.events.list(queryOpts, function(err, response) {
+    calendarClient.events.list(queryOpts, function(err, response) {
       if (err) {
         callback(err);
       } else {
-        callback(null, response);
+        callback(null, transformRawCalendar(spec, response));
       }
     });
   });
 }
 
 function listAllEvents(callback) {
-  async.map(CALENDAR_IDS, listEvents, callback)
+  async.map(CALENDARS, listEvents, callback)
 }
 
-function addCalendar(id, done) {
+function addCalendar(spec, done) {
   authorize(function(err, client) {
     if (err) {
       return done(err);
@@ -116,16 +156,16 @@ function addCalendar(id, done) {
     var queryOpts = {
       auth: client,
       resource: {
-        id: id
+        id: spec.id
       }
     };
-    CALENDAR.calendarList.insert(queryOpts, done);
+    calendarClient.calendarList.insert(queryOpts, done);
   });
 }
 
 function addCalendars(done) {
   done = done || function() {};
-  async.each(CALENDAR_IDS, addCalendar, done)
+  async.each(CALENDARS, addCalendar, done)
 }
 
 module.exports = {
