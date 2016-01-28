@@ -25,6 +25,7 @@ var apiRoutes = require('./apiRoutes/index');
  */
 var app = express();
 var server = http.createServer(app);
+var libs = [];
 
 /**
  * Configure the express app
@@ -53,6 +54,7 @@ apiRoutes.forEach(function(router) {
   app.use('/api', router);
 });
 
+
 app.get('/lib/angular.min.js', function(req, res) {
   res.sendFile(path.join(C.topDir, 'node_modules', 'angular', 'angular.min.js'));
 });
@@ -76,6 +78,24 @@ app.get('/lib/angular-material.min.js', function(req, res) {
 app.get('/lib/bootstrap.min.css', function(req, res) {
   res.sendFile(path.join(C.topDir, 'node_modules', 'bootstrap', 'dist', 'css', 'bootstrap.min.css'))
 });
+
+function addLib(relativePath) {
+  var fileName = path.basename(relativePath);
+  libs.push(relativePath);
+  app.get('/lib/' + fileName, function(req, res) {
+    res.sendFile(path.join(C.topDir, 'node_modules', relativePath));
+  });
+}
+
+addLib('angular/angular.min.js');
+addLib('angular-route/angular-route.min.js');
+addLib('ng-tags-input/build/ng-tags-input.min.js');
+addLib('ng-tags-input/build/ng-tags-input.min.css');
+addLib('angular-material/angular-material.css');
+addLib('angular-material/angular-material.min.js');
+addLib('angular-aria/angular-aria.min.js');
+addLib('angular-animate/angular-animate.min.js');
+
 
 // Configure session and session storage
 // MemoryStory isn't vaiable in a multi-server configuration, so we use
@@ -176,6 +196,7 @@ function start(done) {
 module.exports = {
 
   app: app,
+  libs: libs,
   server: server,
   start: start,
   stop: stop

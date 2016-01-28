@@ -65,7 +65,7 @@ module.exports = function(C){
 
   function getClient() {
     return new googleapis.auth.OAuth2(
-      C.clientID,
+      C.clientId,
       C.clientSecret,
       C.redirectUrl
     );
