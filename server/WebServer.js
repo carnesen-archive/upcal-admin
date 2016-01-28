@@ -54,31 +54,6 @@ apiRoutes.forEach(function(router) {
   app.use('/api', router);
 });
 
-
-app.get('/lib/angular.min.js', function(req, res) {
-  res.sendFile(path.join(C.topDir, 'node_modules', 'angular', 'angular.min.js'));
-});
-
-app.get('/lib/angular-route.min.js', function(req, res) {
-  res.sendFile(path.join(C.topDir, 'node_modules', 'angular-route', 'angular-route.min.js'));
-});
-
-app.get('/lib/ng-tags-input.min.js', function(req, res) {
-  res.sendFile(path.join(C.topDir, 'node_modules', 'ng-tags-input', 'build', 'ng-tags-input.min.js'));
-});
-
-app.get('/lib/ng-tags-input.min.css', function(req, res) {
-  res.sendFile(path.join(C.topDir, 'node_modules', 'ng-tags-input', 'build', 'ng-tags-input.min.css'));
-});
-
-app.get('/lib/angular-material.min.js', function(req, res) {
-  res.sendFile(path.join(C.topDir, 'node_modules', 'angular-material', 'angular-material.min.js'));
-});
-
-app.get('/lib/bootstrap.min.css', function(req, res) {
-  res.sendFile(path.join(C.topDir, 'node_modules', 'bootstrap', 'dist', 'css', 'bootstrap.min.css'))
-});
-
 function addLib(relativePath) {
   var fileName = path.basename(relativePath);
   libs.push(relativePath);
@@ -91,10 +66,7 @@ addLib('angular/angular.min.js');
 addLib('angular-route/angular-route.min.js');
 addLib('ng-tags-input/build/ng-tags-input.min.js');
 addLib('ng-tags-input/build/ng-tags-input.min.css');
-addLib('angular-material/angular-material.css');
-addLib('angular-material/angular-material.min.js');
-addLib('angular-aria/angular-aria.min.js');
-addLib('angular-animate/angular-animate.min.js');
+addLib('bootstrap/dist/css/bootstrap.min.css');
 
 
 // Configure session and session storage
