@@ -34,7 +34,7 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
       endDate:  new Date(2016, 1, 14),
       tags: [{text: 'chocolate'}, {text: 'love'}, {text: 'couples'}],
       description: 'A day where couples show their affection publicly'
-    },
+    }
   ];
 
   $scope.openEdit = function(cue){
@@ -46,5 +46,6 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
     console.log('my new tag:',newTag);
     $scope.currentCue.tags.push(newTag);
   };
+
 
 }]);

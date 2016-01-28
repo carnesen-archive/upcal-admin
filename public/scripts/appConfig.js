@@ -1,4 +1,4 @@
-var app = angular.module('unionPark', ['ngRoute','ngTagsInput','ngMaterial']);
+var app = angular.module('unionPark', ['ngRoute','ngTagsInput']);
 
 app.config(['$routeProvider', '$locationProvider', '$httpProvider',
   function ($routeProvider, $locationProvider, $httpProvider) {
