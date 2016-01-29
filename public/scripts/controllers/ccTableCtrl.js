@@ -6,6 +6,9 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
     $scope.cues = data;
   });
 
+  //[tags].map(function(elem){
+  //  return { 'text': elem}
+  //});
 
   //id: event.id,
   //  htmlLink: event.htmlLink,
@@ -52,9 +55,9 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   //  $scope.table = data;
   //});
 
-  ccFactory.getTags().then(function(data){
-     $scope.tags = data;
-  });
+  //ccFactory.getTags().then(function(data){
+  //   $scope.tags = data;
+  //});
 
   $scope.cues = [
     {
