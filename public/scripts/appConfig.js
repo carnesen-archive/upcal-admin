@@ -9,8 +9,5 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
       when('/ccTable', {
       templateUrl: '/pages/ccTable.html',
       controller: 'ccTableCtrl'
-    }).
-    otherwise({
-      redirectTo:'/'
     })
 }]);

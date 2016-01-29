@@ -1,41 +1,52 @@
 app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactory){
   $scope.editForm = false;
   $scope.newTag = '';
-  //ccFactory.getTable().then(function(data){
-  //  $scope.table = data;
-  //});
+  ccFactory.getTable().then(function(data){
+    $scope.cues = data;
+  });
 
-  $scope.cues = [
-    {
-      name: 'valentines Day',
-      status: 'pending',
-      startDate:  new Date(2016, 1, 14),
-      endDate:  new Date(2016, 1, 14),
-      tags: [{text: 'chocolate'}, {text: 'love'}, {text: 'couples'}],
-      description: 'A day where couples show their affection publicly'
-    }, {
-      name: 'valentines Day',
-      status: 'pending',
-      startDate:  new Date(2016, 1, 14),
-      endDate:  new Date(2016, 1, 14),
-      tags: [{text: 'chocolate'}, {text: 'love'}, {text: 'couples'}],
-      description: 'A day where couples show their affection publicly'
-    },    {
-      name: 'valentines Day',
-      status: 'pending',
-      startDate:  new Date(2016, 1, 14),
-      endDate:  new Date(2016, 1, 14),
-      tags: [{text: 'chocolate'}, {text: 'love'}, {text: 'couples'}],
-      description: 'A day where couples show their affection publicly'
-    },    {
-      name: 'valentines Day',
-      status: 'pending',
-      startDate:  new Date(2016, 1, 14),
-      endDate:  new Date(2016, 1, 14),
-      tags: [{text: 'chocolate'}, {text: 'love'}, {text: 'couples'}],
-      description: 'A day where couples show their affection publicly'
-    }
-  ];
+
+  //id: event.id,
+  //  htmlLink: event.htmlLink,
+  //  summary: event.summary,
+  //  description: event.description,
+  //  location: event.location,
+  //  startDate: event.start.date,
+  //  endDate: event.end.date
+
+  //$scope.cues = [
+  //  {
+  //    summary: 'valentines Day',
+  //    status: 'pending',
+  //    startDate:  new Date(2016, 1, 14),
+  //    endDate:  new Date(2016, 1, 14),
+  //    tags: [{text: 'chocolate'}, {text: 'love'}, {text: 'couples'}],
+  //    description: 'A day where couples show their affection publicly'
+  //  }, {
+  //    summary: 'valentines Day',
+  //    status: 'pending',
+  //    startDate:  new Date(2016, 1, 14),
+  //    endDate:  new Date(2016, 1, 14),
+  //    tags: [{text: 'chocolate'}, {text: 'love'}, {text: 'couples'}],
+  //    description: 'A day where couples show their affection publicly'
+  //  },    {
+  //    summary: 'valentines Day',
+  //    status: 'pending',
+  //    startDate:  new Date(2016, 1, 14),
+  //    endDate:  new Date(2016, 1, 14),
+  //    tags: [{text: 'chocolate'}, {text: 'love'}, {text: 'couples'}],
+  //    description: 'A day where couples show their affection publicly'
+  //  },    {
+  //    summary: 'valentines Day',
+  //    status: 'pending',
+  //    startDate:  new Date(2016, 1, 14),
+  //    endDate:  new Date(2016, 1, 14),
+  //    tags: [{text: 'chocolate'}, {text: 'love'}, {text: 'couples'}],
+  //    description: 'A day where couples show their affection publicly'
+  //  }
+  //];
+
+
 
   $scope.openEdit = function(cue){
     $scope.currentCue = cue;

@@ -67,7 +67,7 @@ addLib('angular-route/angular-route.min.js');
 addLib('ng-tags-input/build/ng-tags-input.min.js');
 addLib('ng-tags-input/build/ng-tags-input.min.css');
 addLib('bootstrap/dist/css/bootstrap.min.css');
-
+addLib('bootstrap/dist/js/bootstrap.min.js');
 
 // Configure session and session storage
 // MemoryStory isn't vaiable in a multi-server configuration, so we use

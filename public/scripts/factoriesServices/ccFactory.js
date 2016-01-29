@@ -3,8 +3,8 @@ app.factory('ccFactory', ['$http', function($http){
 
   // get table from database
   myService.getTable = function(){
-    $http.get({
-      url: '/ccTable',
+    return $http({
+      url: '/api/events',
       method: 'get'
     }).then(function(response){
       console.log('get response', response);
@@ -14,7 +14,7 @@ app.factory('ccFactory', ['$http', function($http){
 
   // update table in database
   myService.putTable = function(){
-    $http.get({
+    return $http({
       url: '/ccTable',
       method: 'put'
     }).then(function(response){
