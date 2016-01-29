@@ -15,41 +15,40 @@
 
 /* OpenID Connect (OAuth2 for Login).
 
-This allows users that have Google accounts (or Google for Work accounts) to
-log in to the application.
+ This allows users that have Google accounts (or Google for Work accounts) to
+ log in to the application.
 
-It performs the [OAuth2 Web Server Flow](
-https://developers.google.com/accounts/docs/OAuth2WebServer)
-and makes the user's credentials and profile information available via the session.
+ It performs the [OAuth2 Web Server Flow](
+ https://developers.google.com/accounts/docs/OAuth2WebServer)
+ and makes the user's credentials and profile information available via the session.
 
-Basic usage:
+ Basic usage:
 
-  var oauth2 = require('oauth2')({
-  clientId: 'your-client-id',
-  clientSecret: 'your-client-secret',
-  redirectUrl: 'http://your-redirect-url',
-  scopes: ['email', 'profile']
-  });
+ var oauth2 = require('oauth2')({
+ clientId: 'your-client-id',
+ clientSecret: 'your-client-secret',
+ redirectUrl: 'http://your-redirect-url',
+ scopes: ['email', 'profile']
+ });
 
-  app.use(oauth2.router);
+ app.use(oauth2.router);
 
-  app.get('/users_only', oauth2.required, function(req, res){
-  //only logged in users can access.
-  // other users are redirected to login page.
-  });
+ app.get('/users_only', oauth2.required, function(req, res){
+ //only logged in users can access.
+ // other users are redirected to login page.
+ });
 
-  app.get('/aware', oauth2.aware, function(req, res){
-  if(req.oauth2client) // user is logged in.
-  });
+ app.get('/aware', oauth2.aware, function(req, res){
+ if(req.oauth2client) // user is logged in.
+ });
 
  */
 
 var crypto = require('crypto'); // check to see if this needs to be added
 var googleapis = require('googleapis');
 var express = require('express');
-var C = require('./Constants');
 
-module.exports = function(C){
+module.exports = function (C) {
 
   var router = express.Router();
 
@@ -74,7 +73,7 @@ module.exports = function(C){
   // Makes a call to the Google+ API to retrieve the user's basic profile info.
   // An authorized OAuth2 client is required.
 
-  function getUserProfile(client, cb){
+  function getUserProfile(client, cb) {
     var plus = googleapis.plus('v1');
     plus.people.get({
       userId: 'me',
@@ -90,19 +89,19 @@ module.exports = function(C){
   // If the credentials are updated by the client (i.e., the access token expires and
   // is refreshed) then this middleware will store the new credentials in the session.
 
-  function authAware(req, res, next){
-    if(req.session.oauth2token){
+  function authAware(req, res, next) {
+    if (req.session.oauth2token) {
       req.oauth2client = getClient();
       req.oauth2client.setCredentials(req.session.oauth2tokens);
     }
 
 
-  next();
+    next();
 
-  // Save credentials back to the session as they may have been refreshed by client.
+    // Save credentials back to the session as they may have been refreshed by client.
 
-  if (req.oauth2client){
-    req.session.oauth2tokens = req.oauth2client.credentials;
+    if (req.oauth2client) {
+      req.session.oauth2tokens = req.oauth2client.credentials;
     }
   } // end of authAware
 
@@ -110,9 +109,9 @@ module.exports = function(C){
   // logged in, it will redirect the user to authorize the application and then
   // return them to the original URL they requested.
 
-  function authRequired (req, res, next) {
-    authWare(req, res, function(){
-      if(!req.oauth2client){
+  function authRequired(req, res, next) {
+    authWare(req, res, function () {
+      if (!req.oauth2client) {
         req.session.oauth2return = req.originalUrl;
         return res.redirect('/oauth2/authorize');
       }
@@ -123,12 +122,12 @@ module.exports = function(C){
   // Middleware that exposes the user's profile as well as login/logout URLs
   // to any templates.  These are available as 'profile', 'login', & 'logout'.
 
-  function addTemplateVariables(req, res, next){
+  function addTemplateVariables(req, res, next) {
     res.locals.profile = req.session.profile;
     res.locals.login = '/oauth2/authorize?return=' +
-        encodeURIComponent(req.originalUrl);
+      encodeURIComponent(req.originalUrl);
     res.locals.logout = '/oauth2/logout?return=' +
-        encodeURIComponent(req.originalUrl);
+      encodeURIComponent(req.originalUrl);
     next();
   } // end of add templatevariables
 
@@ -141,17 +140,19 @@ module.exports = function(C){
   // that URL when the flow is finished.
 
   // START authorize
-  router.get('/oauth2/authorize', function(req, res){
+  router.get('/oauth2/authorize', function (req, res) {
     /*jshint camelcase: false */
     var stateToken = generateStateToken();
     var authorizeUrl = getClient().generateAuthUrl({
       access_type: 'offline',
       scope: C.scopes || ['email', 'profile'],
-      hd: 'upcal-admin.com',
+      hd: 'upcal-admin.com', // trying to restrict domain
       state: stateToken
     });
     req.session.oauth2statetoken = stateToken;
-    if(req.query.return) { req.session.oauth2return = req.query.return; }
+    if (req.query.return) {
+      req.session.oauth2return = req.query.return;
+    }
     res.redirect(authorizeUrl);
   });
   // END authorize
@@ -164,19 +165,23 @@ module.exports = function(C){
   // URL specified to '/oauth2/authorize'.
   //START CALLBACK
 
-  router.get('/oauth2callback', function(req, res){
-    if(!req.query.code || req.query.state !== req.session.oauth2statetoken){
+  router.get('/oauth2callback', function (req, res) {
+    if (!req.query.code || req.query.state !== req.session.oauth2statetoken) {
       return res.status(400).send('Invalid auth code or state token.');
     }
-    getClient().getToken(req.query.code, function(err, tokens){
-      if(err) { return res.status(400).send(err.message);}
+    getClient().getToken(req.query.code, function (err, tokens) {
+      if (err) {
+        return res.status(400).send(err.message);
+      }
       req.session.oauth2tokens = tokens;
 
       /* Get the user's info and store it in the session */
       var client = getClient();
       client.setCredentials(tokens);
-      getUserProfile(client, function(err, profile){
-        if(err) {return res.status('500').send(err.message); }
+      getUserProfile(client, function (err, profile) {
+        if (err) {
+          return res.status('500').send(err.message);
+        }
         req.session.profile = {
           id: profile.id,
           displayName: profile.displayName,
@@ -191,7 +196,7 @@ module.exports = function(C){
 
 // Deletes the user's credentials and profile from the session.
   // This does not revoke any active tokens.
-  router.get('/oauth2/logout', function(req, res){
+  router.get('/oauth2/logout', function (req, res) {
     delete req.session.oauth2tokens;
     delete req.session.profile;
     res.redirect(req.query.return || req.session.oauth2return || '/');
