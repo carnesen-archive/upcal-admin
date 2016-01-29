@@ -22,10 +22,23 @@ app.factory('ccFactory', ['$http', function($http){
     })
   };
 
+  // pull list of tags
+  myService.getTags = function(){
+    $http.get({
+      url: '/tags',
+      method: 'get'
+    }).then(function(response){
+      console.log('put response', response);
+      return response.data;
+    })
+  };
+
   // returns opposite of bool
   myService.toggle = function(bool){
     return !bool;
   };
+
+
 
   return myService;
 }]);

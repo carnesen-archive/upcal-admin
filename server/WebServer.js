@@ -19,6 +19,7 @@ var log = require('./Logger');
 var C = require('./Constants');
 var indexRouter = require('./routes/index');
 var apiRoutes = require('./apiRoutes/index');
+var oauth2 = require('./oauth2')(C.oauth2);
 
 /**
  * Module variables
@@ -80,7 +81,6 @@ app.use(session({
 
 //OAuth2
 
-var oauth2 = require('./oauth2')(C.oauth2);
 app.use(oauth2.router);
 
 
