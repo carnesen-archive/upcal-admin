@@ -8,7 +8,7 @@ var querystring = require('querystring');
 // Installed modules
 var async = require('async');
 var mkdirp = require('mkdirp');
-var google = require('googleapis');
+var googleapis = require('googleapis');
 var googleAuth = require('google-auth-library');
 
 // Local modules
@@ -21,7 +21,7 @@ var SCOPES = [
 ];
 var TOKEN_DIR =  path.join(C.dataDir, 'credentials');
 var TOKEN_PATH = path.join(TOKEN_DIR, 'calendar.json');
-var CALENDARS = [
+var CALENDAR_SPECS = [
   {
     name: 'National Health Observances',
     id: 'nt4onda377vop2r2ph07d8shig@group.calendar.google.com',
@@ -48,7 +48,7 @@ var CALENDARS = [
 ];
 
 // Module variables
-var calendarClient = google.calendar('v3');
+var calendarClient = googleapis.calendar('v3');
 
 mkdirp.sync(TOKEN_DIR);
 
@@ -71,7 +71,7 @@ function getToken(jwtClient, done) {
           fs.writeFile(TOKEN_PATH, JSON.stringify(token), function (writeErr) {
             if (writeErr) {
               // failed to write token to TOKEN_PATH
-              done(authErr);
+              done(writeErr);
             } else {
               log.info('Wrote Google API token to %s', TOKEN_PATH);
               jwtClient.credentials = token;
@@ -105,50 +105,53 @@ function authorize(callback) {
   });
 }
 
-function transformRawEvent(event) {
-  return {
-    id: event.id,
-    htmlLink: event.htmlLink,
-    summary: event.summary,
-    description: event.description,
-    location: event.location,
-    startDate: event.start.date,
-    endDate: event.end.date
+function transformRawCalendar(calendarSpec, data) {
+  function transformRawEvent(event) {
+    return {
+      id: event.id,
+      calendarId: calendarSpec.id,
+      htmlLink: event.htmlLink,
+      summary: event.summary,
+      description: event.description,
+      location: event.location,
+      startDate: event.start.date,
+      endDate: event.end.date,
+      tags: calendarSpec.tags
+    }
   }
+  return data.items.map(transformRawEvent);
 }
 
-function transformRawCalendar(spec, data) {
-  return Object.assign({}, spec, {
-    summary: data.summary,
-    description: data.description,
-    events: data.items.map(transformRawEvent)
-  });
-}
-
-function listEvents(spec, callback) {
+function listEvents(calendarSpec, callback) {
   authorize(function(err, client) {
     if (err) {
       return callback(err);
     }
     var queryOpts = {
       auth: client,
-      calendarId: querystring.escape(spec.id)
+      calendarId: querystring.escape(calendarSpec.id)
     };
     calendarClient.events.list(queryOpts, function(err, response) {
       if (err) {
         callback(err);
       } else {
-        callback(null, transformRawCalendar(spec, response));
+        callback(null, transformRawCalendar(calendarSpec, response));
       }
     });
   });
 }
 
 function listAllEvents(callback) {
-  async.map(CALENDARS, listEvents, callback)
+  async.map(CALENDAR_SPECS, listEvents, function(err, ret) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, [].concat.apply([], ret));
+    }
+  });
 }
 
-function addCalendar(spec, done) {
+function addCalendar(calendarSpec, done) {
   authorize(function(err, client) {
     if (err) {
       return done(err);
@@ -156,7 +159,7 @@ function addCalendar(spec, done) {
     var queryOpts = {
       auth: client,
       resource: {
-        id: spec.id
+        id: calendarSpec.id
       }
     };
     calendarClient.calendarList.insert(queryOpts, done);
@@ -165,7 +168,7 @@ function addCalendar(spec, done) {
 
 function addCalendars(done) {
   done = done || function() {};
-  async.each(CALENDARS, addCalendar, done)
+  async.each(CALENDAR_SPECS, addCalendar, done)
 }
 
 module.exports = {
