@@ -147,6 +147,7 @@ module.exports = function(C){
     var authorizeUrl = getClient().generateAuthUrl({
       access_type: 'offline',
       scope: C.scopes || ['email', 'profile'],
+      hd: 'upcal-admin.com',
       state: stateToken
     });
     req.session.oauth2statetoken = stateToken;

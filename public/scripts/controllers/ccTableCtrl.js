@@ -5,6 +5,10 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   //  $scope.table = data;
   //});
 
+  ccFactory.getTags().then(function(data){
+     $scope.tags = data;
+  });
+
   $scope.cues = [
     {
       name: 'valentines Day',
