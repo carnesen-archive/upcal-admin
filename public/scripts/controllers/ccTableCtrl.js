@@ -54,7 +54,6 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   //ccFactory.getTable().then(function(data){
   //  $scope.table = data;
   //});
-
   //ccFactory.getTags().then(function(data){
   //   $scope.tags = data;
   //});
