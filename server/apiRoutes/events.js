@@ -31,7 +31,7 @@ router.delete('/events', function (req, res, next) {
   });
 });
 
-router.insert('/events', function (req, res, next) {
+router.post('/events', function (req, res, next) {
   var eventSpec = {
     eventId: req.query.eventId,
     calendarId: req.query.calendarId,
@@ -45,7 +45,7 @@ router.insert('/events', function (req, res, next) {
   });
 });
 
-router.update('/events', function (req, res, next) {
+router.put('/events', function (req, res, next) {
   var eventSpec = {
     eventId: req.query.eventId,
     calendarId: req.query.calendarId,
