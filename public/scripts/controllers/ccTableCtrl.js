@@ -6,8 +6,10 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
     $scope.cues = data;
   });
 
-  //[tags].map(function(elem){
-  //  return { 'text': elem}
+  //var eventList = ret.map(function(elem){
+  //  return elem.tags.map(function(tag){
+  //    return {'text':tag};
+  //  })
   //});
 
   //id: event.id,
@@ -49,11 +51,6 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   //    description: 'A day where couples show their affection publicly'
   //  }
   //];
-
-
-  //ccFactory.getTable().then(function(data){
-  //  $scope.table = data;
-  //});
 
   //ccFactory.getTags().then(function(data){
   //   $scope.tags = data;
