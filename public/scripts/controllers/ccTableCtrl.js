@@ -7,6 +7,16 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   $scope.startNumber = 0;
   $scope.listQuantity = 20;
 
+  $scope.turnPage = function(increment){
+    if(increment === -1 && $scope.pageNumber === 1){return;}
+    $scope.pageNumber += increment;
+    $scope.adjustList();
+  };
+
+  $scope.adjustList = function(){
+    $scope.startNumber = ($scope.pageNumber - 1) * 20;
+  };
+
   $scope.returnPossibleTags = function(query){
     var array = [];
     for (var i = 0 ; i < $scope.possibleSearchTags.length;i++){

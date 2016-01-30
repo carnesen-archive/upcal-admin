@@ -3,17 +3,18 @@
   <div class="col-md-2">
     <h1>Filter</h1>
     <tags-input type="text" ng-model="searchByTags">
+      <span class="glyphicon glyphicon-search"></span>
       <auto-complete source="returnPossibleTags($query)"></auto-complete>
     </tags-input>
   </div>
   <div class="col-md-8">
     <div class="listLengthSelector">
       <ul>
-        <li ng-model="forward"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></li>
-        <li ng-if="pageNumber!== 1">{{pageNumber-1}}</li>
+        <li ng-model="forward" ng-click="turnPage(-1)"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></li>
+        <li ng-if="pageNumber!== 1" ng-click="turnPage(-1)">{{pageNumber-1}}</li>
         <li>{{pageNumber}}</li>
-        <li>{{pageNumber+1}}</li>
-        <li ng-model="backward"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></li>
+        <li ng-click="turnPage(1)">{{pageNumber+1}}</li>
+        <li ng-model="backward" ng-click="turnPage(1)"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></li>
       </ul>
     </div>
     <table class="table table-hover">
