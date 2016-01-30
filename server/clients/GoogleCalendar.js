@@ -236,8 +236,7 @@ function addCalendar(calendarSpec, done) {
 }
 
 function addCalendars(done) {
-  done = done || function () {
-      };
+  done = done || function () {};
   async.each(CALENDAR_SPECS, addCalendar, done)
 }
 
