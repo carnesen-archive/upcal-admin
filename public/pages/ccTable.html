@@ -2,6 +2,9 @@
 <div class="row">
   <div class="col-md-2">
     <h1>Filter</h1>
+    <tags-input type="text" ng-model="searchByTags">
+      <auto-complete source="returnPossibleTags($query)"></auto-complete>
+    </tags-input>
   </div>
   <div class="col-md-8">
     <table class="table table-hover">
@@ -14,15 +17,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="cue in cues" ng-click="openEdit(cue)">
-          <td class="firstCol">{{cue.summary}}</td>
-          <td>{{cue.startDate.toDateString()}}</td>
-          <td>{{cue.endDate.toDateString()}}</td>
+        <tr ng-repeat="event in eventList" ng-click="openEdit(event)">
+          <td class="firstCol">{{event.summary}}</td>
+          <td>{{event.startDate.toDateString()}}</td>
+          <td>{{event.endDate.toDateString()}}</td>
           <td>
             <ul>
-              <li>{{cue.tags[0].text}}</li>
-              <li>{{cue.tags[1].text}}</li>
-              <li>{{cue.tags[2].text}}</li>
+              <li ng-repeat="tag in event.tags">{{tag.text}}</li>
             </ul>
           </td>
         </tr>
@@ -32,18 +33,18 @@
 </div>
 
 <div class="modal-dialog">
-  <form ng-show="editForm" ng-submit="saveCue()">
+  <form ng-show="editForm" ng-submit="saveRow()">
     <lable for="summary">Summary</lable>
-    <input type="text" name="summary" ng-model="currentCue.summary">
+    <input type="text" name="summary" ng-model="currentEvent.summary">
     <lable for="startDate">Start Date</lable>
-    <input type="date" name="startDate" ng-model="currentCue.startDate">
+    <input type="date" name="startDate" ng-model="currentEvent.startDate">
     <lable for="endDate">End Date</lable>
-    <input type="date" name="endDate" ng-model="currentCue.endDate">
+    <input type="date" name="endDate" ng-model="currentEvent.endDate">
     <label for="description">Description</label>
-    <input type="text" name="description" ng-model="currentCue.description">
+    <input type="text" name="description" ng-model="currentEvent.description">
     <h4>Tags</h4>
-    <tags-input type="text" ng-model="currentCue.tags">
-      <input type="submit" value="Save Cue">
+    <tags-input type="text" ng-model="currentEvent.tags">
+    <input type="submit" value="Save event">
   </form>
 </div>
 
