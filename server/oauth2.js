@@ -90,7 +90,7 @@ module.exports = function (C) {
   // is refreshed) then this middleware will store the new credentials in the session.
 
   function authAware(req, res, next) {
-    if (req.session.oauth2token) {
+    if (req.session.oauth2tokens) {
       req.oauth2client = getClient();
       req.oauth2client.setCredentials(req.session.oauth2tokens);
     }
@@ -110,7 +110,7 @@ module.exports = function (C) {
   // return them to the original URL they requested.
 
   function authRequired(req, res, next) {
-    authWare(req, res, function () {
+    authAware(req, res, function () {
       if (!req.oauth2client) {
         req.session.oauth2return = req.originalUrl;
         return res.redirect('/oauth2/authorize');
@@ -126,7 +126,7 @@ module.exports = function (C) {
     res.locals.profile = req.session.profile;
     res.locals.login = '/oauth2/authorize?return=' +
       encodeURIComponent(req.originalUrl);
-    res.locals.logout = '/oauth2/logout?return=' +
+    res.locals.logout = 'n' +
       encodeURIComponent(req.originalUrl);
     next();
   } // end of add templatevariables
@@ -146,7 +146,7 @@ module.exports = function (C) {
     var authorizeUrl = getClient().generateAuthUrl({
       access_type: 'offline',
       scope: C.scopes || ['email', 'profile'],
-      hd: 'upcal-admin.com', // trying to restrict domain
+      //hd: 'upcal-admin.com', // trying to restrict domain
       state: stateToken
     });
     req.session.oauth2statetoken = stateToken;
