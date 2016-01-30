@@ -34,7 +34,7 @@ router.delete('/events', function (req, res, next) {
 router.post('/events', function (req, res, next) {
   var eventSpec = {
     eventId: req.query.eventId,
-    calendarId: req.query.calendarId,
+    calendarId: req.query.calendarId
   };
   GoogleCalendar.insertEvent(eventSpec, function (err) {
     if (err) {
@@ -48,7 +48,7 @@ router.post('/events', function (req, res, next) {
 router.put('/events', function (req, res, next) {
   var eventSpec = {
     eventId: req.query.eventId,
-    calendarId: req.query.calendarId,
+    calendarId: req.query.calendarId
   };
   GoogleCalendar.updateEvent(eventSpec, function (Err) {
     if (err) {
