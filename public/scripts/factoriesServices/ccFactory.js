@@ -39,7 +39,8 @@ app.factory('ccFactory', ['$http', function($http){
       url: '/api/events',
       method: 'put'
     }).then(function(response){
-      console.log('put response', response)
+      console.log('put response', response);
+      return response.data;
     })
   };
 
@@ -48,7 +49,8 @@ app.factory('ccFactory', ['$http', function($http){
       url: '/api/events',
       method: 'post'
     }).then(function(response){
-      console.log('put response', response)
+      console.log('put response', response);
+      return response.data
     })
   };
 
@@ -58,7 +60,8 @@ app.factory('ccFactory', ['$http', function($http){
       url: '/api/events',
       method: 'delete'
     }).then(function(response){
-      console.log('put response', response)
+      console.log('put response', response);
+      return response.data
     })
   };
 

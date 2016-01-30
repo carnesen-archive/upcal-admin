@@ -13,6 +13,7 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
     }
     return array;
   };
+
   $scope.filterResults = function(){
 
   };
