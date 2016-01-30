@@ -73,6 +73,8 @@ addLib('ng-tags-input/build/ng-tags-input.min.css');
 addLib('bootstrap/dist/css/bootstrap.min.css');
 addLib('bootstrap/dist/js/bootstrap.min.js');
 
+app.use("/lib/bootstrap/", express.static(path.join(C.topDir, 'node_modules','bootstrap','dist')));
+
 // Configure session and session storage
 // MemoryStory isn't vaiable in a multi-server configuration, so we use
 // encrypted cookies.  Redis or Memcache is a great option for more secure sessions.

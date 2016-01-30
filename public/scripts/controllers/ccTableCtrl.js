@@ -3,6 +3,9 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   $scope.newTag = '';
   $scope.searchByTags = [];
   $scope.possibleSearchTags = [];
+  $scope.pageNumber = 1;
+  $scope.startNumber = 0;
+  $scope.listQuantity = 20;
 
   $scope.returnPossibleTags = function(query){
     var array = [];

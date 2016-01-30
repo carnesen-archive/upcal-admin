@@ -7,13 +7,9 @@ app.factory('ccFactory', ['$http', function($http){
       url: '/api/events',
       method: 'get'
     }).then(function(response){
-      var array = [];
       var possibleTags = [];
       console.log('get response', response);
-      for (var i = 0 ; i <20 ; i++){
-        array.push(response.data[i])
-      }
-      var eventList = array.map(function(elem){
+      var eventList = response.data.map(function(elem){
         elem.tags = elem.tags.map(function(tag){ // tags: [{text: 'tag1'},{text: 'tag2'},{text: 'tag3'}]
           possibleTags.pushUnique(tag);
           return {'text':tag};
