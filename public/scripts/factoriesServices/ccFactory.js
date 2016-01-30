@@ -14,7 +14,7 @@ app.factory('ccFactory', ['$http', function($http){
         array.push(response.data[i])
       }
       var eventList = array.map(function(elem){
-        elem.tags = elem.tags.map(function(tag){
+        elem.tags = elem.tags.map(function(tag){ // tags: [{text: 'tag1'},{text: 'tag2'},{text: 'tag3'}]
           possibleTags.pushUnique(tag);
           return {'text':tag};
         });
@@ -32,6 +32,9 @@ app.factory('ccFactory', ['$http', function($http){
 
   // update table in database
   myService.putRow = function(){
+    // put a single row to server
+    // reverse tags arrays back to just text format {tags:['tag1', 'tag2', 'tag3']}
+    // return 'tag1' see line 19
     return $http({
       url: '/api/events',
       method: 'put'
@@ -50,6 +53,7 @@ app.factory('ccFactory', ['$http', function($http){
   };
 
   myService.deleteRow = function(){
+    // pass in id as data
     return $http({
       url: '/api/events',
       method: 'delete'
