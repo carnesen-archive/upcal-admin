@@ -7,8 +7,21 @@ app.factory('ccFactory', ['$http', function($http){
       url: '/api/events',
       method: 'get'
     }).then(function(response){
+      var array = [];
       console.log('get response', response);
-      return response.data;
+      for (var i = 0 ; i <20 ; i++){
+        array.push(response.data[i])
+      }
+      var eventList = array.map(function(elem){
+        elem.tags = elem.tags.map(function(tag){
+          return {'text':tag};
+        });
+        elem.startDate = new Date(elem.startDate);
+        elem.endDate = new Date(elem.endDate);
+        return elem
+      });
+
+      return eventList;
     })
   };
 
@@ -40,17 +53,6 @@ app.factory('ccFactory', ['$http', function($http){
     })
   };
 
-
-  // pull list of tags
-  myService.getTags = function(){
-    $http.get({
-      url: '/tags',
-      method: 'get'
-    }).then(function(response){
-      console.log('put response', response);
-      return response.data;
-    })
-  };
 
   // returns opposite of bool
   myService.toggle = function(bool){
