@@ -18,3 +18,12 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
 }]);
 
 // change otherwise to 404, 500
+
+Array.prototype.pushUnique = function (item){
+  if(this.indexOf(item) == -1) {
+    //if(jQuery.inArray(item, this) == -1) {
+    this.push(item);
+    return true;
+  }
+  return false;
+};

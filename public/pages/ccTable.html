@@ -2,6 +2,9 @@
 <div class="row">
   <div class="col-md-2">
     <h1>Filter</h1>
+    <tags-input type="text" ng-model="searchByTags">
+      <auto-complete source="returnPossibleTags($query)"></auto-complete>
+    </tags-input>
   </div>
   <div class="col-md-8">
     <table class="table table-hover">
@@ -20,7 +23,7 @@
           <td>{{event.endDate.toDateString()}}</td>
           <td>
             <ul>
-              <li ng-repeat="tag in event.tags | limitTo:4">{{tag.text}}</li>
+              <li ng-repeat="tag in event.tags">{{tag.text}}</li>
             </ul>
           </td>
         </tr>
@@ -41,7 +44,7 @@
     <input type="text" name="description" ng-model="currentEvent.description">
     <h4>Tags</h4>
     <tags-input type="text" ng-model="currentEvent.tags">
-      <input type="submit" value="Save event">
+    <input type="submit" value="Save event">
   </form>
 </div>
 

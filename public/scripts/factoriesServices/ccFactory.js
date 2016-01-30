@@ -8,19 +8,24 @@ app.factory('ccFactory', ['$http', function($http){
       method: 'get'
     }).then(function(response){
       var array = [];
+      var possibleTags = [];
       console.log('get response', response);
       for (var i = 0 ; i <20 ; i++){
         array.push(response.data[i])
       }
       var eventList = array.map(function(elem){
         elem.tags = elem.tags.map(function(tag){
+          possibleTags.pushUnique(tag);
           return {'text':tag};
         });
         elem.startDate = new Date(elem.startDate);
         elem.endDate = new Date(elem.endDate);
         return elem
       });
-
+      possibleTags = possibleTags.map(function(tag){
+        return {text:tag};
+      });
+      eventList.possibleTags = possibleTags;
       return eventList;
     })
   };
