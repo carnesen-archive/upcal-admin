@@ -19,7 +19,7 @@ var log = require('../Logger');
 var SCOPES = [
   'https://www.googleapis.com/auth/calendar'
 ];
-var TOKEN_DIR =  path.join(C.dataDir, 'credentials');
+var TOKEN_DIR = path.join(C.dataDir, 'credentials');
 var TOKEN_PATH = path.join(TOKEN_DIR, 'calendar.json');
 var CALENDAR_SPECS = [
   {
@@ -89,12 +89,12 @@ function getToken(jwtClient, done) {
  */
 function authorize(callback) {
   var auth = new googleAuth();
-  auth.fromJSON(C.googleApiCredentials, function(err, jwtClient) {
+  auth.fromJSON(C.googleApiCredentials, function (err, jwtClient) {
     if (err) {
       callback(err);
     } else {
       jwtClient.scopes = SCOPES;
-      getToken(jwtClient, function(err) {
+      getToken(jwtClient, function (err) {
         if (err) {
           callback(err);
         } else {
@@ -119,19 +119,26 @@ function transformRawCalendar(calendarSpec, data) {
       tags: calendarSpec.tags
     }
   }
+
   return data.items.map(transformRawEvent);
 }
 
+
+// list all events in one calendar
 function listEvents(calendarSpec, callback) {
-  authorize(function(err, client) {
+  // checks for token authorization before it can execute the remaining part of function
+  authorize(function (err, client) {
     if (err) {
       return callback(err);
     }
+    // queryOpts takes 2 properties, the JWTclient and the calendarId
     var queryOpts = {
       auth: client,
       calendarId: querystring.escape(calendarSpec.id)
     };
-    calendarClient.events.list(queryOpts, function(err, response) {
+    // calendarClient is what communicates with google api
+    // must pass in an authorized JWT in order to get data back
+    calendarClient.events.list(queryOpts, function (err, response) {
       if (err) {
         callback(err);
       } else {
@@ -141,18 +148,80 @@ function listEvents(calendarSpec, callback) {
   });
 }
 
+function deleteEvent(calendarId, eventId, callback) {
+  authorize(function (err, client) {
+    if (err) {
+      return callback(err);
+    }
+    var queryOpts = {
+      auth: client,
+      calendarId: querystring.escape(calendarId),
+      eventId: querystring.escape(eventId)
+    };
+    calendarClient.events.delete(queryOpts, function (err, response) {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, transformRawCalendar(calendarSpec, response));
+      }
+    });
+  });
+}
+
+function insertEvent(calendarId, callback) {
+  authorize(function (err, client) {
+    if (err) {
+      return callback(err);
+    }
+    var queryOpts = {
+      auth: client,
+      calendarId: querystring.escape(calendarId)
+    };
+    calendarClient.events.insert(queryOpts, function (err, response) {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, transformRawCalendar(calendarSpec, response));
+      }
+    });
+  });
+}
+
+function updateEvent(eventSpec, callback) {
+  authorize(function (err, client) {
+    if (err) {
+      return callback(err);
+    }
+    var queryOpts = {
+      auth: client,
+      calendarId: querystring.escape(calendarId),
+      eventId: querystring.escape(eventId)
+    };
+    calendarClient.events.update(queryOpts, function (err, response) {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, transformRawCalendar(eventSpec, response));
+      }
+    });
+  });
+}
+
+// list all events in all calendars
 function listAllEvents(callback) {
-  async.map(CALENDAR_SPECS, listEvents, function(err, ret) {
+  // async is a library that allows us to map an asynchronous function onto each element in the listEvents array
+  async.map(CALENDAR_SPECS, listEvents, function (err, ret) {
     if (err) {
       callback(err);
     } else {
+      // takes array of arrays and puts all elements into one array
       callback(null, [].concat.apply([], ret));
     }
   });
 }
 
 function addCalendar(calendarSpec, done) {
-  authorize(function(err, client) {
+  authorize(function (err, client) {
     if (err) {
       return done(err);
     }
@@ -167,12 +236,15 @@ function addCalendar(calendarSpec, done) {
 }
 
 function addCalendars(done) {
-  done = done || function() {};
+  done = done || function () {
+      };
   async.each(CALENDAR_SPECS, addCalendar, done)
 }
 
 module.exports = {
-
+  deleteEvent: deleteEvent,
+  insertEvent: insertEvent,
+  updateEvent: updateEvent,
   listEvents: listEvents,
   listAllEvents: listAllEvents,
   addCalendars: addCalendars
