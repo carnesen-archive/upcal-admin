@@ -27,22 +27,26 @@ app.factory('ccFactory', ['$http', function($http){
   };
 
   // update table in database
-  myService.putRow = function(){
+  myService.putRow = function(currentEvent){
     // put a single row to server
     // reverse tags arrays back to just text format {tags:['tag1', 'tag2', 'tag3']}
     // return 'tag1' see line 19
+
+    // return array of tag names as strings
+    currentEvent.tags = currentEvent.tags.map(function(tag) {
+      return tag.text;
+    });
+
+    // change javascript dates "currentEvent.startDate","currentEvent.endDate"
+    // to string format: '2015-5-31'
+
     return $http({
       url: '/api/events',
       method: 'put'
     }).then(function(response){
       var possibleTags = [];
       console.log('put response', response);
-      var eventList = response.data.map(function(elem) {
-        elem.tags = elem.tags.map(function(tag) {
-          possibleTags.pushUnique(tag);
-          return {tags: ['tag', 'tag', 'tag']}
-        })
-      })
+
       return response.data;
     })
   };
