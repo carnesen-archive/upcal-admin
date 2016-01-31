@@ -21,6 +21,12 @@ mkdirp.sync(dataDir);
 
 var env = process.env.NODE_ENV || 'development';
 
+var googleApiCredentials = {
+  type: 'service_account',
+  private_key: process.env.GOOGLE_API_PRIVATE_KEY || 'no key provided',
+  client_email: process.env.GOOGLE_API_CLIENT_EMAIL || 'no email provided'
+};
+
 module.exports = {
   name: name,
   description: pkg.description,
@@ -29,11 +35,7 @@ module.exports = {
   topDir: topDir,
   port: process.env.PORT || 3000,
   logLevel: process.env.LOG_LEVEL || 'debug',
-  googleApiCredentials: {
-    type: 'service_account',
-    private_key: process.env.GOOGLE_API_PRIVATE_KEY || 'no key provided',
-    client_email: process.env.GOOGLE_API_CLIENT_EMAIL || 'no email provided'
-  },
+  googleApiCredentials: googleApiCredentials,
   oauth2: {
     clientId: process.env.GOOGLE_API_CLIENT_ID || 'no client id provided',
     clientSecret: process.env.GOOGLE_API_CLIENT_SECRET || 'no secret provided',
@@ -42,7 +44,8 @@ module.exports = {
   },
   env: env,
   gcloud: {
-    projectId: 'driven-density-120118'
+    projectId: 'driven-density-120118',
+    credentials: googleApiCredentials
   },
   secret: process.env.GOOGLE_API_CLIENT_SECRET,
   cloudStorageBucket: 'driven-density-120118',
