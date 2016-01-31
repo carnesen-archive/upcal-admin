@@ -37,6 +37,7 @@
     "angular-aria": "^1.4.9",
     "angular-material": "^1.0.2",
     "angular-route": "1.4.9",
+    "angular-ui-bootstrap": "^1.1.1",
     "async": "1.5.2",
     "bluebird": "3.1.1",
     "body-parser": "1.13.2",
