@@ -26,12 +26,15 @@ var KIND = 'Event';
 function listAllEvents(callback) {
 
   // To get data out of the dataset using gcloud, one first creates a query then runs it
+  // give us every event because "kind" is equal to "event"
   var q = dataset.createQuery([KIND]);
 
   dataset.runQuery(q, function(err, entities) {
     if (err) {
       callback(err);
     }
+    // if callback succeeds, put "null" as the value of the error and map the "entities" array
+    // each element of "entities" is an object that has a key field and a data field, and we just want to return a data field
     callback(null, entities.map(function(entity) {
       return entity.data;
     }));

@@ -9,8 +9,8 @@ var GoogleCalendar = require('../clients/GoogleCalendar');
 router.get('/events', function (req, res, next) {
 
   var calls = {
-    calendarEvents: GoogleCalendar.listAllEvents,
-    datastoreEvents: GoogleDatastore.listAllEvents
+    calendarEvents: GoogleCalendar.listAllEvents, // calls this function and stores it as property of GoogleCalendar
+    datastoreEvents: GoogleDatastore.listAllEvents // is the result of calling ret.CalendarEvents
   };
 
   function callback(err, ret) {
@@ -18,8 +18,9 @@ router.get('/events', function (req, res, next) {
     if (err) {
       next(new Error(err));
     } else {
+      // this function is called once per element in the calendarEvents array
 
-      // For each calender event, find a matching datastore event if it exists
+      // For each calender event, find a matching datastore event if it exists, ret.datastore is an array
       var joinedEvents = ret.calendarEvents.map(function(calendarEvent) {
 
         // match function: returns true if there's a matching event, false otherwise
@@ -27,7 +28,8 @@ router.get('/events', function (req, res, next) {
           return datastoreEvent.calendarId === calendarEvent.calendarId
             && datastoreEvent.eventId === calendarEvent.eventId;
         }
-
+        // matchedDataStoreEvents should only contain 0 or 1 dataStoreEvent items
+        // if we don't find a match, then we need to add in the default tags
         var matchedDatastoreEvents = ret.datastoreEvents.filter(isMatch);
 
         // if there's not an event in the datastore that matches the calendar event
@@ -35,6 +37,7 @@ router.get('/events', function (req, res, next) {
           // insert default tags into datastore
           GoogleDatastore.insertEvent(calendarEvent);
         } else {
+          // if we did find a matching event, set tags to the default tags in the calendar
           // set tags field of calender event to those found in the datastore
           calendarEvent.tags = matchedDatastoreEvents[0].tags;
         }
@@ -47,7 +50,7 @@ router.get('/events', function (req, res, next) {
 
     }
   }
-
+  // runs asynchronous functions in parallel
   async.parallel(calls, callback);
 
 });

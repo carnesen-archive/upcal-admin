@@ -35,7 +35,14 @@ app.factory('ccFactory', ['$http', function($http){
       url: '/api/events',
       method: 'put'
     }).then(function(response){
+      var possibleTags = [];
       console.log('put response', response);
+      var eventList = response.data.map(function(elem) {
+        elem.tags = elem.tags.map(function(tag) {
+          possibleTags.pushUnique(tag);
+          return {tags: ['tag', 'tag', 'tag']}
+        })
+      })
       return response.data;
     })
   };
