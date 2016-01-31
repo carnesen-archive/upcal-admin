@@ -6,6 +6,7 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   $scope.pageNumber = 1;
   $scope.startNumber = 0;
   $scope.listQuantity = 20;
+  $scope.pages = 0;
 
   $scope.turnPage = function(increment){
     if(increment === -1 && $scope.pageNumber === 1){return;}
@@ -34,7 +35,8 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   ccFactory.getTable().then(function(eventList){
     $scope.possibleSearchTags = eventList.possibleTags;
     $scope.eventList = eventList;
-    console.log('alksjeflkjes',$scope.possibleSearchTags)
+    $scope.pages = Math.floor($scope.eventList.length/20)
+    console.log($scope.pages)
   });
 
   $scope.openEdit = function(event){
