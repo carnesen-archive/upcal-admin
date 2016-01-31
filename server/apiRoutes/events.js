@@ -13,6 +13,8 @@ router.get('/events', function (req, res, next) {
     datastoreEvents: GoogleDatastore.listAllEvents
   };
 
+  async.parallel(calls, callback);
+
   function callback(err, ret) {
 
     if (err) {
@@ -48,52 +50,44 @@ router.get('/events', function (req, res, next) {
     }
   }
 
-  async.parallel(calls, callback);
-
 });
 
-router.delete('/events', function (req, res, next) {
-  var eventSpec = {
-    eventId: req.query.eventId,
-    calendarId: req.query.calendarId
-  };
-  GoogleCalendar.deleteEvent(eventSpec, function (err) {
-    if (err) {
-      // creates a new Error object (error is constructor) and takes a single object and passes it to the next middleware
-      // links to WebServer.js error handler
-      next(new Error(err));
-    } else {
-      res.sendStatus(200);
-    }
-  });
+router.delete('/events/:calendarId/:eventId', function (req, res, next) {
+  res.sendStatus(200);
+  //GoogleCalendar.deleteEvent(eventSpec, function (err) {
+  //  if (err) {
+  //    // creates a new Error object (error is constructor) and takes a single object and passes it to the next middleware
+  //    // links to WebServer.js error handler
+  //    next(new Error(err));
+  //  } else {
+  //    res.sendStatus(200);
+  //  }
+  //});
 });
 
 router.post('/events', function (req, res, next) {
-  var eventSpec = {
-    eventId: req.query.eventId,
-    calendarId: req.query.calendarId
-  };
-  GoogleCalendar.insertEvent(eventSpec, function (err) {
-    if (err) {
-      next(new Error(err));
-    } else {
-      res.send(ret);
-    }
+  res.send({
+    calendarId: Date.now(),
+    eventId: Date.now()
   });
+  //GoogleCalendar.insertEvent(eventSpec, function (err) {
+  //  if (err) {
+  //    next(new Error(err));
+  //  } else {
+  //    res.send(ret);
+  //  }
+  //});
 });
 
-router.put('/events', function (req, res, next) {
-  var eventSpec = {
-    eventId: req.query.eventId,
-    calendarId: req.query.calendarId
-  };
-  GoogleCalendar.updateEvent(eventSpec, function (Err) {
-    if (err) {
-      next(new Error(err));
-    } else {
-      res.send(ret);
-    }
-  });
+router.put('/events/:calendarId/:eventId', function (req, res, next) {
+  res.sendStatus(200);
+  //GoogleCalendar.updateEvent(eventSpec, function (Err) {
+  //  if (err) {
+  //    next(new Error(err));
+  //  } else {
+  //    res.send(ret);
+  //  }
+  //});
 });
 
 

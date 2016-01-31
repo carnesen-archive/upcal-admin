@@ -7,8 +7,8 @@ var gcloud = require('gcloud');
 var C = require('../Constants');
 
 /*
- In Google Cloud Datastore, a datastore is like a "database" in an RDBMS.
- Within a "dataset" is like a "table" in an RDBMS.
+ In Google Cloud Datastore, a "dataset" is like a "database" in an RDBMS.
+ Within a dataset a "kind" is like a "table" in an RDBMS.
  An "entity" is the equivalent of a row in an RDBMS or a "document" in MongoDB.
  The unique key identifying each entity is called a "key".
  The data fields stored in each entity are called "properties".
@@ -33,7 +33,7 @@ function listAllEvents(callback) {
       callback(err);
     }
     callback(null, entities.map(function(entity) {
-      return entity.data;
+      return entity;
     }));
   });
 
@@ -47,7 +47,7 @@ function listAllEvents(callback) {
 function insertEvent(event, done) {
   done = done || function() {};
   dataset.save({
-    key: dataset.key([KIND]),
+    key: dataset.key([KIND, event.calendarId + event.eventId]),
     data: {
       eventId: event.id,
       calendarId: event.calendarId,
@@ -71,10 +71,19 @@ function deleteAll(done) {
   });
 }
 
-//listAllEvents(console.log)
+function updateEvent() {
+
+}
+
+function deleteEvent(calendarId, eventId, done) {
+  dataset.delete(keys, done)
+}
+listAllEvents(console.log)
 //deleteAll(console.log)
 
 module.exports = {
+  updateEvent: updateEvent,
+  deleteEvent: deleteEvent,
   listAllEvents: listAllEvents,
   insertEvent: insertEvent
 };
