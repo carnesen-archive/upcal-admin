@@ -1,18 +1,55 @@
 'use strict';
 
+var async = require('async');
 var router = require('express').Router();
 
-
+var GoogleDatastore = require('../clients/GoogleDatastore');
 var GoogleCalendar = require('../clients/GoogleCalendar');
 
 router.get('/events', function (req, res, next) {
-  GoogleCalendar.listAllEvents(function (err, ret) {
+
+  var calls = {
+    calendarEvents: GoogleCalendar.listAllEvents,
+    datastoreEvents: GoogleDatastore.listAllEvents
+  };
+
+  function callback(err, ret) {
+
     if (err) {
       next(new Error(err));
     } else {
-      res.send(ret);
+
+      // For each calender event, find a matching datastore event if it exists
+      var joinedEvents = ret.calendarEvents.map(function(calendarEvent) {
+
+        // match function: returns true if there's a matching event, false otherwise
+        function isMatch(datastoreEvent) {
+          return datastoreEvent.calendarId === calendarEvent.calendarId
+            && datastoreEvent.eventId === calendarEvent.eventId;
+        }
+
+        var matchedDatastoreEvents = ret.datastoreEvents.filter(isMatch);
+
+        // if there's not an event in the datastore that matches the calendar event
+        if (matchedDatastoreEvents.length === 0) {
+          // insert default tags into datastore
+          GoogleDatastore.insertEvent(calendarEvent);
+        } else {
+          // set tags field of calender event to those found in the datastore
+          calendarEvent.tags = matchedDatastoreEvents[0].tags;
+        }
+
+        return calendarEvent;
+
+      });
+
+      res.send(joinedEvents);
+
     }
-  });
+  }
+
+  async.parallel(calls, callback);
+
 });
 
 router.delete('/events', function (req, res, next) {

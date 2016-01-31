@@ -19,6 +19,7 @@ var log = require('../Logger');
 var SCOPES = [
   'https://www.googleapis.com/auth/calendar'
 ];
+var CALENDAR_CLIENT = googleapis.calendar('v3');
 var TOKEN_DIR = path.join(C.dataDir, 'credentials');
 var TOKEN_PATH = path.join(TOKEN_DIR, 'calendar.json');
 var CALENDAR_SPECS = [
@@ -47,18 +48,20 @@ var CALENDAR_SPECS = [
   }
 ];
 
-// Module variables
-var calendarClient = googleapis.calendar('v3');
-
 mkdirp.sync(TOKEN_DIR);
 
 /**
- * Get a token and store it in jwtClient.credentials
+ * Get a token from the Google Auth servers and store it in jwtClient.credentials
+ * @param jwtClient
+ * @param done
  */
 function getToken(jwtClient, done) {
 
+  // Read the token file from the TOKEN_DIR directory
   fs.readFile(TOKEN_PATH, function (readErr, fileContents) {
+    // Here we assume that a read error just means the token file doesn't exist yet
     if (!readErr) {
+      // No read error so parse the token file and set credentials
       jwtClient.credentials = JSON.parse(fileContents);
       done();
     } else {
@@ -105,6 +108,12 @@ function authorize(callback) {
   });
 }
 
+/**
+ * Transforms the raw data coming from the Google Calendar API 
+ * @param calendarSpec
+ * @param data
+ * @returns {*}
+ */
 function transformRawCalendar(calendarSpec, data) {
   function transformRawEvent(event) {
     return {
@@ -138,7 +147,7 @@ function listEvents(calendarSpec, callback) {
     };
     // calendarClient is what communicates with google api
     // must pass in an authorized JWT in order to get data back
-    calendarClient.events.list(queryOpts, function (err, response) {
+    CALENDAR_CLIENT.events.list(queryOpts, function (err, response) {
       if (err) {
         callback(err);
       } else {
@@ -158,7 +167,7 @@ function deleteEvent(calendarId, eventId, callback) {
       calendarId: querystring.escape(calendarId),
       eventId: querystring.escape(eventId)
     };
-    calendarClient.events.delete(queryOpts, function (err, response) {
+    CALENDAR_CLIENT.events.delete(queryOpts, function (err, response) {
       if (err) {
         callback(err);
       } else {
@@ -177,7 +186,7 @@ function insertEvent(calendarId, callback) {
       auth: client,
       calendarId: querystring.escape(calendarId)
     };
-    calendarClient.events.insert(queryOpts, function (err, response) {
+    CALENDAR_CLIENT.events.insert(queryOpts, function (err, response) {
       if (err) {
         callback(err);
       } else {
@@ -197,7 +206,7 @@ function updateEvent(eventSpec, callback) {
       calendarId: querystring.escape(calendarId),
       eventId: querystring.escape(eventId)
     };
-    calendarClient.events.update(queryOpts, function (err, response) {
+    CALENDAR_CLIENT.events.update(queryOpts, function (err, response) {
       if (err) {
         callback(err);
       } else {
@@ -231,7 +240,7 @@ function addCalendar(calendarSpec, done) {
         id: calendarSpec.id
       }
     };
-    calendarClient.calendarList.insert(queryOpts, done);
+    CALENDAR_CLIENT.calendarList.insert(queryOpts, done);
   });
 }
 
