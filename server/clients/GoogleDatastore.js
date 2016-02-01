@@ -79,10 +79,11 @@ function updateEvent() {
 }
 
 function deleteEvent(calendarId, eventId, done) {
-  dataset.delete(keys, done)
+  done = done || function() {};
+  dataset.delete(dataset.key([KIND, calendarId + eventId], done));
 }
+//insertEvent(sampleEvent)
 //listAllEvents(console.log)
-//deleteAll(console.log)
 
 module.exports = {
   updateEvent: updateEvent,
