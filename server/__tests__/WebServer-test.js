@@ -25,10 +25,6 @@ describe('WebServer', function() {
     request(WebServer.app).get('/lib/angular.min.js').expect(200, done);
   });
 
-  it('delete /api/events/:calendarId/:eventId', function(done) {
-    request(WebServer.app).delete('/api/events/a/b').expect(200, done);
-  });
-
   it('get /api/version', function(done) {
     request(WebServer.app).get('/api/version').expect(200, done);
   });

@@ -73,7 +73,7 @@ addLib('ng-tags-input/build/ng-tags-input.min.css');
 addLib('bootstrap/dist/css/bootstrap.min.css');
 addLib('bootstrap/dist/js/bootstrap.min.js');
 addLib('angular-ui-bootstrap/dist/ui-bootstrap-tpls.js');
-addLib('angular-animate/angular-animate-min.js');
+addLib('angular-animate/angular-animate.min.js');
 
 app.use("/lib/bootstrap/", express.static(path.join(C.topDir, 'node_modules','bootstrap','dist')));
 
