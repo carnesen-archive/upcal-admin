@@ -1,4 +1,4 @@
-app.controller('ModalDemoCtrl', function ($scope, $uibModal, $log) {
+app.controller('modalCtrl', function ($scope, $uibModal, $log){
 
   $scope.items = ['item1', 'item2', 'item3'];
 
@@ -31,7 +31,7 @@ app.controller('ModalDemoCtrl', function ($scope, $uibModal, $log) {
 
 });
 
-app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) {
+app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items){
 
   $scope.items = items;
   $scope.selected = {
@@ -46,6 +46,3 @@ app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) 
     $uibModalInstance.dismiss('cancel');
   };
 });
-
-
-

@@ -59,7 +59,7 @@
 </div>
 
 
-<div ng-controller="ModalDemoCtrl">
+<div ng-controller="modalCtrl">
   <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header">
       <h3 class="modal-title">I'm a modal!</h3>
@@ -84,6 +84,12 @@
   <button type="button" class="btn btn-default" ng-click="toggleAnimation()">Toggle Animation ({{ animationsEnabled }})</button>
   <div ng-show="selected">Selection from a modal: {{ selected }}</div>
 </div>
+
+
+
+
+
+
 <!--&lt;!&ndash; Trigger the modal with a button &ndash;&gt;-->
 <!--<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>-->
 
