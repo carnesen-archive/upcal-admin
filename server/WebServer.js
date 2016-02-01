@@ -19,7 +19,9 @@ var log = require('./Logger');
 var C = require('./Constants');
 var indexRouter = require('./routes/index');
 var apiRoutes = require('./apiRoutes/index');
-var oauth2 = require('./oauth2')(C.oauth2);
+var passport = require('passport');
+var GoogleStrategy = require('passport-google-oauth2').Strategy;
+var expressSession = require('express-session');
 
 /**
  * Module variables
@@ -28,9 +30,65 @@ var app = express();
 var server = http.createServer(app);
 var libs = [];
 
+
 /**
  * Configure the express app
  */
+
+/**
+ * Passport session setup
+ * To support persistent login sessions, Passport needs to be able to serialize users into and deserialize out
+ * of the session.  Typically this will be as simple as storing the user ID when serializing, and finding the user by ID
+ * when deserializing.  However, since this example does not have a database of user records, the Google profile is
+ * serialized and deserialized.
+ */
+
+
+/*
+passport.serializeUser(function(user, done){
+  done(null,user);
+});
+passport.deserializeUser(function (obj, done){
+    done(err, obj);
+});
+
+/**
+ * Use the GoogleStrategy within Passport.
+ * Strategies in Passport require a 'verify' function, which accept credentials (in this case, an accessToken, refreshToken,
+ * and Google profile), and invoke a callback with a user object.
+
+
+passport.use(new GoogleStrategy({
+  clientID: C.oauth2.clientId,
+  clientSecret: C.oauth2.clientSecret,
+  //NOTE: Careful and avoid usage of Private IP, otherwise you will get the device_id device_name issue for Private IP during
+  //authentication.  The workaround is to set up thru google cloud console a full qualified domain name such as http://mydomain:3000/
+  //then edit your /etc/hosts local file to point on your Private IP.
+  // also both sign-in button + callbackURL has to share the same url, otherwise two cookies will be created and lead to lost session.
+  callbackURL:'http://localhost:3000/oauth2callback',
+  passReqToCallback: true
+},
+function(request, accessToken, refreshToken, profile, done) {
+  //asynch verification for effect...
+  process.nextTick(function () {
+
+    // to keep this simple, the user's Google profile is returned to represent the logged-in user.  In a typical application,
+    // you would want to associate the Google account with a user record in your database, and return that user instead.
+    return done(null, profile);
+  });
+}
+));
+
+/*
+app.get('/api/*', ensureAuthenticated, function(req, res){
+  res.json({message: 'Hooray! welcome to our route.'});
+}
+);
+*/
+apiRoutes.forEach(function(router) {
+  app.use('/api', router);
+});
+
 
 // log all http requests
 app.use(morgan('dev', {stream: log.stream}));
@@ -43,6 +101,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+/*
+//app.use(expressSession({
+  //secret: // this requires a secret...unsure what we need here.
+  // ));
+
+// Initialize Passport!  Also use passport.session() middleware, to support
+// persistent login sessions (recommended).
+app.use(passport.initialize());
+app.use(passport.session());
+*/
+
 // pretty print JSON responses
 app.set('json spaces', 2);
 
@@ -51,12 +120,31 @@ app.use(express.static(path.join(C.topDir, 'public')));
 
 app.use(indexRouter);
 
-apiRoutes.forEach(function(router) {
-  app.use('/api', router);
+/* route where user goes after clicking log on
+app.get('/auth/google',
+  passport.authenticate('google',
+  {scope: ['https://www.googleapis.com/auth/userinfo.profile',
+  'https://www.googleapis.com/auth/userinfo.email']}),
+  function(req, res){} // never called
+);
+
+// call back address to tell local server whether authentication was successful.
+app.get('/oauth2callback',
+  passport.authenticate('google',
+  {successRedirect: '/', failureRedirect: '/login'}
+));
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
 });
 
-app.use('/api', oauth2.required);
-//oauth2.required, oauth2.aware, oauth2.template,
+// checks if request is made by an authenticated user (used with routes to authenticate)
+function ensureAuthenticated(req, res, next){
+  if(req.isAuthenticated()) {return next();}
+  res.sendStatus(401);
+}
+*/
 
 function addLib(relativePath) {
   var fileName = path.basename(relativePath);
@@ -77,18 +165,21 @@ addLib('angular-animate/angular-animate-min.js');
 
 app.use("/lib/bootstrap/", express.static(path.join(C.topDir, 'node_modules','bootstrap','dist')));
 
+
+
+// THIS IS FROM GOOG OAUTH2 not PASSPORT
 // Configure session and session storage
 // MemoryStory isn't vaiable in a multi-server configuration, so we use
 // encrypted cookies.  Redis or Memcache is a great option for more secure sessions.
 
-app.use(session({
-  secret: C.secret,
-  signed: true
-}));
+//app.use(session({
+  //secret: C.secret,
+  //signed: true
+//}));
 
 //OAuth2
 
-app.use(oauth2.router);
+//app.use(oauth2.router);
 
 
 // attach error handler for http server
