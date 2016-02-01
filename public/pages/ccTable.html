@@ -59,18 +59,31 @@
 </div>
 
 
-<div ng-controller="ModalDemoCtrl">
+<div ng-controller="modalCtrl">
   <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header">
       <h3 class="modal-title">I'm a modal!</h3>
     </div>
     <div class="modal-body">
-      <ul>
+      <form ng-submit="$parent.saveRow()">
+        <lable for="summary">Summary</lable>
+        <input type="text" name="summary" ng-model="$parent.currentEvent.summary">
+        <lable for="startDate">Start Date</lable>
+        <input type="date" name="startDate" ng-model="$parent.currentEvent.startDate">
+        <lable for="endDate">End Date</lable>
+        <input type="date" name="endDate" ng-model="$parent.currentEvent.endDate">
+        <label for="description">Description</label>
+        <input type="text" name="description" ng-model="$parent.currentEvent.description">
+        <h4>Tags</h4>
+        <tags-input type="text" ng-model="$parent.currentEvent.tags">
+          <input type="submit" value="Save event">
+      </form>
+     <!-- <ul>
         <li ng-repeat="item in items">
           <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
         </li>
       </ul>
-      Selected: <b>{{ selected.item }}</b>
+      Selected: <b>{{ selected.item }}</b>-->
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
@@ -84,6 +97,12 @@
   <button type="button" class="btn btn-default" ng-click="toggleAnimation()">Toggle Animation ({{ animationsEnabled }})</button>
   <div ng-show="selected">Selection from a modal: {{ selected }}</div>
 </div>
+
+
+
+
+
+
 <!--&lt;!&ndash; Trigger the modal with a button &ndash;&gt;-->
 <!--<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>-->
 

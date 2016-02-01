@@ -56,16 +56,13 @@ router.get('/events', function (req, res, next) {
 });
 
 router.delete('/events/:calendarId/:eventId', function (req, res, next) {
-  res.sendStatus(200);
-  //GoogleCalendar.deleteEvent(eventSpec, function (err) {
-  //  if (err) {
-  //    // creates a new Error object (error is constructor) and takes a single object and passes it to the next middleware
-  //    // links to WebServer.js error handler
-  //    next(new Error(err));
-  //  } else {
-  //    res.sendStatus(200);
-  //  }
-  //});
+  GoogleCalendar.deleteEvent(req.params, function (err) {
+    if (err) {
+      next(new Error(err));
+    } else {
+      res.sendStatus(200);
+    }
+  });
 });
 
 router.post('/events', function (req, res, next) {

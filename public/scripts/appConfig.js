@@ -1,7 +1,9 @@
 // Angular module
 
 // create our app. injecting ngRoute/ngTagsInput directives
-var app = angular.module('unionPark', ['ngRoute', 'ngTagsInput']);
+var app = angular.module('unionPark', ['ngRoute', 'ui.bootstrap', 'ngTagsInput']);
+//
+//'ngAnimate',
 
 // routes
 // when just #/ ... goes to /pages/login.html, then use loginCtrl

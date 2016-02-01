@@ -19,6 +19,10 @@ var dataset = gcloud.datastore.dataset(C.gcloud);
 // We'll just use a single kind, "Event"
 var KIND = 'Event';
 
+function key(calendarId, eventId) {
+  return dataset.key([KIND, calendarId + ' ' + eventId]);
+}
+
 /**
  * Returns an error all entities of kind KIND
  * @param callback : function of err, entities
@@ -52,7 +56,7 @@ function insertEvent(event, done) {
   dataset.save({
     key: dataset.key([KIND, event.calendarId + event.eventId]),
     data: {
-      eventId: event.id,
+      eventId: event.eventId,
       calendarId: event.calendarId,
       tags: event.tags
     }
@@ -79,10 +83,11 @@ function updateEvent() {
 }
 
 function deleteEvent(calendarId, eventId, done) {
-  dataset.delete(keys, done)
+  done = done || function() {};
+  dataset.delete(key(calendarId, eventId), done);
 }
+//insertEvent(sampleEvent)
 //listAllEvents(console.log)
-//deleteAll(console.log)
 
 module.exports = {
   updateEvent: updateEvent,

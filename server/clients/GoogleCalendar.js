@@ -117,7 +117,7 @@ function authorize(callback) {
 function transformRawCalendar(calendarSpec, data) {
   function transformRawEvent(event) {
     return {
-      id: event.id,
+      eventId: event.id,
       calendarId: calendarSpec.id,
       htmlLink: event.htmlLink,
       summary: event.summary,
@@ -241,6 +241,18 @@ function addCalendar(calendarSpec, done) {
       }
     };
     CALENDAR_CLIENT.calendarList.insert(queryOpts, done);
+  });
+}
+
+function createCalendar(done) {
+  authorize(function (err, client) {
+    if (err) {
+      return done(err);
+    }
+    var queryOpts = {
+      auth: client
+    };
+    CALENDAR_CLIENT.calendars.insert(queryOpts, done);
   });
 }
 
