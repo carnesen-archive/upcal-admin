@@ -35,15 +35,18 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   ccFactory.getTable().then(function(eventList){
     $scope.possibleSearchTags = eventList.possibleTags;
     $scope.eventList = eventList;
-    $scope.pages = Math.floor($scope.eventList.length/20)
+    $scope.pages = Math.floor($scope.eventList.length/20);
     console.log($scope.pages)
   });
 
 
-  $scope.openEdit = function(event){
+  $scope.openEdit = function(event,eventIndex){
     $scope.currentEvent = event;
-    console.log(event);
-    ccFactory.open();
+    ccFactory.open(event).then(function(response){
+      $scope.currentEvent = response;
+      $scope.eventList[eventIndex] = response;
+      ccFactory.putRow(response);
+    });
   };
 
   $scope.addTag = function(newTag){

@@ -28,25 +28,21 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal, $log
 
   // update table in database
   myService.putRow = function(currentEvent){
-    // put a single row to server
-    // reverse tags arrays back to just text format {tags:['tag1', 'tag2', 'tag3']}
-    // return 'tag1' see line 19
-
-    // return array of tag names as strings
-    currentEvent.tags = currentEvent.tags.map(function(tag) {
+    var event = Object.assign({},currentEvent);
+    var startDate = event.startDate;
+    var endDate = event.endDate;
+    event.tags = event.tags.map(function(tag) {
       return tag.text;
     });
-
-    // change javascript dates "currentEvent.startDate","currentEvent.endDate"
-    // to string format: '2015-5-31'
-
+    event.startDate = startDate.getFullYear() + '-' + (startDate.getMonth()+1) + '-' + startDate.getDate();
+    event.endDate = endDate.getFullYear() + '-' + endDate.getMonth() + '-' + endDate.getDate();
+    console.log(event);
     return $http({
       url: '/api/events',
       method: 'put'
     }).then(function(response){
       var possibleTags = [];
       console.log('put response', response);
-
       return response.data;
     })
   };
@@ -76,19 +72,24 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal, $log
   // modal open
   myService.animationsEnabled = true;
 
-  myService.open = function () {
+  myService.open = function (event) {
 
+    var myEvent = Object.assign({},event);
+    console.log('myEvent copy',myEvent);
     var modalInstance = $uibModal.open({
       animation: myService.animationsEnabled,
       templateUrl: 'myModalContent.html',
       controller: 'ModalInstanceCtrl',
-      size: 'lg'
+      size: 'lg',
+      resolve: {
+        currentEvent: function () {
+          return myEvent;
+        }
+      }
     });
 
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
+    return modalInstance.result.then(function (updatedEvent) {
+      return updatedEvent;
     });
   };
 
@@ -96,8 +97,6 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal, $log
   myService.toggle = function(bool){
     return !bool;
   };
-
-
 
   return myService;
 }]);

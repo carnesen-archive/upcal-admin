@@ -27,7 +27,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="event in eventList | limitTo:listQuantity:startNumber" ng-click="openEdit(event)">
+      <tr ng-repeat="event in eventList | limitTo:listQuantity:startNumber" ng-click="openEdit(event,eventList.indexOf(event))">
         <td class="firstCol">{{event.summary}}</td>
         <td>{{event.startDate.toDateString()}}</td>
         <td>{{event.endDate.toDateString()}}</td>
@@ -42,23 +42,6 @@
   </div>
 </div>
 
-<div class="modal-dialog">
-  <form ng-show="editForm" ng-submit="saveRow()">
-    <label for="summary">Summary</label>
-    <input type="text" name="summary" ng-model="currentEvent.summary">
-    <label for="startDate">Start Date</label>
-    <input type="date" name="startDate" ng-model="currentEvent.startDate">
-    <label for="endDate">End Date</label>
-    <input type="date" name="endDate" ng-model="currentEvent.endDate">
-    <label for="description">Description</label>
-    <input type="text" name="description" ng-model="currentEvent.description">
-    <h4>Tags</h4>
-    <tags-input type="text" ng-model="currentEvent.tags">
-      <input type="submit" value="Save event">
-  </form>
-</div>
-
-
   <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header">
       <h3 class="modal-title">I'm a modal!</h3>
@@ -68,21 +51,14 @@
         <lable for="summary">Summary</lable>
         <input type="text" name="summary" ng-model="currentEvent.summary">
         <lable for="startDate">Start Date</lable>
-        <input type="date" name="startDate" ng-model="$parent.currentEvent.startDate">
+        <input type="date" name="startDate" ng-model="currentEvent.startDate">
         <lable for="endDate">End Date</lable>
-        <input type="date" name="endDate" ng-model="$parent.currentEvent.endDate">
+        <input type="date" name="endDate" ng-model="currentEvent.endDate">
         <label for="description">Description</label>
-        <input type="text" name="description" ng-model="$parent.currentEvent.description">
+        <input type="text" name="description" ng-model="currentEvent.description">
         <h4>Tags</h4>
-        <tags-input type="text" ng-model="$parent.currentEvent.tags">
-          <input type="submit" value="Save event">
+        <tags-input type="text" ng-model="currentEvent.tags">
       </form>
-     <!-- <ul>
-        <li ng-repeat="item in items">
-          <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
-        </li>
-      </ul>
-      Selected: <b>{{ selected.item }}</b>-->
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
@@ -90,7 +66,7 @@
     </div>
   </script>
 
-  <button type="button" class="btn btn-default" ng-click="open()">Open me!</button>
+  <button type="button" class="btn btn-default" ng-click="openEdit({summary:'asdf'})">Open me!</button>
   <button type="button" class="btn btn-default" ng-click="open('lg')">Large modal</button>
   <button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>
   <button type="button" class="btn btn-default" ng-click="toggleAnimation()">Toggle Animation ({{ animationsEnabled }})</button>
