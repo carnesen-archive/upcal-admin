@@ -44,14 +44,17 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
 
     $scope.currentEvent = event;
     ccFactory.open(event).then(function(response){
-      console.log('cID',response.calendarId);
       if(response.calendarId){
         ccFactory.putRow(response).then(function(){
           $scope.eventList[eventIndex] = response;
         });
       } else {
-        ccFactory.postRow(response).then(function(){
-          $scope.eventList.unshift(response);
+        ccFactory.postRow(response).then(function(newEvent){
+          console.log(newEvent);
+          $scope.eventList.unshift(newEvent);
+          newEvent.tags.forEach(function(elem){
+            $scope.eventList.possibleTags.pushUnique(elem)
+          });
         });
       }
     });

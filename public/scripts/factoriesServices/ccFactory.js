@@ -51,8 +51,9 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal, $log
       method: 'post',
       data: event
     }).then(function(response){
-      console.log('post response', response);
-      return response.data
+      newEvent.calendarId = response.data.calendarId;
+      newEvent.eventId = response.data.eventId;
+      return newEvent;
     })
   };
 
