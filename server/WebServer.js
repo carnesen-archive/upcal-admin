@@ -55,7 +55,7 @@ apiRoutes.forEach(function(router) {
   app.use('/api', router);
 });
 
-app.get('/api', oauth2.required);
+app.use('/api', oauth2.required);
 //oauth2.required, oauth2.aware, oauth2.template,
 
 function addLib(relativePath) {
