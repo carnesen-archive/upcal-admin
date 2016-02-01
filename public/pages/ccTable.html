@@ -17,6 +17,7 @@
         <li ng-model="backward" ng-click="turnPage(1)"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></li>
       </ul>
     </div>
+    <button class="btn btn-default" ng-click="openEdit()">Insert New Event</button>
     <table class="table table-hover">
       <thead>
       <tr>
@@ -42,38 +43,29 @@
   </div>
 </div>
 
-  <script type="text/ng-template" id="myModalContent.html">
-    <div class="modal-header">
-      <h3 class="modal-title">I'm a modal!</h3>
-    </div>
-    <div class="modal-body">
-      <form ng-submit="$parent.saveRow()">
-        <lable for="summary">Summary</lable>
-        <input type="text" name="summary" ng-model="currentEvent.summary">
-        <lable for="startDate">Start Date</lable>
-        <input type="date" name="startDate" ng-model="currentEvent.startDate">
-        <lable for="endDate">End Date</lable>
-        <input type="date" name="endDate" ng-model="currentEvent.endDate">
-        <label for="description">Description</label>
-        <input type="text" name="description" ng-model="currentEvent.description">
-        <h4>Tags</h4>
-        <tags-input type="text" ng-model="currentEvent.tags">
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
-    </div>
-  </script>
-
-  <button type="button" class="btn btn-default" ng-click="openEdit({summary:'asdf'})">Open me!</button>
-  <button type="button" class="btn btn-default" ng-click="open('lg')">Large modal</button>
-  <button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>
-  <button type="button" class="btn btn-default" ng-click="toggleAnimation()">Toggle Animation ({{ animationsEnabled }})</button>
-  <div ng-show="selected">Selection from a modal: {{ selected }}</div>
-
-
-
+<script type="text/ng-template" id="myModalContent.html">
+  <div class="modal-header">
+    <h3 class="modal-title">I'm a modal!</h3>
+  </div>
+  <div class="modal-body">
+    <form ng-submit="$parent.saveRow()">
+      <lable for="summary">Summary</lable>
+      <input type="text" name="summary" ng-model="currentEvent.summary">
+      <lable for="startDate">Start Date</lable>
+      <input type="date" name="startDate" ng-model="currentEvent.startDate">
+      <lable for="endDate">End Date</lable>
+      <input type="date" name="endDate" ng-model="currentEvent.endDate">
+      <label for="description">Description</label>
+      <input type="text" name="description" ng-model="currentEvent.description">
+      <h4>Tags</h4>
+      <tags-input type="text" ng-model="currentEvent.tags">
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+  </div>
+</script>
 
 
 <!--&lt;!&ndash; Trigger the modal with a button &ndash;&gt;-->

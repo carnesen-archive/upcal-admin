@@ -41,12 +41,21 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
 
 
   $scope.openEdit = function(event,eventIndex){
+
     $scope.currentEvent = event;
     ccFactory.open(event).then(function(response){
-      $scope.currentEvent = response;
-      $scope.eventList[eventIndex] = response;
-      ccFactory.putRow(response);
+      console.log('cID',response.calendarId);
+      if(response.calendarId){
+        ccFactory.putRow(response).then(function(){
+          $scope.eventList[eventIndex] = response;
+        });
+      } else {
+        ccFactory.postRow(response).then(function(){
+          $scope.eventList.unshift(response);
+        });
+      }
     });
+
   };
 
   $scope.addTag = function(newTag){

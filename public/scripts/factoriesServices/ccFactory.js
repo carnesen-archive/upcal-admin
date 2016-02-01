@@ -28,18 +28,14 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal, $log
 
   // update table in database
   myService.putRow = function(currentEvent){
-    var event = Object.assign({},currentEvent);
-    var startDate = event.startDate;
-    var endDate = event.endDate;
-    event.tags = event.tags.map(function(tag) {
-      return tag.text;
-    });
-    event.startDate = startDate.getFullYear() + '-' + (startDate.getMonth()+1) + '-' + startDate.getDate();
-    event.endDate = endDate.getFullYear() + '-' + endDate.getMonth() + '-' + endDate.getDate();
+    var event = Object.assign({},newEvent);
+    event = myService.prepareEvent(event);
+
     console.log(event);
     return $http({
       url: '/api/events',
-      method: 'put'
+      method: 'put',
+      data: event
     }).then(function(response){
       var possibleTags = [];
       console.log('put response', response);
@@ -47,12 +43,15 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal, $log
     })
   };
 
-  myService.postRow = function(){
+  myService.postRow = function(newEvent){
+    var event = Object.assign({},newEvent);
+    event = myService.prepareEvent(event);
     return $http({
       url: '/api/events',
-      method: 'post'
+      method: 'post',
+      data: event
     }).then(function(response){
-      console.log('put response', response);
+      console.log('post response', response);
       return response.data
     })
   };
@@ -91,6 +90,17 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal, $log
     return modalInstance.result.then(function (updatedEvent) {
       return updatedEvent;
     });
+  };
+
+  myService.prepareEvent = function(event){
+    var startDate = event.startDate;
+    var endDate = event.endDate;
+    event.tags = event.tags.map(function(tag) {
+      return tag.text;
+    });
+    event.startDate = startDate.getFullYear() + '-' + (startDate.getMonth()+1) + '-' + startDate.getDate();
+    event.endDate = endDate.getFullYear() + '-' + endDate.getMonth() + '-' + endDate.getDate();
+    return event
   };
 
   // returns opposite of bool
