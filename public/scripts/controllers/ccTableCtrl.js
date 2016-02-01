@@ -39,9 +39,10 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
     console.log($scope.pages)
   });
 
+
   $scope.openEdit = function(event){
     $scope.currentEvent = event;
-    $scope.editForm = ccFactory.toggle($scope.editForm);
+    ccFactory.open();
   };
 
   $scope.addTag = function(newTag){

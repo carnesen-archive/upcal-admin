@@ -44,7 +44,7 @@
 
  */
 
-var crypto = require('crypto'); // check to see if this needs to be added
+var crypto = require('crypto');
 var googleapis = require('googleapis');
 var express = require('express');
 
