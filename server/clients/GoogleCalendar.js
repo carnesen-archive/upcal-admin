@@ -22,29 +22,25 @@ var SCOPES = [
 var CALENDAR_CLIENT = googleapis.calendar('v3');
 var TOKEN_DIR = path.join(C.dataDir, 'credentials');
 var TOKEN_PATH = path.join(TOKEN_DIR, 'calendar.json');
+var PRIMARY_CALENDAR_SPEC = {
+  id: 'primary',
+  tags: [ 'userCreated' ]
+};
 var CALENDAR_SPECS = [
   {
     name: 'National Health Observances',
     id: 'nt4onda377vop2r2ph07d8shig@group.calendar.google.com',
-    tags: [
-      'health',
-      'observances'
-    ]
+    tags: [ 'health', 'observances' ]
   },
   {
     name: 'US Holidays',
     id: 'en.usa#holiday@group.v.calendar.google.com',
-    tags: [
-      'holidays'
-    ]
+    tags: [ 'holidays' ]
   },
   {
     name: 'Fashion Week',
     id: 'vvfgv249tf6u90hjc4e381g1a8@group.calendar.google.com',
-    tags: [
-      'fashion',
-      'luxury'
-    ]
+    tags: [ 'fashion', 'luxury' ]
   }
 ];
 
@@ -108,6 +104,19 @@ function authorize(callback) {
   });
 }
 
+function toEvent(calendarSpec, event) {
+  return {
+    eventId: event.id,
+    calendarId: calendarSpec.id,
+    htmlLink: event.htmlLink,
+    summary: event.summary,
+    description: event.description,
+    location: event.location,
+    startDate: event.start.date,
+    endDate: event.end.date,
+    tags: calendarSpec.tags
+  }
+}
 /**
  * Transforms the raw data coming from the Google Calendar API 
  * @param calendarSpec
@@ -115,21 +124,9 @@ function authorize(callback) {
  * @returns {*}
  */
 function transformRawCalendar(calendarSpec, data) {
-  function transformRawEvent(event) {
-    return {
-      eventId: event.id,
-      calendarId: calendarSpec.id,
-      htmlLink: event.htmlLink,
-      summary: event.summary,
-      description: event.description,
-      location: event.location,
-      startDate: event.start.date,
-      endDate: event.end.date,
-      tags: calendarSpec.tags
-    }
-  }
-
-  return data.items.map(transformRawEvent);
+  return data.items.map(function(item) {
+    return toEvent(calendarSpec, item);
+  });
 }
 
 
@@ -157,42 +154,43 @@ function listEvents(calendarSpec, callback) {
   });
 }
 
-function deleteEvent(calendarId, eventId, callback) {
-  authorize(function (err, client) {
-    if (err) {
-      return callback(err);
+function toResource(event) {
+  return {
+    summary: event.summary,
+    description: event.description,
+    start: {
+      date: event.startDate,
+      timeZone: 'America/Chicago'
+    },
+    end: {
+      date: event.endDate,
+      timeZone: 'America/Chicago'
     }
-    var queryOpts = {
-      auth: client,
-      calendarId: querystring.escape(calendarId),
-      eventId: querystring.escape(eventId)
-    };
-    CALENDAR_CLIENT.events.delete(queryOpts, function (err, response) {
-      if (err) {
-        callback(err);
-      } else {
-        callback(null, transformRawCalendar(calendarSpec, response));
-      }
-    });
-  });
+  }
 }
 
-function insertEvent(calendarId, callback) {
+function insertEvent(event, callback) {
+
   authorize(function (err, client) {
+
     if (err) {
       return callback(err);
+    } else {
+
+      var queryOpts = {
+        auth: client,
+        calendarId: 'primary',
+        resource: toResource(event)
+      };
+
+      CALENDAR_CLIENT.events.insert(queryOpts, function (err, ret) {
+        if (err) {
+          callback(err);
+        } else {
+          callback(null, toEvent(PRIMARY_CALENDAR_SPEC, ret));
+        }
+      });
     }
-    var queryOpts = {
-      auth: client,
-      calendarId: querystring.escape(calendarId)
-    };
-    CALENDAR_CLIENT.events.insert(queryOpts, function (err, response) {
-      if (err) {
-        callback(err);
-      } else {
-        callback(null, transformRawCalendar(calendarSpec, response));
-      }
-    });
   });
 }
 
@@ -244,25 +242,12 @@ function addCalendar(calendarSpec, done) {
   });
 }
 
-function createCalendar(done) {
-  authorize(function (err, client) {
-    if (err) {
-      return done(err);
-    }
-    var queryOpts = {
-      auth: client
-    };
-    CALENDAR_CLIENT.calendars.insert(queryOpts, done);
-  });
-}
-
 function addCalendars(done) {
   done = done || function () {};
   async.each(CALENDAR_SPECS, addCalendar, done)
 }
 
 module.exports = {
-  deleteEvent: deleteEvent,
   insertEvent: insertEvent,
   updateEvent: updateEvent,
   listEvents: listEvents,

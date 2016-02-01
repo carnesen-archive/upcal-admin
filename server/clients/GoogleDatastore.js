@@ -49,7 +49,7 @@ function listAllEvents(callback) {
 /**
  * Inserts a single event into the datastore
  * @param event : data object to be inserted
- * @param done : optional function called when the insertion has completed
+ * @param done {function} [noop] : optional function called when the insertion has completed
  */
 function insertEvent(event, done) {
   done = done || function() {};
@@ -82,16 +82,11 @@ function updateEvent() {
 
 }
 
-function deleteEvent(calendarId, eventId, done) {
-  done = done || function() {};
-  dataset.delete(key(calendarId, eventId), done);
-}
 //insertEvent(sampleEvent)
 //listAllEvents(console.log)
 
 module.exports = {
   updateEvent: updateEvent,
-  deleteEvent: deleteEvent,
   listAllEvents: listAllEvents,
   insertEvent: insertEvent
 };
