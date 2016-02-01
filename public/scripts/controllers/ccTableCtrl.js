@@ -42,6 +42,7 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
 
   $scope.openEdit = function(event){
     $scope.currentEvent = event;
+    console.log(event);
     ccFactory.open();
   };
 

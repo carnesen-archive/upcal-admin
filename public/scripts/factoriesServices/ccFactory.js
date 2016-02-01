@@ -1,4 +1,4 @@
-app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
+app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal, $log){
   var myService = {};
 
   // get table from database
@@ -76,18 +76,13 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
   // modal open
   myService.animationsEnabled = true;
 
-  myService.open = function (size) {
+  myService.open = function () {
 
     var modalInstance = $uibModal.open({
-      animation: $scope.animationsEnabled,
+      animation: myService.animationsEnabled,
       templateUrl: 'myModalContent.html',
       controller: 'ModalInstanceCtrl',
-      size: size,
-      resolve: {
-        items: function () {
-          return $scope.items;
-        }
-      }
+      size: 'lg'
     });
 
     modalInstance.result.then(function (selectedItem) {
