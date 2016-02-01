@@ -35,15 +35,27 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   ccFactory.getTable().then(function(eventList){
     $scope.possibleSearchTags = eventList.possibleTags;
     $scope.eventList = eventList;
-    $scope.pages = Math.floor($scope.eventList.length/20)
+    $scope.pages = Math.floor($scope.eventList.length/20);
     console.log($scope.pages)
   });
 
 
-  $scope.openEdit = function(event){
+  $scope.openEdit = function(event,eventIndex){
+
     $scope.currentEvent = event;
-    console.log(event);
-    ccFactory.open();
+    ccFactory.open(event).then(function(response){
+      console.log('cID',response.calendarId);
+      if(response.calendarId){
+        ccFactory.putRow(response).then(function(){
+          $scope.eventList[eventIndex] = response;
+        });
+      } else {
+        ccFactory.postRow(response).then(function(){
+          $scope.eventList.unshift(response);
+        });
+      }
+    });
+
   };
 
   $scope.addTag = function(newTag){

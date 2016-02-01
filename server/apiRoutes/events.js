@@ -55,28 +55,15 @@ router.get('/events', function (req, res, next) {
 
 });
 
-router.delete('/events/:calendarId/:eventId', function (req, res, next) {
-  GoogleCalendar.deleteEvent(req.params, function (err) {
+router.post('/events', function (req, res, next) {
+  GoogleCalendar.insertEvent(req.body, function (err, ret) {
     if (err) {
       next(new Error(err));
     } else {
-      res.sendStatus(200);
+      GoogleDatastore.insertEvent(ret);
+      res.send(ret);
     }
   });
-});
-
-router.post('/events', function (req, res, next) {
-  res.send({
-    calendarId: Date.now(),
-    eventId: Date.now()
-  });
-  //GoogleCalendar.insertEvent(eventSpec, function (err) {
-  //  if (err) {
-  //    next(new Error(err));
-  //  } else {
-  //    res.send(ret);
-  //  }
-  //});
 });
 
 router.put('/events/:calendarId/:eventId', function (req, res, next) {
