@@ -19,7 +19,9 @@ var log = require('./Logger');
 var C = require('./Constants');
 var indexRouter = require('./routes/index');
 var apiRoutes = require('./apiRoutes/index');
-var oauth2 = require('./oauth2')(C.oauth2);
+var passport = require('passport');
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var expressSession = require('express-session');
 
 /**
  * Module variables
@@ -28,9 +30,50 @@ var app = express();
 var server = http.createServer(app);
 var libs = [];
 
+
 /**
  * Configure the express app
  */
+
+/**
+ * Passport session setup
+ * To support persistent login sessions, Passport needs to be able to serialize users into and deserialize out
+ * of the session.  Typically this will be as simple as storing the user ID when serializing, and finding the user by ID
+ * when deserializing.  However, since this example does not have a database of user records, the Google profile is
+ * serialized and deserialized.
+ */
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+/**
+ * Use the GoogleStrategy within Passport.
+ * Strategies in Passport require a 'verify' function, which accept credentials (in this case, an accessToken, refreshToken,
+ * and Google profile), and invoke a callback with a user object.
+**/
+
+passport.use(new GoogleStrategy({
+  clientID: C.oauth2.clientId,
+  clientSecret: C.oauth2.clientSecret,
+  callbackURL:'http://localhost:3000/auth/google/callback'
+  //passReqToCallback: true
+},
+function(accessToken, refreshToken, profile, done) {
+  //asynch verification for effect...
+  process.nextTick(function () {
+
+    // to keep this simple, the user's Google profile is returned to represent the logged-in user.  In a typical application,
+    // you would want to associate the Google account with a user record in your database, and return that user instead.
+    return done(null, profile);
+  });
+}
+));
+
 
 // log all http requests
 app.use(morgan('dev', {stream: log.stream}));
@@ -42,6 +85,14 @@ app.set('views', path.join(__dirname, 'views'));
 // Put POST data into request.body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
+// need to set resave/saveUninitalized values explicitly due to impending default changes
+app.use(expressSession({secret: 'unionpark', resave: true, saveUninitialized: true}));
+
+// Initialize Passport!  Also use passport.session() middleware, to support
+// persistent login sessions (recommended).
+app.use(passport.initialize());
+app.use(passport.session());
 
 // pretty print JSON responses
 app.set('json spaces', 2);
@@ -55,8 +106,58 @@ apiRoutes.forEach(function(router) {
   app.use('/api', router);
 });
 
-app.use('/api', oauth2.required);
-//oauth2.required, oauth2.aware, oauth2.template,
+
+/** GET /auth/google
+ * Use passport.authenticate() as route middleware to authenticate the request. The first step in Google authentication
+ * will involve redirecting the user to google.com. After authorization, GOOG will redirect the user back to this app
+ * att /auth/google/callback.
+ */
+
+app.get('/auth/google',
+  passport.authenticate('google', {
+    hostedDomain: 'upcal-admin.com',
+    scope: ['https://www.googleapis.com/auth/plus.login'] }),
+  function(req, res){
+    // request to redirect to GOOG for authentication, so this function won't be called.
+  });
+
+/** GET /auth/google/callback
+ * Use passport.authenticate() as route middleware to authenticate the request. If authentication fails, the user will
+ * be redirected back to the login page. Otherwise, primary route function will be called, which will redirect to /.
+ */
+
+app.get('/auth/google/callback',
+  passport.authenticate('google', {failureRedirect: '/'}), //change to /login when created
+  function(req, res){
+    res.redirect('/');
+  });
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
+
+
+/*
+ app.get('/api/*', ensureAuthenticated, function(req, res){
+ res.json({message: 'Hooray! welcome to our route.'});
+ }
+ );
+ */
+
+
+
+
+/** Simple route middleware to ensure user is authe'd.
+ * Use this route middleware on any resource that needs to be protected. If the request is auth'd,
+ * the request will proceed.  Otherwise, the user will be redirected to login page.
+ */
+
+function ensureAuthenticated(req, res, next){
+  if(req.isAuthenticated()) {return next();}
+  res.redirect('/poop');
+}
+
 
 function addLib(relativePath) {
   var fileName = path.basename(relativePath);
@@ -76,19 +177,6 @@ addLib('angular-ui-bootstrap/dist/ui-bootstrap-tpls.js');
 addLib('angular-animate/angular-animate.min.js');
 
 app.use("/lib/bootstrap/", express.static(path.join(C.topDir, 'node_modules','bootstrap','dist')));
-
-// Configure session and session storage
-// MemoryStory isn't vaiable in a multi-server configuration, so we use
-// encrypted cookies.  Redis or Memcache is a great option for more secure sessions.
-
-app.use(session({
-  secret: C.secret,
-  signed: true
-}));
-
-//OAuth2
-
-app.use(oauth2.router);
 
 
 // attach error handler for http server
@@ -178,6 +266,7 @@ module.exports = {
   libs: libs,
   server: server,
   start: start,
-  stop: stop
+  stop: stop,
+  ensureAuthenticated: ensureAuthenticated,
 
 };
