@@ -20,11 +20,8 @@ html(ng-app="unionPark")
     script(src='/scripts/controllers/modalCtrl.js')
     script(src='https://apis.google.com/js/platform.js', async='', defer='')
   body
-    .page
-      h1= title
-        //.row
-        //  .col-md-2
-        //  .col-md-2
-        //    h1= title
+    .page.container-fluid
+      .header.head
+        h1= title
       block content
 

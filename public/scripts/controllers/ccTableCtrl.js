@@ -32,7 +32,7 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
 
   // If tags are not undefined and are matching, increment 'checkMatches', only push event if all tags match.
   function filterMatches(event){
-    var checkMatches = 0;
+    var checkMatches = 0; // counter to only lets events that match all searchByTags through
     for (var i in event.tags){
       for (var x in $scope.searchByTags) {
         if (event.tags[i].text && $scope.searchByTags[x].text){
