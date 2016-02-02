@@ -46,6 +46,7 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal, $log
   myService.postRow = function(newEvent){
     var event = Object.assign({},newEvent);
     event = myService.prepareEvent(event);
+    console.log(event);
     return $http({
       url: '/api/events',
       method: 'post',
@@ -100,7 +101,7 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal, $log
       return tag.text;
     });
     event.startDate = startDate.getFullYear() + '-' + (startDate.getMonth()+1) + '-' + startDate.getDate();
-    event.endDate = endDate.getFullYear() + '-' + endDate.getMonth() + '-' + endDate.getDate();
+    event.endDate = endDate.getFullYear() + '-' + (endDate.getMonth()+1) + '-' + endDate.getDate();
     return event
   };
 

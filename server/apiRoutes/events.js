@@ -56,6 +56,7 @@ router.get('/events', function (req, res, next) {
 });
 
 router.post('/events', function (req, res, next) {
+  console.log(req.body);
   GoogleCalendar.insertEvent(req.body, function (err, ret) {
     if (err) {
       next(new Error(err));
