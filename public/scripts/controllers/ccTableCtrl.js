@@ -30,13 +30,32 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
     return array;
   };
 
-  $scope.filterResults = function(){
+  // If tags are not undefined and are matching, increment 'checkMatches', only push event if all tags match.
+  function filterMatches(event){
+    var checkMatches = 0;
+    for (var i in event.tags){
+      for (var x in $scope.searchByTags) {
+        if (event.tags[i].text && $scope.searchByTags[x].text){
+          if (event.tags[i].text === $scope.searchByTags[x].text) {
+            console.log('event text', event.tags[i].text, 'search tag text:', $scope.searchByTags[x].text);
+            checkMatches += 1;
+          }
+        }
+      }
+    }
+    if ($scope.searchByTags.length === checkMatches){return event}
+  }
 
+  $scope.eventFilter = function(){
+    $scope.filteredEvents = $scope.eventList.filter(filterMatches);
   };
+
 
   ccFactory.getTable().then(function(eventList){
     $scope.possibleSearchTags = eventList.possibleTags;
     $scope.eventList = eventList;
+    $scope.eventFilter($scope.eventList);
+
     $scope.totalPages = Math.floor($scope.eventList.length/20);
     console.log($scope.totalPages);
   });
@@ -69,6 +88,14 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
 
   $scope.deleteEvent = function(eventIndex){
     $scope.eventList[eventIndex].tags.push({'text': 'deleted'});
+    $scope.eventList.possibleTags.pushUnique({'text': 'deleted'});
+    ccFactory.putRow($scope.eventList[eventIndex]).then(function(success){
+      if (success !== 'success'){
+        console.log('Row Update Failed');
+      } else {
+        console.log('delete success!');
+      }
+    });
   };
 
   $scope.addTag = function(newTag){
