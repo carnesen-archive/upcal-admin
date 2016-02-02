@@ -19,10 +19,12 @@
         <th class="md-table-header">Start Date</th>
         <th class="md-table-header">End Date</th>
         <th class="md-table-header">Tags</th>
+        <th class="md-table-header">Edit Event</th>
+        <th class="md-table-header">Remove Event</th>
       </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="event in eventList | limitTo:itemsPerPage:startNumber" ng-click="openEdit(event,eventList.indexOf(event))">
+      <tr ng-repeat="event in eventList | limitTo:itemsPerPage:startNumber">
         <td class="firstCol">{{event.summary}}</td>
         <td>{{event.startDate.toDateString()}}</td>
         <td>{{event.endDate.toDateString()}}</td>
@@ -31,6 +33,8 @@
             <li ng-repeat="tag in event.tags">{{tag.text}}</li>
           </ul>
         </td>
+        <td><button class="btn btn-default" ng-click="openEdit(event,eventList.indexOf(event))">Edit</button></td>
+        <td><button class="btn btn-default" ng-click="deleteEvent(eventList.indexOf(event))">Remove</button></td>
       </tr>
       </tbody>
     </table>

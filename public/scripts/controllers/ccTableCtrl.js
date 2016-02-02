@@ -55,6 +55,7 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
           }
         });
       } else {
+        response.tags.push({'text': 'User Created'});
         ccFactory.postRow(response).then(function(newEvent){
           console.log(newEvent);
           $scope.eventList.unshift(newEvent);
@@ -64,7 +65,10 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
         });
       }
     });
+  };
 
+  $scope.deleteEvent = function(eventIndex){
+    $scope.eventList[eventIndex].tags.push({'text': 'deleted'});
   };
 
   $scope.addTag = function(newTag){
