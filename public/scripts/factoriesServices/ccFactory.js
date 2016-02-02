@@ -28,18 +28,17 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal, $log
 
   // update table in database
   myService.putRow = function(currentEvent){
-    var event = Object.assign({},newEvent);
+    var event = Object.assign({}, currentEvent);
     event = myService.prepareEvent(event);
 
     console.log(event);
     return $http({
-      url: '/api/events',
+      url: '/api/events/'+ event.calendarId + '/' + event.eventId,
       method: 'put',
       data: event
     }).then(function(response){
-      var possibleTags = [];
       console.log('put response', response);
-      return response.data;
+      return 'success';
     })
   };
 

@@ -68,6 +68,7 @@ router.post('/events', function (req, res, next) {
 });
 
 router.put('/events/:calendarId/:eventId', function (req, res, next) {
+  console.log('ids', req.params.calendarId , ' and... ', req.params.eventId);
   res.sendStatus(200);
   //GoogleCalendar.updateEvent(eventSpec, function (Err) {
   //  if (err) {

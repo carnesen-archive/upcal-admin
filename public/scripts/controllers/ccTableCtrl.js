@@ -45,8 +45,12 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
     $scope.currentEvent = event;
     ccFactory.open(event).then(function(response){
       if(response.calendarId){
-        ccFactory.putRow(response).then(function(){
-          $scope.eventList[eventIndex] = response;
+        ccFactory.putRow(response).then(function(success){
+          if (success !== 'success'){
+            console.log('Row Update Failed')
+          } else {
+            $scope.eventList[eventIndex] = response;
+          }
         });
       } else {
         ccFactory.postRow(response).then(function(newEvent){
