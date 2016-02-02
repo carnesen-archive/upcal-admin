@@ -27,20 +27,28 @@ var googleApiCredentials = {
   client_email: process.env.GOOGLE_API_CLIENT_EMAIL || 'no email provided'
 };
 
+var port = process.env.PORT || 3000;
+
+var baseUrl = process.env.BASE_URL || 'http://localhost:' + port;
+
 module.exports = {
   name: name,
   description: pkg.description,
   npmVersion: pkg.version,
   gitVersion: process.env.npm_package_gitHead,
   topDir: topDir,
-  port: process.env.PORT || 3000,
+  port: port,
   logLevel: process.env.LOG_LEVEL || 'debug',
   googleApiCredentials: googleApiCredentials,
   oauth2: {
-    clientId: process.env.GOOGLE_API_CLIENT_ID || 'no client id provided',
+    clientID: process.env.GOOGLE_API_CLIENT_ID || 'no client id provided',
     clientSecret: process.env.GOOGLE_API_CLIENT_SECRET || 'no secret provided',
-    redirectUrl: process.env.OAUTH2_CALLBACK || 'http://localhost:3000/oauth2callback',
-    scopes: ['email', 'profile']
+    returnURL: baseUrl + '/auth/google/return',
+    realm: baseUrl + '/',
+    scopes: [
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/userinfo.email'
+    ]
   },
   env: env,
   gcloud: {
