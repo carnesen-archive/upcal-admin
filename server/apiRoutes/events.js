@@ -37,7 +37,7 @@ router.get('/events', function (req, res, next) {
         // if there's not an event in the datastore that matches the calendar event
         if (matchedDatastoreEvents.length === 0) {
           // insert default tags into datastore
-          GoogleDatastore.insertEvent(calendarEvent);
+          GoogleDatastore.upsertEvent(calendarEvent);
         } else {
           // if we did find a matching event, set tags to the default tags in the calendar
           // set tags field of calender event to those found in the datastore
@@ -56,28 +56,40 @@ router.get('/events', function (req, res, next) {
 });
 
 router.post('/events', function (req, res, next) {
-  console.log(req.body);
-  GoogleCalendar.insertEvent(req.body, function (err, ret) {
+  GoogleCalendar.insertEvent(req.body, function(err, ret) {
     if (err) {
       next(new Error(err));
     } else {
-      GoogleDatastore.insertEvent(ret);
-      res.send(ret);
+      GoogleDatastore.upsertEvent(ret, function (err) {
+        if (err) {
+          next(new Error(err));
+        } else {
+          res.send(ret);
+        }
+      });
     }
   });
 });
 
 router.put('/events/:calendarId/:eventId', function (req, res, next) {
-  console.log('ids', req.params.calendarId , ' and... ', req.params.eventId);
-  res.sendStatus(200);
-  //GoogleCalendar.updateEvent(eventSpec, function (Err) {
-  //  if (err) {
-  //    next(new Error(err));
-  //  } else {
-  //    res.send(ret);
-  //  }
-  //});
+  var event = Object.assign({}, req.params, req.body);
+  async.parallel(
+    [
+      function (done) {
+        GoogleCalendar.updateEvent(event, done);
+      },
+      function (done) {
+        GoogleDatastore.upsertEvent(event, done);
+      }
+    ],
+    function (err) {
+      if (err) {
+        next(new Error(err));
+      } else {
+        res.sendStatus(200);
+      }
+    }
+  );
 });
-
 
 module.exports = router;

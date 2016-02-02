@@ -194,21 +194,22 @@ function insertEvent(event, callback) {
   });
 }
 
-function updateEvent(eventSpec, callback) {
+function updateEvent(event, done) {
   authorize(function (err, client) {
     if (err) {
-      return callback(err);
+      return done(err);
     }
     var queryOpts = {
       auth: client,
-      calendarId: querystring.escape(calendarId),
-      eventId: querystring.escape(eventId)
+      calendarId: querystring.escape(event.calendarId),
+      eventId: querystring.escape(event.eventId),
+      resource: toResource(event)
     };
-    CALENDAR_CLIENT.events.update(queryOpts, function (err, response) {
+    CALENDAR_CLIENT.events.update(queryOpts, function(err) {
       if (err) {
-        callback(err);
+        done(err);
       } else {
-        callback(null, transformRawCalendar(eventSpec, response));
+        done(null);
       }
     });
   });
