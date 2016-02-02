@@ -1,4 +1,4 @@
-app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal, $log){
+app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
   var myService = {};
 
   // get table from database

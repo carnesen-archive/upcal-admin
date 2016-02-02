@@ -3,19 +3,21 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   $scope.newTag = '';
   $scope.searchByTags = [];
   $scope.possibleSearchTags = [];
-  $scope.pageNumber = 1;
+  $scope.currentPage = 1;
   $scope.startNumber = 0;
-  $scope.listQuantity = 20;
-  $scope.pages = 0;
+  $scope.itemsPerPage = 20;
+  $scope.totalPages = 0;
+  $scope.maxSize = 5;
+  $scope.bigCurrentPage = 1;
 
-  $scope.turnPage = function(increment){
-    if(increment === -1 && $scope.pageNumber === 1){return;}
-    $scope.pageNumber += increment;
+  $scope.setPage = function(){
+    console.log($scope.currentPage);
     $scope.adjustList();
   };
 
   $scope.adjustList = function(){
-    $scope.startNumber = ($scope.pageNumber - 1) * 20;
+    $scope.startNumber = ($scope.currentPage - 1) * 20;
+    console.log($scope.startNumber)
   };
 
   $scope.returnPossibleTags = function(query){
@@ -35,8 +37,8 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   ccFactory.getTable().then(function(eventList){
     $scope.possibleSearchTags = eventList.possibleTags;
     $scope.eventList = eventList;
-    $scope.pages = Math.floor($scope.eventList.length/20);
-    console.log($scope.pages)
+    $scope.totalPages = Math.floor($scope.eventList.length/20);
+    console.log($scope.totalPages);
   });
 
 
@@ -72,5 +74,6 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
 
   $scope.saveRow = function(){
     ccFactory.putRow($scope.currentEvent);
-  }
+  };
+
 }]);
