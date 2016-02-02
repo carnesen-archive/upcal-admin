@@ -216,8 +216,8 @@ function updateEvent(eventSpec, callback) {
 
 // list all events in all calendars
 function listAllEvents(callback) {
-  // async is a library that allows us to map an asynchronous function onto each element in the listEvents array
-  async.map(CALENDAR_SPECS, listEvents, function (err, ret) {
+  var allCalendarSpecs = CALENDAR_SPECS.concat(PRIMARY_CALENDAR_SPEC);
+  async.map(allCalendarSpecs, listEvents, function (err, ret) {
     if (err) {
       callback(err);
     } else {
