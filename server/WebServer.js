@@ -20,7 +20,7 @@ var C = require('./Constants');
 var indexRouter = require('./routes/index');
 var apiRoutes = require('./apiRoutes/index');
 var passport = require('passport');
-var GoogleStrategy = require('passport-google-oauth2').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var expressSession = require('express-session');
 
 /**
@@ -43,32 +43,27 @@ var libs = [];
  * serialized and deserialized.
  */
 
-
-/*
-passport.serializeUser(function(user, done){
-  done(null,user);
+passport.serializeUser(function(user, done) {
+  done(null, user);
 });
-passport.deserializeUser(function (obj, done){
-    done(err, obj);
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
 });
 
 /**
  * Use the GoogleStrategy within Passport.
  * Strategies in Passport require a 'verify' function, which accept credentials (in this case, an accessToken, refreshToken,
  * and Google profile), and invoke a callback with a user object.
-
+**/
 
 passport.use(new GoogleStrategy({
   clientID: C.oauth2.clientId,
   clientSecret: C.oauth2.clientSecret,
-  //NOTE: Careful and avoid usage of Private IP, otherwise you will get the device_id device_name issue for Private IP during
-  //authentication.  The workaround is to set up thru google cloud console a full qualified domain name such as http://mydomain:3000/
-  //then edit your /etc/hosts local file to point on your Private IP.
-  // also both sign-in button + callbackURL has to share the same url, otherwise two cookies will be created and lead to lost session.
-  callbackURL:'http://localhost:3000/oauth2callback',
-  passReqToCallback: true
+  callbackURL:'http://localhost:3000/auth/google/callback'
+  //passReqToCallback: true
 },
-function(request, accessToken, refreshToken, profile, done) {
+function(accessToken, refreshToken, profile, done) {
   //asynch verification for effect...
   process.nextTick(function () {
 
@@ -78,16 +73,6 @@ function(request, accessToken, refreshToken, profile, done) {
   });
 }
 ));
-
-/*
-app.get('/api/*', ensureAuthenticated, function(req, res){
-  res.json({message: 'Hooray! welcome to our route.'});
-}
-);
-*/
-apiRoutes.forEach(function(router) {
-  app.use('/api', router);
-});
 
 
 // log all http requests
@@ -101,16 +86,13 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-/*
-//app.use(expressSession({
-  //secret: // this requires a secret...unsure what we need here.
-  // ));
+// need to set resave/saveUninitalized values explicitly due to impending default changes
+app.use(expressSession({secret: 'unionpark', resave: true, saveUninitialized: true}));
 
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
 app.use(passport.initialize());
 app.use(passport.session());
-*/
 
 // pretty print JSON responses
 app.set('json spaces', 2);
@@ -120,31 +102,62 @@ app.use(express.static(path.join(C.topDir, 'public')));
 
 app.use(indexRouter);
 
-/* route where user goes after clicking log on
-app.get('/auth/google',
-  passport.authenticate('google',
-  {scope: ['https://www.googleapis.com/auth/userinfo.profile',
-  'https://www.googleapis.com/auth/userinfo.email']}),
-  function(req, res){} // never called
-);
+apiRoutes.forEach(function(router) {
+  app.use('/api', router);
+});
 
-// call back address to tell local server whether authentication was successful.
-app.get('/oauth2callback',
-  passport.authenticate('google',
-  {successRedirect: '/', failureRedirect: '/login'}
-));
+
+/** GET /auth/google
+ * Use passport.authenticate() as route middleware to authenticate the request. The first step in Google authentication
+ * will involve redirecting the user to google.com. After authorization, GOOG will redirect the user back to this app
+ * att /auth/google/callback.
+ */
+
+app.get('/auth/google',
+  passport.authenticate('google', {
+    hostedDomain: 'upcal-admin.com',
+    scope: ['https://www.googleapis.com/auth/plus.login'] }),
+  function(req, res){
+    // request to redirect to GOOG for authentication, so this function won't be called.
+  });
+
+/** GET /auth/google/callback
+ * Use passport.authenticate() as route middleware to authenticate the request. If authentication fails, the user will
+ * be redirected back to the login page. Otherwise, primary route function will be called, which will redirect to /.
+ */
+
+app.get('/auth/google/callback',
+  passport.authenticate('google', {failureRedirect: '/'}), //change to /login when created
+  function(req, res){
+    res.redirect('/');
+  });
 
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
 
-// checks if request is made by an authenticated user (used with routes to authenticate)
+
+/*
+ app.get('/api/*', ensureAuthenticated, function(req, res){
+ res.json({message: 'Hooray! welcome to our route.'});
+ }
+ );
+ */
+
+
+
+
+/** Simple route middleware to ensure user is authe'd.
+ * Use this route middleware on any resource that needs to be protected. If the request is auth'd,
+ * the request will proceed.  Otherwise, the user will be redirected to login page.
+ */
+
 function ensureAuthenticated(req, res, next){
   if(req.isAuthenticated()) {return next();}
-  res.sendStatus(401);
+  res.redirect('/poop');
 }
-*/
+
 
 function addLib(relativePath) {
   var fileName = path.basename(relativePath);
@@ -164,22 +177,6 @@ addLib('angular-ui-bootstrap/dist/ui-bootstrap-tpls.js');
 addLib('angular-animate/angular-animate.min.js');
 
 app.use("/lib/bootstrap/", express.static(path.join(C.topDir, 'node_modules','bootstrap','dist')));
-
-
-
-// THIS IS FROM GOOG OAUTH2 not PASSPORT
-// Configure session and session storage
-// MemoryStory isn't vaiable in a multi-server configuration, so we use
-// encrypted cookies.  Redis or Memcache is a great option for more secure sessions.
-
-//app.use(session({
-  //secret: C.secret,
-  //signed: true
-//}));
-
-//OAuth2
-
-//app.use(oauth2.router);
 
 
 // attach error handler for http server
@@ -269,6 +266,7 @@ module.exports = {
   libs: libs,
   server: server,
   start: start,
-  stop: stop
+  stop: stop,
+  ensureAuthenticated: ensureAuthenticated,
 
 };
