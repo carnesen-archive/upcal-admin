@@ -51,9 +51,9 @@ function listAllEvents(callback) {
  * @param event : data object to be inserted
  * @param done {function} [noop] : optional function called when the insertion has completed
  */
-function insertEvent(event, done) {
+function upsertEvent(event, done) {
   done = done || function() {};
-  dataset.save({
+  dataset.upsert({
     key: dataset.key([KIND, event.calendarId + event.eventId]),
     data: {
       eventId: event.eventId,
@@ -78,15 +78,10 @@ function deleteAll(done) {
   });
 }
 
-function updateEvent() {
-
-}
-
 //insertEvent(sampleEvent)
 //listAllEvents(console.log)
 
 module.exports = {
-  updateEvent: updateEvent,
-  listAllEvents: listAllEvents,
-  insertEvent: insertEvent
+  upsertEvent: upsertEvent,
+  listAllEvents: listAllEvents
 };
