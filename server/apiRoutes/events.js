@@ -73,11 +73,15 @@ router.post('/events', function (req, res, next) {
 
 router.put('/events/:calendarId/:eventId', function (req, res, next) {
   var event = Object.assign({}, req.params, req.body);
-  async.parallel(
+  function updateCalendar(done) {
+    GoogleCalendar.updateEvent(event, done);
+  }
+  function noop(done) {
+    done();
+  }
+    async.parallel(
     [
-      function (done) {
-        GoogleCalendar.updateEvent(event, done);
-      },
+      (event.calendarId === 'primary') ? updateCalendar : noop,
       function (done) {
         GoogleDatastore.upsertEvent(event, done);
       }

@@ -76,8 +76,6 @@ function verifyIdToken(idToken, done) {
   })
 }
 
-verifyIdToken('foo', console.log);
-
 module.exports = {
   verifyIdToken: verifyIdToken
 };

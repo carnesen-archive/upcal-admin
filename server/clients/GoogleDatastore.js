@@ -40,7 +40,7 @@ function listAllEvents(callback) {
     // if callback succeeds, put "null" as the value of the error and map the "entities" array
     // each element of "entities" is an object that has a key field and a data field, and we just want to return a data field
     callback(null, entities.map(function(entity) {
-      return entity;
+      return entity.data;
     }));
   });
 
@@ -48,7 +48,7 @@ function listAllEvents(callback) {
 
 /**
  * Inserts a single event into the datastore
- * @param event : data object to be inserted
+ * @param event : object to be inserted
  * @param done {function} [noop] : optional function called when the insertion has completed
  */
 function upsertEvent(event, done) {
@@ -65,21 +65,18 @@ function upsertEvent(event, done) {
 
 /**
  * For development only! Deletes all entities of kind KIND
- * @param done : optional function called when the deletion is
  */
-function deleteAll(done) {
-  done = done || function() {};
+function deleteAll() {
   var q = dataset.createQuery([KIND]);
-  dataset.runQuery(q, function(err, entities) {
-    var keys = entities.map(function(entity) {
+  dataset.runQuery(q, function (err, entities) {
+    var keys = entities.map(function (entity) {
       return entity.key
     });
-    dataset.delete(keys, done);
+    keys.forEach(function (key) {
+      dataset.delete(key, function () {});
+    });
   });
 }
-
-//insertEvent(sampleEvent)
-//listAllEvents(console.log)
 
 module.exports = {
   upsertEvent: upsertEvent,
