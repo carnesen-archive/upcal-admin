@@ -50,7 +50,6 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
     $scope.filteredEvents = $scope.eventList.filter(filterMatches);
   };
 
-
   ccFactory.getTable().then(function(eventList){
     $scope.possibleSearchTags = eventList.possibleTags;
     $scope.eventList = eventList;
