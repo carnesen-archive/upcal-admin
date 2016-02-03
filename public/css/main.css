@@ -2,11 +2,13 @@ body {
 }
 
 main {
+  border: 1px orange solid;
   width:100%;
   padding-top:30px;
 }
 
 input {
+  border: 1px brown solid;
   padding: 1%;
   margin: 1% auto;
   display: block;
@@ -17,17 +19,20 @@ a {
 }
 
 i {
+  border: 1px red solid;
   vertical-align: middle;
   font-size: 24px;
 }
 
 .addEventButton {
+  border: 1px green solid;
   height:50px;
-  margin: 0 10%;
+  margin: 10%;
   width: 80%;
 }
 
 .page {
+  border: 1px pink solid;
   margin: auto;
 }
 
@@ -39,6 +44,11 @@ i {
   color: grey;
 }
 
-uib-pagination {
-  background-color: black;
+.logoheader {
+  border: 1px blue solid;
+  position: relative;
+  float: left;
+  width: 200px;
+  height: 200px;
+
 }
