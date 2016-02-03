@@ -17,7 +17,9 @@ var topDir = path.join(__dirname, '..');
 var dataDir = path.join(process.env.DATA_DIR || process.env.HOME ||
   process.env.HOMEPATH || process.env.USERPROFILE, '.' + name);
 
-mkdirp.sync(dataDir);
+var tokenDir = path.join(dataDir, 'tokens');
+
+mkdirp.sync(tokenDir);
 
 var env = process.env.NODE_ENV || 'development';
 
@@ -43,12 +45,9 @@ module.exports = {
   oauth2: {
     clientID: process.env.GOOGLE_API_CLIENT_ID || 'no client id provided',
     clientSecret: process.env.GOOGLE_API_CLIENT_SECRET || 'no secret provided',
-    returnURL: baseUrl + '/auth/google/return',
+    callbackURL: baseUrl + '/auth/google/callback',
     realm: baseUrl + '/',
-    scopes: [
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/userinfo.email'
-    ]
+    scopes: [ 'profile', 'email' ]
   },
   env: env,
   gcloud: {
@@ -57,5 +56,6 @@ module.exports = {
   },
   secret: process.env.GOOGLE_API_CLIENT_SECRET,
   cloudStorageBucket: 'driven-density-120118',
-  dataDir: dataDir
+  dataDir: dataDir,
+  tokenDir: tokenDir
 };
