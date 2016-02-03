@@ -20,6 +20,7 @@ var C = require('./Constants');
 var indexRouter = require('./routes/index');
 var apiRoutes = require('./apiRoutes/index');
 var passport = require('passport');
+var GoogleTokenInfo = require('./clients/GoogleTokenInfo');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var expressSession = require('express-session');
 
@@ -104,8 +105,27 @@ app.use(express.static(path.join(C.topDir, 'public')));
 
 app.use(indexRouter);
 
+function authMiddleware(req, res, next) {
+  if (C.restricted) {
+    var jwt = req.get('Authorization');
+    if (jwt) {
+      GoogleTokenInfo.verifyIdToken(jwt, function(err) {
+        if (err) {
+          res.sendStatus(401);
+        } else {
+          next();
+        }
+      })
+    } else {
+      res.sendStatus(401);
+    }
+  } else {
+    next();
+  }
+}
+
 apiRoutes.forEach(function(router) {
-  app.use('/api', router);
+  app.use('/api', authMiddleware, router);
 });
 
 function addLib(relativePath) {
