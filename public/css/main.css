@@ -24,6 +24,14 @@ i {
   font-size: 24px;
 }
 
+.header {
+  padding: 5px 20px 20px 5px;
+}
+
+.title {
+  margin-left: 20px;
+}
+
 .addEventButton {
   border: 1px green solid;
   height:50px;

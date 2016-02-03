@@ -1,44 +1,43 @@
-<main>
-  <div class="col-md-3">
-    <button class="btn btn-default addEventButton" ng-click="openEdit()">Insert New Event</button>
-    <h1>Filter</h1>
-    <tags-input type="text" ng-model="searchByTags" on-tag-added="eventFilter()" on-tag-removed="eventFilter()">
-      <span class="glyphicon glyphicon-search"></span>
-      <auto-complete source="returnPossibleTags($query)"></auto-complete>
-    </tags-input>
+
+<div class="col-md-3">
+  <button class="btn btn-default addEventButton" ng-click="openEdit()">Insert New Event</button>
+  <h1>Filter</h1>
+  <tags-input type="text" ng-model="searchByTags" on-tag-added="eventFilter()" on-tag-removed="eventFilter()">
+    <span class="glyphicon glyphicon-search"></span>
+    <auto-complete source="returnPossibleTags($query)"></auto-complete>
+  </tags-input>
+</div>
+<div class="col-md-9">
+  <div class="listLengthSelector">
+    <uib-pagination total-items="filteredEvents.length" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="setPage()" max-size="maxSize" class="pagination-md" boundary-links="true" num-pages="totalPages"></uib-pagination>
   </div>
-  <div class="col-md-9">
-    <div class="listLengthSelector">
-      <uib-pagination total-items="filteredEvents.length" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="setPage()" max-size="maxSize" class="pagination-md" boundary-links="true" num-pages="totalPages"></uib-pagination>
-    </div>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th class="md-table-header">Name</th>
-          <th class="md-table-header">Start Date</th>
-          <th class="md-table-header">End Date</th>
-          <th class="md-table-header">Tags</th>
-          <th class="md-table-header">Edit Event</th>
-          <th class="md-table-header">Remove Event</th>
-        </tr>
-      </thead>
-      <tbody>
-      <tr ng-repeat="event in filteredEvents | limitTo:itemsPerPage:startNumber">
-        <td class="firstCol">{{event.summary}}</td>
-        <td>{{event.startDate.toDateString()}}</td>
-        <td>{{event.endDate.toDateString()}}</td>
-        <td>
-          <ul>
-            <li ng-repeat="tag in event.tags">{{tag.text}}</li>
-          </ul>
-        </td>
-        <td><button class="btn btn-default" ng-click="openEdit(event,eventList.indexOf(event))">Edit</button></td>
-        <td><button class="btn btn-default" ng-click="deleteEvent(eventList.indexOf(event))">Remove</button></td>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th class="md-table-header">Name</th>
+        <th class="md-table-header">Start Date</th>
+        <th class="md-table-header">End Date</th>
+        <th class="md-table-header">Tags</th>
+        <th class="md-table-header">Edit Event</th>
+        <th class="md-table-header">Remove Event</th>
       </tr>
-      </tbody>
-    </table>
-  </div>
-</main>
+    </thead>
+    <tbody>
+    <tr ng-repeat="event in filteredEvents | limitTo:itemsPerPage:startNumber">
+      <td class="firstCol">{{event.summary}}</td>
+      <td>{{event.startDate.toDateString()}}</td>
+      <td>{{event.endDate.toDateString()}}</td>
+      <td>
+        <ul>
+          <li ng-repeat="tag in event.tags">{{tag.text}}</li>
+        </ul>
+      </td>
+      <td><button class="btn btn-default" ng-click="openEdit(event,eventList.indexOf(event))">Edit</button></td>
+      <td><button class="btn btn-default" ng-click="deleteEvent(eventList.indexOf(event))">Remove</button></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
 <script type="text/ng-template" id="myModalContent.html">
   <div class="modal-header">
     <h3 class="modal-title">I'm a modal!</h3>

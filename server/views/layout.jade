@@ -21,8 +21,11 @@ html(ng-app="unionPark")
     script(src='https://apis.google.com/js/platform.js', async='', defer='')
   body
     .page.container-fluid
-      .header.head
-        img.logoheader(src='/img/unionparklogo.jpeg' alt='unionpark logo' style='width:200px;height:200px;')
-        h1= title
-      block content
+      .row
+        .header.navbar
+          img.logoheader(src='/img/up_whitetrans.png' alt='unionpark logo' style='width:100px;height:100px;')
+          h1.title= title
+        .g-signin2(data-onsuccess="onSignIn")
+      .row
+        block content
 
