@@ -112,8 +112,8 @@ function toEvent(calendarSpec, event) {
     summary: event.summary,
     description: event.description,
     location: event.location,
-    startDate: event.start.date,
-    endDate: event.end.date,
+    startDate: event.start.date || event.start.dateTime,
+    endDate: event.end.date || event.end.dateTime,
     tags: calendarSpec.tags
   }
 }
