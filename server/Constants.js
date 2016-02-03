@@ -40,6 +40,7 @@ module.exports = {
   gitVersion: process.env.npm_package_gitHead,
   topDir: topDir,
   port: port,
+  restricted: process.envtrue,
   logLevel: process.env.LOG_LEVEL || 'debug',
   googleApiCredentials: googleApiCredentials,
   oauth2: {
