@@ -35,46 +35,6 @@ var libs = [];
  * Configure the express app
  */
 
-/**
- * Passport session setup
- * To support persistent login sessions, Passport needs to be able to serialize users into and deserialize out
- * of the session.  Typically this will be as simple as storing the user ID when serializing, and finding the user by ID
- * when deserializing.  However, since this example does not have a database of user records, the Google profile is
- * serialized and deserialized.
- */
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
-
-/**
- * Use the GoogleStrategy within Passport.
- * Strategies in Passport require a 'verify' function, which accept credentials (in this case, an accessToken, refreshToken,
- * and Google profile), and invoke a callback with a user object.
-**/
-
-passport.use(new GoogleStrategy({
-  clientID: C.oauth2.clientId,
-  clientSecret: C.oauth2.clientSecret,
-  callbackURL:'http://localhost:3000/auth/google/callback'
-  //passReqToCallback: true
-},
-function(accessToken, refreshToken, profile, done) {
-  //asynch verification for effect...
-  process.nextTick(function () {
-
-    // to keep this simple, the user's Google profile is returned to represent the logged-in user.  In a typical application,
-    // you would want to associate the Google account with a user record in your database, and return that user instead.
-    return done(null, profile);
-  });
-}
-));
-
-
 // log all http requests
 app.use(morgan('dev', {stream: log.stream}));
 
@@ -86,6 +46,23 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+// pretty print JSON responses
+app.set('json spaces', 2);
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+passport.use(new GoogleStrategy(C.oauth2,
+  function(identifier, profile, done) {
+    done(null, profile);
+  }
+));
+
 // need to set resave/saveUninitalized values explicitly due to impending default changes
 app.use(expressSession({secret: 'unionpark', resave: true, saveUninitialized: true}));
 
@@ -94,8 +71,33 @@ app.use(expressSession({secret: 'unionpark', resave: true, saveUninitialized: tr
 app.use(passport.initialize());
 app.use(passport.session());
 
-// pretty print JSON responses
-app.set('json spaces', 2);
+app.get('/auth/google', passport.authenticate('google', {
+    //hostedDomain: 'upcal-admin.com',
+    scope: C.oauth2.scopes
+  })
+);
+
+app.get('/auth/google/return',
+  passport.authenticate('google', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+  }),
+  function(req, res){
+    res.redirect('/');
+  }
+);
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
+
+function ensureAuthenticated(req, res, next){
+  if(req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/login');
+}
 
 // Mount routes
 app.use(express.static(path.join(C.topDir, 'public')));
@@ -105,59 +107,6 @@ app.use(indexRouter);
 apiRoutes.forEach(function(router) {
   app.use('/api', router);
 });
-
-
-/** GET /auth/google
- * Use passport.authenticate() as route middleware to authenticate the request. The first step in Google authentication
- * will involve redirecting the user to google.com. After authorization, GOOG will redirect the user back to this app
- * att /auth/google/callback.
- */
-
-app.get('/auth/google',
-  passport.authenticate('google', {
-    hostedDomain: 'upcal-admin.com',
-    scope: ['https://www.googleapis.com/auth/plus.login'] }),
-  function(req, res){
-    // request to redirect to GOOG for authentication, so this function won't be called.
-  });
-
-/** GET /auth/google/callback
- * Use passport.authenticate() as route middleware to authenticate the request. If authentication fails, the user will
- * be redirected back to the login page. Otherwise, primary route function will be called, which will redirect to /.
- */
-
-app.get('/auth/google/callback',
-  passport.authenticate('google', {failureRedirect: '/'}), //change to /login when created
-  function(req, res){
-    res.redirect('/');
-  });
-
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/');
-});
-
-
-/*
- app.get('/api/*', ensureAuthenticated, function(req, res){
- res.json({message: 'Hooray! welcome to our route.'});
- }
- );
- */
-
-
-
-
-/** Simple route middleware to ensure user is authe'd.
- * Use this route middleware on any resource that needs to be protected. If the request is auth'd,
- * the request will proceed.  Otherwise, the user will be redirected to login page.
- */
-
-function ensureAuthenticated(req, res, next){
-  if(req.isAuthenticated()) {return next();}
-  res.redirect('/poop');
-}
-
 
 function addLib(relativePath) {
   var fileName = path.basename(relativePath);
