@@ -38,3 +38,7 @@ i {
 .grey {
   color: grey;
 }
+
+uib-pagination {
+  background-color: black;
+}
