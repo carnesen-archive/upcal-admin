@@ -39,10 +39,18 @@ i {
   width: 80%;
 }
 
-.page {
+.editButton{}
+
+.deleteButton{}
+
+
+
+.page.container-fluid {
   /*border: 1px pink solid;*/
   margin: auto;
 }
+
+
 
 .bold {
   font-weight: 700;
@@ -66,5 +74,5 @@ i {
   margin-top: 70px;
   margin-left: 40px;
   padding-top: 10px;
-
 }
+
