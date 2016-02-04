@@ -11,13 +11,13 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
       console.log('get response', response);
       var eventList = response.data.map(function(elem){
         elem.tags = elem.tags.map(function(tag){ // tags: [{text: 'tag1'},{text: 'tag2'},{text: 'tag3'}]
-          possibleTags.pushUnique(tag);
+          possibleTags = myService.pushTagText(tag,possibleTags);
           return {'text':tag};
         });
         elem.startDate = new Date(elem.startDate);
         elem.endDate = new Date(elem.endDate);
         return elem
-      })
+      });
       possibleTags = possibleTags.map(function(tag){
         return {text:tag};
       });
@@ -107,6 +107,25 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
   // returns opposite of bool
   myService.toggle = function(bool){
     return !bool;
+  };
+
+  myService.pushTagObject = function(item,array){
+    for (var i = 0 ; i < array.length ; i++){
+      if (array[i].text === item.text){
+        return array;
+      }
+    }
+    array.push(item);
+    return array;
+  };
+
+  myService.pushTagText = function(text, array){
+    if(array.indexOf(text) == -1) {
+      //if(jQuery.inArray(item, this) == -1) {
+      array.push(text);
+      return array;
+    }
+    return array;
   };
 
   return myService;

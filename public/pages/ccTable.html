@@ -7,11 +7,11 @@
   </div>
 <div class="col-md-6" id="addFilter">
   <div class="addFilterCol">
-  <h3 class="addFilterText">Filter by Event Tag</h3>
-  <tags-input type="text" ng-model="searchByTags" on-tag-added="eventFilter()" on-tag-removed="eventFilter()">
-    <span class="glyphicon glyphicon-search"></span>
-    <auto-complete source="returnPossibleTags($query)"></auto-complete>
-  </tags-input>
+    <h3 class="addFilterText">Filter by Event Tag</h3>
+    <tags-input type="text" ng-model="searchByTags" placeholder="Search by Tag" on-tag-added="eventFilter()" on-tag-removed="eventFilter()">
+      <span class="glyphicon glyphicon-search"></span>
+      <auto-complete source="returnPossibleTags($query)"></auto-complete>
+    </tags-input>
   </div>
 </div>
 <div class="tableContainer">
@@ -50,7 +50,7 @@
 </div>
 <script type="text/ng-template" id="myModalContent.html">
   <div class="modal-header">
-    <h3 class="modal-title">I'm a modal!</h3>
+    <h3 class="modal-title">Create or editEvent</h3>
   </div>
   <div class="modal-body">
     <form ng-submit="$parent.saveRow()">
