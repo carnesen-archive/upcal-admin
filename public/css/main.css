@@ -8,7 +8,7 @@ main {
 }
 
 input {
-  border: 1px brown solid;
+  /*border: 1px brown solid;*/
   padding: 1%;
   margin: 1% auto;
   display: block;
@@ -19,7 +19,7 @@ a {
 }
 
 i {
-  border: 1px red solid;
+  /*border: 1px red solid;*/
   vertical-align: middle;
   font-size: 24px;
 }
@@ -33,14 +33,14 @@ i {
 }
 
 .addEventButton {
-  border: 1px green solid;
+  /*border: 1px green solid;*/
   height:50px;
   margin: 10%;
   width: 80%;
 }
 
 .page {
-  border: 1px pink solid;
+  /*border: 1px pink solid;*/
   margin: auto;
 }
 
@@ -53,10 +53,18 @@ i {
 }
 
 .logoheader {
-  border: 1px blue solid;
+  /*border: 1px blue solid;*/
   position: relative;
+  margin-left: 50px;
   float: left;
   width: 200px;
   height: 200px;
+  padding: 10px 20px 10px 10px;
+}
+
+.title {
+  margin-top: 70px;
+  margin-left: 40px;
+  padding-top: 10px;
 
 }
