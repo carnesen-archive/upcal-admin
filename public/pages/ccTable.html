@@ -1,15 +1,22 @@
 
-<div class="col-md-3">
+<div class="col-md-6">
+  <div class="addEventCol">
+  <h3 class="addEventText">Add Event to UPcal</h3>
   <button class="btn btn-default addEventButton" ng-click="openEdit()">Insert New Event</button>
-  <h1>Filter</h1>
+    </div>
+  </div>
+<div class="col-md-6" id="addFilter">
+  <div class="addFilterCol">
+  <h3 class="addFilterText">Filter by Event Tag</h3>
   <tags-input type="text" ng-model="searchByTags" on-tag-added="eventFilter()" on-tag-removed="eventFilter()">
     <span class="glyphicon glyphicon-search"></span>
     <auto-complete source="returnPossibleTags($query)"></auto-complete>
   </tags-input>
+  </div>
 </div>
-<div class="col-md-9">
+<div class="tableContainer">
   <div class="listLengthSelector">
-    <uib-pagination total-items="filteredEvents.length" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="setPage()" max-size="maxSize" class="pagination-md" boundary-links="true" num-pages="totalPages"></uib-pagination>
+    <uib-pagination total-items="filteredEvents.length" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="setPage()" max-size="maxSize" class="pagination-sm" boundary-links="true" num-pages="totalPages"></uib-pagination>
   </div>
   <table class="table table-striped">
     <thead>
@@ -37,6 +44,9 @@
     </tr>
     </tbody>
   </table>
+  <div class="listLengthSelector">
+    <uib-pagination total-items="filteredEvents.length" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="setPage()" max-size="maxSize" class="pagination-md" boundary-links="true" num-pages="totalPages"></uib-pagination>
+  </div>
 </div>
 <script type="text/ng-template" id="myModalContent.html">
   <div class="modal-header">
