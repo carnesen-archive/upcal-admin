@@ -48,6 +48,9 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
 
   $scope.eventFilter = function(){
     $scope.filteredEvents = $scope.eventList.filter(filterMatches);
+    $scope.filteredEvents.sort(function(a, b) {
+      return (a.startDate < b.startDate) ? -1 : 1;
+    });
   };
 
   ccFactory.getTable().then(function(eventList){

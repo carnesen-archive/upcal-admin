@@ -32,8 +32,8 @@
           <li ng-repeat="tag in event.tags">{{tag.text}}</li>
         </ul>
       </td>
-      <td><button class="btn btn-default" ng-click="openEdit(event,eventList.indexOf(event))">Edit</button></td>
-      <td><button class="btn btn-default" ng-click="deleteEvent(eventList.indexOf(event))">Remove</button></td>
+      <td><button class="btn btn-default editButton" ng-click="openEdit(event,eventList.indexOf(event))">Edit</button></td>
+      <td><button class="btn btn-default deleteButton" ng-click="deleteEvent(eventList.indexOf(event))">Remove</button></td>
     </tr>
     </tbody>
   </table>

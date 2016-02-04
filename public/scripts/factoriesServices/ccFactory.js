@@ -17,7 +17,7 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
         elem.startDate = new Date(elem.startDate);
         elem.endDate = new Date(elem.endDate);
         return elem
-      });
+      })
       possibleTags = possibleTags.map(function(tag){
         return {text:tag};
       });
