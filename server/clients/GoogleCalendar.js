@@ -140,7 +140,8 @@ function listEvents(calendarSpec, callback) {
     // queryOpts takes 2 properties, the JWTclient and the calendarId
     var queryOpts = {
       auth: client,
-      calendarId: querystring.escape(calendarSpec.id)
+      calendarId: querystring.escape(calendarSpec.id),
+      timeMin: new Date().toISOString()
     };
     // calendarClient is what communicates with google api
     // must pass in an authorized JWT in order to get data back
