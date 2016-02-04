@@ -81,7 +81,7 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
           console.log(newEvent);
           $scope.eventList.unshift(newEvent);
           newEvent.tags.forEach(function(elem){
-            $scope.eventList.possibleTags.pushUnique(elem)
+            $scope.eventList.possibleTags = ccFactory.pushTagObject(elem,$scope.eventList.possibleTags)
           });
         });
       }
@@ -89,8 +89,9 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   };
 
   $scope.deleteEvent = function(eventIndex){
-    $scope.eventList[eventIndex].tags.push({'text': 'deleted'});
-    $scope.eventList.possibleTags.pushUnique({'text': 'deleted'});
+    $scope.eventList[eventIndex].tags = ccFactory.pushTagObject({'text': 'deleted'},$scope.eventList[eventIndex].tags);
+    $scope.eventList.possibleTags = ccFactory.pushTagObject({'text': 'deleted'},$scope.eventList.possibleTags);
+    console.log($scope.eventList.possibleTags);
     ccFactory.putRow($scope.eventList[eventIndex]).then(function(success){
       if (success !== 'success'){
         console.log('Row Update Failed');
