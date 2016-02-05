@@ -1,12 +1,11 @@
 app.controller('loginCtrl', ['$scope', '$http', 'authService', '$location',
   function ($scope, $http, authService, $location) {
 
-    function onSignIn(googleUser) {
-      var profile = googleUser.getBasicProfile();
-      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-      console.log('Name: ' + profile.getName());
-      console.log('Image URL: ' + profile.getImageUrl());
-      console.log('Email: ' + profile.getEmail());
+    function login() {
+      hello( 'google' ).login( function() {
+        var token = hello( 'google' ).getAuthResponse().access_token;
+        console.log(token)
+      });
     }
 
     function signOut() {
