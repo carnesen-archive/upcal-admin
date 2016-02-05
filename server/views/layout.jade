@@ -5,6 +5,9 @@ html(ng-app="unionPark")
     link(rel="stylesheet" href='/lib/ng-tags-input.min.css')
     link(rel='stylesheet' href='/lib/bootstrap/css/bootstrap.min.css')
     link(rel='stylesheet' href='/css/main.css')
+    script(src='lib/moment.js')
+    script.
+      moment().format()
     script(src='lib/angular.min.js')
     script(src='lib/angular-route.min.js')
     script(src='lib/ng-tags-input.min.js')
@@ -17,7 +20,6 @@ html(ng-app="unionPark")
     script(src='/scripts/controllers/loginCtrl.js')
     script(src='/scripts/controllers/layoutCtrl.js')
     script(src='/scripts/controllers/modalCtrl.js')
-    script(src='lib/moment.js')
     script(src='https://apis.google.com/js/platform.js', async='', defer='')
   body
     .page.container-fluid

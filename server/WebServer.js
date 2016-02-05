@@ -24,7 +24,6 @@ var passport = require('passport');
 var GoogleTokenInfo = require('./clients/GoogleTokenInfo');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var expressSession = require('express-session');
-var moment = require('moment');
 
 /**
  * Module variables
@@ -39,7 +38,7 @@ var libs = [];
  */
 
 // moment.js
-moment().format();
+//moment().format();
 
 // log all http requests
 app.use(morgan('dev', {stream: log.stream}));
@@ -152,6 +151,7 @@ addLib('bootstrap/dist/js/bootstrap.min.js');
 addLib('angular-ui-bootstrap/dist/ui-bootstrap-tpls.js');
 addLib('angular-animate/angular-animate.min.js');
 addLib('hellojs/dist/hello.all.min.js');
+addLib('moment/moment.js');
 
 app.use("/lib/bootstrap/", express.static(path.join(C.topDir, 'node_modules','bootstrap','dist')));
 
