@@ -30,8 +30,19 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
 
   // If tags are not undefined and are matching, increment 'checkMatches', only push event if all tags match.
   function filterMatches(event){
+    var searchDeleted = false;
     var checkMatches = 0; // counter to only lets events that match all searchByTags through
+    for (var x = 0 ; x < $scope.searchByTags.length ; x++){
+      if ($scope.searchByTags[x].text === 'deleted'){
+        searchDeleted = true;
+      }
+    }
     for (var i in event.tags){
+      if (event.tags[i].text === 'deleted' && searchDeleted === true){
+        return event;
+      } else if (event.tags[i].text === 'deleted' && searchDeleted === false){
+        return
+      }
       for (var x in $scope.searchByTags) {
         if (event.tags[i].text && $scope.searchByTags[x].text){
           if (event.tags[i].text === $scope.searchByTags[x].text) {
@@ -85,6 +96,7 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   $scope.deleteEvent = function(eventIndex){
     $scope.eventList[eventIndex].tags = ccFactory.pushTagObject({'text': 'deleted'},$scope.eventList[eventIndex].tags);
     $scope.eventList.possibleTags = ccFactory.pushTagObject({'text': 'deleted'},$scope.eventList.possibleTags);
+    $scope.eventFilter();
     ccFactory.putRow($scope.eventList[eventIndex]).then(function(success){
       if (success !== 'success'){
         console.log('Row Update Failed');

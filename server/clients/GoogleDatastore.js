@@ -77,7 +77,6 @@ function deleteAll() {
     });
   });
 }
-
 module.exports = {
   upsertEvent: upsertEvent,
   listAllEvents: listAllEvents
