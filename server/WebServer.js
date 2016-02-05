@@ -18,6 +18,7 @@ var session = require('cookie-session');
 var log = require('./Logger');
 var C = require('./Constants');
 var indexRouter = require('./routes/index');
+var clientInfo = require('./routes/clientInfo');
 var apiRoutes = require('./apiRoutes/index');
 var passport = require('passport');
 var GoogleTokenInfo = require('./clients/GoogleTokenInfo');
@@ -109,6 +110,7 @@ function ensureAuthenticated(req, res, next){
 app.use(express.static(path.join(C.topDir, 'public')));
 
 app.use(indexRouter);
+app.use(clientInfo);
 
 function authMiddleware(req, res, next) {
   if (C.restricted) {
@@ -152,7 +154,6 @@ addLib('angular-animate/angular-animate.min.js');
 addLib('hellojs/dist/hello.all.min.js');
 
 app.use("/lib/bootstrap/", express.static(path.join(C.topDir, 'node_modules','bootstrap','dist')));
-
 
 // attach error handler for http server
 server.on('error', function(error) {
