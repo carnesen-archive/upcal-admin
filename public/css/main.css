@@ -1,8 +1,8 @@
 body {
+  font-family: Montserrat;
 }
 
 main {
-  border: 1px orange solid;
   width:100%;
   padding-top:30px;
 }
@@ -18,13 +18,31 @@ a {
   text-decoration: none;
 }
 
+td {
+  font-size: 20px;
+}
+
+li {
+  font-size: 16px;
+}
+
+.editButton:hover {
+  background-color: #337AB7;
+  color: #FFFFFF;
+}
+
+.deleteButton:hover {
+  background-color: #337AB7;
+  color: #FFFFFF;
+}
+
 i {
-  /*border: 1px red solid;*/
   vertical-align: middle;
   font-size: 24px;
 }
 
 .header {
+  margin-top: 20px;
   padding: 5px 20px 20px 5px;
 }
 
@@ -33,27 +51,25 @@ i {
 }
 
 .addEventButton {
-  /*border: 1px green solid;*/
   height:50px;
   margin-left: 20%;
   width: 40%;
+  font-size: 150%;
 }
 
 .addEventButton:hover {
-  background-color: #ffff00;
+  background-color: #337AB7;
+  color: #FFFFFF;
 }
 
-.editButton{}
-
-.deleteButton{}
-
-
+tbody tr:hover {
+  color: #337AB7;
+}
 
 .page.container-fluid {
   /*border: 1px pink solid;*/
   margin: auto;
 }
-
 
 
 .bold {
@@ -101,22 +117,23 @@ span.glyphicon {
   margin-left: 5px;
 }
 
-#addEventCol {
+.addEventCol {
   width: 100%;
   margin: 0 auto;
+  padding-left: 100px;
 
 }
 
-.addEventH3 {
+.addFilterCol {
+  width: 50%;
   margin: 0 auto;
-}
-
-#addFilterCol {
-  width: 100%;
-  margin: 0 auto;
-
+  padding-right: 100px;
 }
 
 .tableContainer {
-  margin: 0 50px;
+  margin: 0 75px;
+}
+
+.modal-title {
+  text-align: center;
 }
