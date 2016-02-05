@@ -1,6 +1,5 @@
 app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
   var myService = {};
-
   // get table from database
   myService.getTable = function(){
     return $http({
@@ -13,8 +12,8 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
           possibleTags = myService.pushTagText(tag,possibleTags);
           return {'text':tag};
         });
-        elem.startDate = new Date(elem.startDate);
-        elem.endDate = new Date(elem.endDate);
+        elem.startDate = new moment(elem.startDate);
+        elem.endDate = new moment(elem.endDate);
         return elem
       });
       possibleTags = possibleTags.map(function(tag){
