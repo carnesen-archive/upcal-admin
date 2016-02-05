@@ -5,9 +5,8 @@ app.controller('loginCtrl', ['$scope', '$http', '$location',
       var clientID = response.data.clientID;
       hello.init(
         {google : clientID },
-        {redirect_uri:'redirect.html'}
+        {redirect_uri:'http://localhost:3000/#/ccTable'}
       );
-
       login();
     });
 
