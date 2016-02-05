@@ -8,7 +8,6 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
       method: 'get'
     }).then(function(response){
       var possibleTags = [];
-      console.log('get response', response);
       var eventList = response.data.map(function(elem){
         elem.tags = elem.tags.map(function(tag){ // tags: [{text: 'tag1'},{text: 'tag2'},{text: 'tag3'}]
           possibleTags = myService.pushTagText(tag,possibleTags);
@@ -31,13 +30,11 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
     var event = Object.assign({}, currentEvent);
     event = myService.prepareEvent(event);
 
-    console.log(event);
     return $http({
       url: '/api/events/'+ event.calendarId + '/' + event.eventId,
       method: 'put',
       data: event
     }).then(function(response){
-      console.log('put response', response);
       return 'success';
     })
   };
@@ -45,7 +42,6 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
   myService.postRow = function(newEvent){
     var event = Object.assign({},newEvent);
     event = myService.prepareEvent(event);
-    console.log(event);
     return $http({
       url: '/api/events',
       method: 'post',
@@ -63,7 +59,6 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
       url: '/api/events',
       method: 'delete'
     }).then(function(response){
-      console.log('put response', response);
       return response.data
     })
   };
@@ -75,7 +70,6 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
   myService.open = function (event) {
 
     var myEvent = Object.assign({},event);
-    console.log('myEvent copy',myEvent);
     var modalInstance = $uibModal.open({
       animation: myService.animationsEnabled,
       templateUrl: 'myModalContent.html',

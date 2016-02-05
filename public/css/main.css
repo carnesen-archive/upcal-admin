@@ -1,11 +1,12 @@
 body {
-  font-family: Montserrat;
+  font-family: helvetica;
 }
 
 main {
   width:100%;
   padding-top:30px;
 }
+
 
 input {
   /*border: 1px brown solid;*/
@@ -26,19 +27,20 @@ li {
   font-size: 16px;
 }
 
-.editButton:hover {
-  background-color: #337AB7;
-  color: #FFFFFF;
-}
-
-.deleteButton:hover {
-  background-color: #337AB7;
-  color: #FFFFFF;
-}
 
 i {
   vertical-align: middle;
   font-size: 24px;
+}
+
+/* search icon near filter */
+span.glyphicon {
+  margin-top: 15px;
+  margin-left: 5px;
+}
+
+tbody tr:hover {
+  color: #337AB7;
 }
 
 .header {
@@ -51,15 +53,25 @@ i {
 }
 
 .addEventButton {
-  height:50px;
+  height: 50px;
   font-size: 150%;
 }
 
-.addEventButton:hover {
-  background-color: #337AB7;
-  color: #FFFFFF;
+/* UP logo */
+.logoheader {
+  position: relative;
+  margin-left: 30px;
+  float: left;
+  width: 200px;
+  height: 200px;
+  padding: 10px 20px 10px 10px;
 }
 
+.title {
+  margin-top: 70px;
+  margin-left: 40px;
+  padding-top: 10px;
+}
 
 .addFilterText {
   margin-left: 10px;
@@ -75,12 +87,17 @@ tbody tr:hover {
   color: #337AB7;
 }
 
+/* Table */
+.tableContainer {
+  margin: 0 75px;
+}
+
 .page.container-fluid {
   /*border: 1px pink solid;*/
   margin: auto;
 }
 
-
+/* Text & Color */
 .bold {
   font-weight: 700;
 }
@@ -89,41 +106,53 @@ tbody tr:hover {
   color: grey;
 }
 
-.logoheader {
-  /*border: 1px blue solid;*/
-  position: relative;
-  margin-left: 30px;
-  float: left;
-  width: 200px;
-  height: 200px;
-  padding: 10px 20px 10px 10px;
+/* Buttons */
+.addEventButton {
+  height:50px;
+  margin-left: 20%;
+  width: 40%;
+  font-size: 150%;
 }
 
-.title {
-  margin-top: 70px;
-  margin-left: 40px;
-  padding-top: 10px;
+.addEventButton:hover {
+  background-color: #337AB7;
+  color: #FFFFFF;
 }
 
+.editButton:hover {
+  background-color: #337AB7;
+  color: #FFFFFF;
+}
+
+.deleteButton:hover {
+  background-color: #337AB7;
+  color: #FFFFFF;
+}
+
+/* Pagination */
 .listLengthSelector {
   margin: 0 auto;
-}
-
-.addEventText {
-  margin-left: 25%;
-
-}
-
-
-span.glyphicon {
-  margin-top: 15px;
-  margin-left: 5px;
 }
 
 .tableContainer {
   margin: 0 75px;
 }
 
+/* Add Event, Filter Search */
+.addEventCol {
+  width: 100%;
+  margin: 0 auto;
+  padding-left: 100px;
+}
+
+.addFilterCol {
+  width: 50%;
+  margin: 0 auto;
+  padding-right: 100px;
+}
+
+
+/* Modal */
 .modal-title {
   text-align: center;
 }
