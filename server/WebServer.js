@@ -23,6 +23,7 @@ var passport = require('passport');
 var GoogleTokenInfo = require('./clients/GoogleTokenInfo');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var expressSession = require('express-session');
+var moment = require('moment');
 
 /**
  * Module variables
@@ -35,6 +36,9 @@ var libs = [];
 /**
  * Configure the express app
  */
+
+// moment.js
+moment().format();
 
 // log all http requests
 app.use(morgan('dev', {stream: log.stream}));
@@ -63,6 +67,7 @@ passport.use(new GoogleStrategy(C.oauth2,
     done(null, profile);
   }
 ));
+
 
 // need to set resave/saveUninitalized values explicitly due to impending default changes
 app.use(expressSession({secret: 'unionpark', resave: true, saveUninitialized: true}));
