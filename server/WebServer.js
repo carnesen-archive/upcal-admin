@@ -18,7 +18,6 @@ var session = require('cookie-session');
 var log = require('./Logger');
 var C = require('./Constants');
 var indexRouter = require('./routes/index');
-var clientInfo = require('./routes/clientInfo');
 var apiRoutes = require('./apiRoutes/index');
 var passport = require('passport');
 var GoogleTokenInfo = require('./clients/GoogleTokenInfo');
@@ -108,8 +107,9 @@ function ensureAuthenticated(req, res, next){
 // Mount routes
 app.use(express.static(path.join(C.topDir, 'public')));
 
-app.use(indexRouter);
-app.use(clientInfo);
+// app.use('/clientInfo', clientInfo);
+app.use('/',indexRouter);
+
 
 function authMiddleware(req, res, next) {
   if (C.restricted) {

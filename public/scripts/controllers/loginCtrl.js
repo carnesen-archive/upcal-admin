@@ -1,7 +1,7 @@
-app.controller('loginCtrl', ['$scope', '$http', 'authService', '$location',
-  function ($scope, $http, authService, $location) {
+app.controller('loginCtrl', ['$scope', '$http', '$location',
+  function ($scope, $http, $location) {
 
-    $http.get('/clientInfo').then(function(response){
+    $http.get('/api/clientInfo').then(function(response){
       var clientID = response.data.clientID;
       hello.init(
         {google : clientID },
