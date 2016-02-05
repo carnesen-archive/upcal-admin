@@ -1,14 +1,14 @@
 
 <div class="col-md-6">
   <div class="addEventCol">
-  <!--<h3 class="addEventText">Add Event to UPcal</h3>-->
-  <button class="btn btn-default addEventButton" ng-click="openEdit()">Insert New Event</button>
-    </div>
+    <!--<h3 class="addEventText">Add Event to UPcal</h3>-->
+    <button class="btn btn-default addEventButton" ng-click="openEdit()">Insert New Event</button>
   </div>
+</div>
 <div class="col-md-6" id="addFilter">
   <div class="addFilterCol">
     <!--<h3 class="addFilterText">Filter by Event Tag</h3>-->
-    <tags-input type="text" ng-model="searchByTags" placeholder="Search by Tag" on-tag-added="eventFilter()" on-tag-removed="eventFilter()">
+    <tags-input type="text" class="tagFilter" ng-model="searchByTags" placeholder="Search by Tag" on-tag-added="eventFilter()" on-tag-removed="eventFilter()">
       <span class="glyphicon glyphicon-search"></span>
       <auto-complete source="returnPossibleTags($query)"></auto-complete>
     </tags-input>
