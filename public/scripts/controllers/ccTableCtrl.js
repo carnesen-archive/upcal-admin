@@ -9,7 +9,7 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   $scope.totalPages = 0;
   $scope.maxSize = 5;
   $scope.bigCurrentPage = 1;
-
+  
   $scope.setPage = function(){
     $scope.adjustList();
   };
