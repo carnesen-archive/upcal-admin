@@ -1,5 +1,8 @@
 app.controller('loginCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
+    if(hello( 'google' ).getAuthResponse()){
+      $location.path('/ccTable')
+    }
 
     $scope.login = function(){
       $http.get('/api/clientInfo').then(function(response){
@@ -7,21 +10,18 @@ app.controller('loginCtrl', ['$scope', '$http', '$location',
         console.log(clientID);
         hello.init(
           {google : clientID },
-          {redirect_uri:'http://localhost:3000'}
+          {redirect_uri:'http://localhost:3000/'}
         );
         login();
       });
     };
     function login() {
-      hello( 'google' ).login( function() {
-        var token = hello( 'google' ).getAuthResponse().access_token;
-        $location.path('/ccTable.html');
-        console.log(token)
+      return hello( 'google' ).login( function() {
+        window.location.reload();
       }, function(e){
         alert('login failed. Error:', e);
       });
     }
-
   //$http.post('api/login', $scope.form)
   //  .then(function (response) {
   //

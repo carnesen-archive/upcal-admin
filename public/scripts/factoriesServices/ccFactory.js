@@ -2,7 +2,9 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
   var myService = {};
   // get table from database
   myService.getTable = function(){
+    console.log(hello( 'google' ).getAuthResponse());
     return $http({
+      headers: {'Authorization': hello( 'google' ).getAuthResponse().access_token},
       url: '/api/events',
       method: 'get'
     }).then(function(response){
@@ -32,6 +34,7 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
     event = myService.prepareEvent(event);
 
     return $http({
+      headers: {'Authorization': hello( 'google' ).getAuthResponse().access_token},
       url: '/api/events/'+ event.calendarId + '/' + event.eventId,
       method: 'put',
       data: event
@@ -44,6 +47,7 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
     var event = Object.assign({},newEvent);
     event = myService.prepareEvent(event);
     return $http({
+      headers: {'Authorization': hello( 'google' ).getAuthResponse().access_token},
       url: '/api/events',
       method: 'post',
       data: event
@@ -57,6 +61,7 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
   myService.deleteRow = function(){
     // pass in id as data
     return $http({
+      headers: {'Authorization': hello( 'google' ).getAuthResponse().access_token},
       url: '/api/events',
       method: 'delete'
     }).then(function(response){
