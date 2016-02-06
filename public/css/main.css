@@ -162,9 +162,10 @@ tbody tr:hover {
 /* login box */
 .login-card {
   padding: 40px;
-  width: 300px;
+  width: 500px;
+  height: 500px;
   background-color: #F7F7F7;
-  margin: 100px auto 10px;
+  margin: 80px auto 100px;
   border-radius: 2px;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
   overflow: hidden;
@@ -174,15 +175,24 @@ tbody tr:hover {
 .login-default {
   border: 0px;
   color: #fff;
-  margin-left: 20px;
-  margin-top: 40px;
+  width: 200px;
+  margin-left: 0px;
+  margin-top: 80px;
+
   text-shadow: 0 1px rgba(0,0,0,0.1);
-  background-color: #4d90fe;
+  background-color: #000000;
 }
+
+.login-default:hover {
+  color: #000000;
+  background-color: #fff;
+  border: 1px #000000 solid;
+}
+
 
 /* UP logo in login-box */
 .loginimage {
   position: relative;
-  margin: 10px 50px;
+  margin: 10px 100px;
   padding: 10px;
 }
