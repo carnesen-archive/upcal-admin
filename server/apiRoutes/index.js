@@ -1,1 +1,1 @@
-module.exports = [ require('./events'), require('./version') , require('./clientInfo')];
+module.exports = [ require('./events'), require('./version')];
