@@ -58,9 +58,9 @@ app.use('/',indexRouter);
 
 function authMiddleware(req, res, next) {
   if (C.restricted) {
-    var jwt = req.get('Authorization');
-    if (jwt) {
-      GoogleTokenInfo.verifyIdToken(jwt, function(err) {
+    var access_token = req.get('Authorization');
+    if (access_token) {
+      GoogleTokenInfo.verifyAccessToken(access_token, function(err) {
         if (err) {
           res.sendStatus(401);
         } else {
