@@ -12,17 +12,13 @@ var path = require('path');
 var express = require('express');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
-var session = require('cookie-session');
 
 // Local dependencies
 var log = require('./Logger');
 var C = require('./Constants');
 var indexRouter = require('./routes/index');
 var apiRoutes = require('./apiRoutes/index');
-var passport = require('passport');
 var GoogleTokenInfo = require('./clients/GoogleTokenInfo');
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var expressSession = require('express-session');
 
 /**
  * Module variables
@@ -31,13 +27,9 @@ var app = express();
 var server = http.createServer(app);
 var libs = [];
 
-
 /**
  * Configure the express app
  */
-
-// moment.js
-//moment().format();
 
 // log all http requests
 app.use(morgan('dev', {stream: log.stream}));
@@ -53,56 +45,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 // pretty print JSON responses
 app.set('json spaces', 2);
 
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
-
-passport.use(new GoogleStrategy(C.oauth2,
-  function(identifier, profile, done) {
-    done(null, profile);
-  }
-));
-
-
-// need to set resave/saveUninitalized values explicitly due to impending default changes
-app.use(expressSession({secret: 'unionpark', resave: true, saveUninitialized: true}));
-
-// Initialize Passport!  Also use passport.session() middleware, to support
-// persistent login sessions (recommended).
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.get('/auth/google', passport.authenticate('google', {
-    //hostedDomain: 'upcal-admin.com',
-    scope: C.oauth2.scopes
-  })
-);
-
-app.get('/auth/google/return',
-  passport.authenticate('google', {
-    successRedirect: '/',
-    failureRedirect: '/login'
-  }),
-  function(req, res){
-    res.redirect('/');
-  }
-);
-
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
-
-function ensureAuthenticated(req, res, next){
-  if(req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/login');
-}
 
 // Mount routes
 app.use(express.static(path.join(C.topDir, 'public')));
@@ -110,12 +56,11 @@ app.use(express.static(path.join(C.topDir, 'public')));
 // app.use('/clientInfo', clientInfo);
 app.use('/',indexRouter);
 
-
 function authMiddleware(req, res, next) {
   if (C.restricted) {
-    var jwt = req.get('Authorization');
-    if (jwt) {
-      GoogleTokenInfo.verifyIdToken(jwt, function(err) {
+    var access_token = req.get('Authorization');
+    if (access_token) {
+      GoogleTokenInfo.verifyAccessToken(access_token, function(err) {
         if (err) {
           res.sendStatus(401);
         } else {
@@ -130,12 +75,15 @@ function authMiddleware(req, res, next) {
   }
 }
 
+app.get('/api/clientInfo', function(req,res) {
+  res.send({
+    clientID: C.oauth2.clientID
+  })
+});
+
 apiRoutes.forEach(function(router) {
   app.use('/api', authMiddleware, router);
 });
-
-app.use('/api', require('./apiRoutes/clientInfo'));
-
 
 function addLib(relativePath) {
   var fileName = path.basename(relativePath);
@@ -245,7 +193,6 @@ module.exports = {
   libs: libs,
   server: server,
   start: start,
-  stop: stop,
-  ensureAuthenticated: ensureAuthenticated,
+  stop: stop
 
 };

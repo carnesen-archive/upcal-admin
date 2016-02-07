@@ -35,12 +35,13 @@ var baseUrl = process.env.BASE_URL || 'http://localhost:' + port;
 
 module.exports = {
   name: name,
+  domain: 'upcal-admin.com',
   description: pkg.description,
   npmVersion: pkg.version,
   gitVersion: process.env.npm_package_gitHead,
   topDir: topDir,
   port: port,
-  restricted: false, // !(process.env.RESTRICTED && process.env.RESTRICTED === 'false'),
+  restricted: !(process.env.RESTRICTED && process.env.RESTRICTED === 'false'),
   logLevel: process.env.LOG_LEVEL || 'debug',
   googleApiCredentials: googleApiCredentials,
   oauth2: {

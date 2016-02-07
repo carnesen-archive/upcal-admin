@@ -1,83 +1,36 @@
 'use strict';
 
-// Node.js core modules
-var path = require('path');
-var fs = require('fs');
+// installed modules
+var request = require('request');
 
-// Installed modules
-var googleAuth = require('google-auth-library');
-
-// Local modules
+// local modules
 var C = require('../Constants');
 
-// Local constants
-
-var TOKEN_PATH = path.join(C.tokenDir, 'tokeninfo.json');
-
-function getToken(jwtClient, done) {
-
-  // Read the token file from the TOKEN_DIR directory
-  fs.readFile(TOKEN_PATH, function (readErr, fileContents) {
-    // Here we assume that a read error just means the token file doesn't exist yet
-    if (!readErr) {
-      // No read error so parse the token file and set credentials
-      jwtClient.credentials = JSON.parse(fileContents);
-      done();
-    } else {
-      // The token file doesn't exist so we need to fetch one
-      jwtClient.authorize(function (authErr, token) {
-        if (authErr) {
-          // failed to get a token from the authorization API
-          done(authErr);
-        } else {
-          fs.writeFile(TOKEN_PATH, JSON.stringify(token), function (writeErr) {
-            if (writeErr) {
-              // failed to write token to TOKEN_PATH
-              done(writeErr);
-            } else {
-              jwtClient.credentials = token;
-              done();
-            }
-          });
-        }
-      });
-    }
-  });
-}
-
-/**
- * Calls back an error or an authorized jwt client
- */
-function authorize(callback) {
-  var auth = new googleAuth();
-  auth.fromJSON(C.googleApiCredentials, function (err, jwtClient) {
-    if (err) {
-      callback(err);
-    } else {
-      jwtClient.scopes = C.oauth2.scopes;
-      getToken(jwtClient, function (err) {
-        if (err) {
-          callback(err);
-        } else {
-          callback(null, jwtClient);
-        }
-      });
-    }
-  });
-}
-
-function verifyIdToken(idToken, done) {
-  authorize(function(err, jwtClient) {
+function verifyAccessToken(accessToken, done) {
+  request({
+    method: 'GET',
+    uri: 'https://www.googleapis.com/oauth2/v3/tokeninfo',
+    qs: {
+      access_token: accessToken
+    },
+    json: true
+  }, function(err, res, json) {
     if (err) {
       done(err);
     } else {
-      jwtClient.verifyIdToken(idToken, C.oauth2.clientID, done);
+      var email = json.email;
+      var domain = email.split('@')[1];
+      if (domain === C.domain) {
+        done();
+      } else {
+        done(new Error('Bad Domain ' + domain))
+      }
     }
-  })
+  });
 }
 
-verifyIdToken('ya29.gAI1K8r0qpWZpb5rENBe2gf8SIdodWyEVuc4Zcn2CzmKNlHj1pKS5HLkypumvl6CigFG', console.log)
+//verifyAccessToken('ya29.gQKjmyvenUyCLYIrGP68fOfFiOOpUlWuUkB5s6aDtmktjUxkx6NVUT9dIzUaX0qMXW0W', console.log)
 
 module.exports = {
-  verifyIdToken: verifyIdToken
+  verifyAccessToken: verifyAccessToken
 };
