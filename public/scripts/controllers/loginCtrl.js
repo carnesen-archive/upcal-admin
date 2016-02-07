@@ -4,24 +4,21 @@ app.controller('loginCtrl', ['$scope', '$http', '$location',
       $location.path('/ccTable')
     }
 
-    $scope.login = function(){
-      $http.get('/api/clientInfo').then(function(response){
+    $scope.login = function() {
+      $http.get('/api/clientInfo').then(function (response) {
         var clientID = response.data.clientID;
         console.log(clientID);
-        hello.init(
-          {google : clientID },
-          {redirect_uri:'http://localhost:3000/'}
-        );
-        login();
+        hello.init({
+          google: clientID
+        }, {
+          redirect_uri: 'http://localhost:3000/'
+        });
+        hello.login('google', {
+          display: 'page',
+          scope: 'basic email'
+        });
       });
     };
-    function login() {
-      return hello( 'google' ).login( function() {
-        window.location.reload();
-      }, function(e){
-        alert('login failed. Error:', e);
-      });
-    }
   //$http.post('api/login', $scope.form)
   //  .then(function (response) {
   //
