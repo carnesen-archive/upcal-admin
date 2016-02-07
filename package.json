@@ -44,10 +44,8 @@
     "bookshelf": "0.9.1",
     "bootstrap": "^3.3.6",
     "config": "1.19.0",
-    "cookie-session": "^1.2.0",
     "dotenv": "2.0.0",
     "express": "4.13.1",
-    "express-session": "^1.13.0",
     "gcloud": "^0.27.0",
     "google-auth-library": "0.9.7",
     "googleapis": "2.1.7",
@@ -58,9 +56,6 @@
     "mkdirp": "0.5.1",
     "morgan": "1.6.1",
     "ng-tags-input": "^3.0.0",
-    "passport": "0.3.2",
-    "passport-google-oauth": "0.2.0",
-    "passport-google-oauth2": "^0.1.6",
     "request": "2.69.0"
   },
   "devDependencies": {
