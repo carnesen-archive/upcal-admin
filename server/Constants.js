@@ -41,7 +41,7 @@ module.exports = {
   gitVersion: process.env.npm_package_gitHead,
   topDir: topDir,
   port: port,
-  restricted: false, // !(process.env.RESTRICTED && process.env.RESTRICTED === 'false'),
+  restricted: !(process.env.RESTRICTED && process.env.RESTRICTED === 'false'),
   logLevel: process.env.LOG_LEVEL || 'debug',
   googleApiCredentials: googleApiCredentials,
   oauth2: {

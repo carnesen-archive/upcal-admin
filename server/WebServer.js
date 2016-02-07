@@ -75,12 +75,15 @@ function authMiddleware(req, res, next) {
   }
 }
 
+app.get('/api/clientInfo', function(req,res) {
+  res.send({
+    clientID: C.oauth2.clientID
+  })
+});
+
 apiRoutes.forEach(function(router) {
   app.use('/api', authMiddleware, router);
 });
-
-app.use('/api', require('./apiRoutes/clientInfo'));
-
 
 function addLib(relativePath) {
   var fileName = path.basename(relativePath);
