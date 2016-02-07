@@ -1,52 +1,55 @@
-
-<div class="col-md-6">
-  <div class="addEventCol">
-    <!--<h3 class="addEventText">Add Event to UPcal</h3>-->
-    <button class="btn btn-default addEventButton" ng-click="openEdit()">Insert New Event</button>
-  </div></div>
-<div class="col-md-6" id="addFilter">
-  <div class="addFilterCol">
-    <!--<h3 class="addFilterText">Filter by Event Tag</h3>-->
-    <tags-input type="text" ng-model="searchByTags" placeholder="Search by Tag" on-tag-added="eventFilter()" on-tag-removed="eventFilter()">
-      <span class="glyphicon glyphicon-search"></span>
-      <auto-complete source="returnPossibleTags($query)"></auto-complete>
-    </tags-input>
+<row>
+  <div class="col-md-6">
+    <div class="addEventCol">
+      <!--<h3 class="addEventText">Add Event to UPcal</h3>-->
+      <button class="btn btn-default addEventButton" ng-click="openEdit()">Insert New Event</button>
+    </div></div>
+  <div class="col-md-6" id="addFilter">
+    <div class="addFilterCol">
+      <!--<h3 class="addFilterText">Filter by Event Tag</h3>-->
+      <tags-input type="text" ng-model="searchByTags" placeholder="Search by Tag" on-tag-added="eventFilter()" on-tag-removed="eventFilter()">
+        <span class="glyphicon glyphicon-search"></span>
+        <auto-complete source="returnPossibleTags($query)"></auto-complete>
+      </tags-input>
+    </div>
   </div>
-</div>
-<div class="tableContainer">
-  <div class="listLengthSelector">
-    <uib-pagination total-items="filteredEvents.length" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="setPage()" max-size="maxSize" class="pagination-sm" boundary-links="true" num-pages="totalPages"></uib-pagination>
-  </div>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th class="md-table-header">Name</th>
-        <th class="md-table-header">Start Date</th>
-        <th class="md-table-header">End Date</th>
-        <th class="md-table-header">Tags</th>
-        <th class="md-table-header">Edit Event</th>
-        <th class="md-table-header">Remove Event</th>
+</row>
+<row>
+  <div class="tableContainer">
+    <div class="listLengthSelector">
+      <uib-pagination total-items="filteredEvents.length" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="setPage()" max-size="maxSize" class="pagination-md" boundary-links="true" num-pages="totalPages"></uib-pagination>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th class="md-table-header">Name</th>
+          <th class="md-table-header">Start Date</th>
+          <th class="md-table-header">End Date</th>
+          <th class="md-table-header">Tags</th>
+          <th class="md-table-header">Edit Event</th>
+          <th class="md-table-header">Remove Event</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="event in filteredEvents | limitTo:itemsPerPage:startNumber">
+        <td class="firstCol">{{event.summary}}</td>
+        <td>{{event.startDate.toDateString()}}</td>
+        <td>{{event.endDate.toDateString()}}</td>
+        <td>
+          <ul>
+            <li ng-repeat="tag in event.tags">{{tag.text}}</li>
+          </ul>
+        </td>
+        <td><button class="btn btn-default editButton" ng-click="openEdit(event,eventList.indexOf(event))">Edit</button></td>
+        <td><button class="btn btn-default deleteButton" ng-click="deleteEvent(eventList.indexOf(event))">Remove</button></td>
       </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="event in filteredEvents | limitTo:itemsPerPage:startNumber">
-      <td class="firstCol">{{event.summary}}</td>
-      <td>{{event.startDate.toDateString()}}</td>
-      <td>{{event.endDate.toDateString()}}</td>
-      <td>
-        <ul>
-          <li ng-repeat="tag in event.tags">{{tag.text}}</li>
-        </ul>
-      </td>
-      <td><button class="btn btn-default editButton" ng-click="openEdit(event,eventList.indexOf(event))">Edit</button></td>
-      <td><button class="btn btn-default deleteButton" ng-click="deleteEvent(eventList.indexOf(event))">Remove</button></td>
-    </tr>
-    </tbody>
-  </table>
-  <div class="listLengthSelector">
-    <uib-pagination total-items="filteredEvents.length" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="setPage()" max-size="maxSize" class="pagination-md" boundary-links="true" num-pages="totalPages"></uib-pagination>
+      </tbody>
+    </table>
+    <div class="listLengthSelector">
+      <uib-pagination total-items="filteredEvents.length" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="setPage()" max-size="maxSize" class="pagination-md" boundary-links="true" num-pages="totalPages"></uib-pagination>
+    </div>
   </div>
-</div>
+</row>
 <script type="text/ng-template" id="myModalContent.html">
   <div class="modal-header">
     <h3 class="modal-title">Create or Edit Event</h3>

@@ -7,7 +7,7 @@ app.controller('ccTableCtrl', ['$scope', 'ccFactory', function ($scope, ccFactor
   $scope.startNumber = 0;
   $scope.itemsPerPage = 20;
   $scope.totalPages = 0;
-  $scope.maxSize = 5;
+  $scope.maxSize = 8;
   $scope.bigCurrentPage = 1;
 
   $scope.setPage = function(){

@@ -28,7 +28,6 @@ html(ng-app="unionPark")
         .header.navbar
           img.logoheader(src='/img/up_whitetrans.png' alt='unionpark logo' style='width:200px;height:200px;')
           h1.title= 'Union Park Marketing Editorial Content Cues'
-          logout.navbar-right(ng-controller="logoutCtrl")
-            button.btn.btn-default(ng-click="logout()" ng-if="bool") Logout
-      .row
-        block content
+          logout(ng-controller="logoutCtrl")
+            button.btn.btn-default.logoutButton(ng-click="logout()" ng-if="bool") Logout
+      block content

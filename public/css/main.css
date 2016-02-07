@@ -35,8 +35,9 @@ i {
 
 /* search icon near filter */
 span.glyphicon {
-  margin-top: 15px;
-  margin-left: 5px;
+  position: absolute;
+  top:10px;
+  right:10px;
 }
 
 tbody tr:hover {
@@ -46,15 +47,6 @@ tbody tr:hover {
 .header {
   margin-top: 20px;
   padding: 5px 20px 20px 5px;
-}
-
-.title {
-  margin-left: 20px;
-}
-
-.addEventButton {
-  height: 50px;
-  font-size: 150%;
 }
 
 /* UP logo */
@@ -107,10 +99,14 @@ tbody tr:hover {
 }
 
 /* Buttons */
+.logoutButton{
+  width:150px;
+  height:40px;
+  display:inline;
+  float:right;
+}
 .addEventButton {
-  height:50px;
-  margin-left: 20%;
-  width: 40%;
+  width:100%;
   font-size: 150%;
 }
 
@@ -124,11 +120,20 @@ tbody tr:hover {
   color: #FFFFFF;
 }
 
+.addEventButton:hover {
+  background-color: #337AB7;
+  color: #FFFFFF;
+}
+
 .deleteButton:hover {
   background-color: #337AB7;
   color: #FFFFFF;
 }
 
+.logoutButton:hover {
+  background-color: #337AB7;
+  color: #FFFFFF;
+}
 /* Pagination */
 .listLengthSelector {
   margin: 0 auto;
@@ -140,17 +145,15 @@ tbody tr:hover {
 
 /* Add Event, Filter Search */
 .addEventCol {
-  width: 100%;
+  height:50px;
+  width:300px;
   margin: 0 auto;
-  padding-left: 100px;
 }
 
 .addFilterCol {
-  width: 50%;
+  width:300px;
   margin: 0 auto;
-  padding-right: 100px;
 }
-
 
 /* Modal */
 .modal-title {
