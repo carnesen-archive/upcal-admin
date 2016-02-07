@@ -134,6 +134,9 @@ apiRoutes.forEach(function(router) {
   app.use('/api', authMiddleware, router);
 });
 
+app.use('/api', require('./apiRoutes/clientInfo'));
+
+
 function addLib(relativePath) {
   var fileName = path.basename(relativePath);
   libs.push(relativePath);

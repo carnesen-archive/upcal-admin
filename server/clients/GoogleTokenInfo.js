@@ -76,6 +76,8 @@ function verifyIdToken(idToken, done) {
   })
 }
 
+verifyIdToken('ya29.gAI1K8r0qpWZpb5rENBe2gf8SIdodWyEVuc4Zcn2CzmKNlHj1pKS5HLkypumvl6CigFG', console.log)
+
 module.exports = {
   verifyIdToken: verifyIdToken
 };
