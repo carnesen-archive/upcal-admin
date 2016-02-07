@@ -2,7 +2,7 @@ app.factory('ccFactory', ['$http', '$uibModal',  function($http, $uibModal){
   var myService = {};
   // get table from database
   myService.getTable = function(){
-    console.log(hello( 'google' ).getAuthResponse());
+
     return $http({
       headers: {'Authorization': hello( 'google' ).getAuthResponse().access_token},
       url: '/api/events',

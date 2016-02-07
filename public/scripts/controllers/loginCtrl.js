@@ -13,7 +13,6 @@ app.controller('loginCtrl', ['$scope', '$http', '$location',
           {redirect_uri:'http://localhost:3000/'},
           {scope : "https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"}
         );
-
         login();
       });
     };

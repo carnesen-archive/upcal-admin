@@ -18,6 +18,7 @@ html(ng-app="unionPark")
     script(src='/scripts/factoriesServices/loginFactory.js')
     script(src='/scripts/controllers/ccTableCtrl.js')
     script(src='/scripts/controllers/loginCtrl.js')
+    script(src='/scripts/controllers/logoutCtrl.js')
     script(src='/scripts/controllers/layoutCtrl.js')
     script(src='/scripts/controllers/modalCtrl.js')
     script(src='https://apis.google.com/js/platform.js', async='', defer='')
@@ -27,5 +28,7 @@ html(ng-app="unionPark")
         .header.navbar
           img.logoheader(src='/img/up_whitetrans.png' alt='unionpark logo' style='width:200px;height:200px;')
           h1.title= 'Union Park Marketing Editorial Content Cues'
+          logout.navbar-right(ng-controller="logoutCtrl")
+            button.btn.btn-default(ng-click="logout()" ng-if="bool") Logout
       .row
         block content
