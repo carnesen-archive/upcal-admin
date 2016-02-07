@@ -35,6 +35,7 @@ var baseUrl = process.env.BASE_URL || 'http://localhost:' + port;
 
 module.exports = {
   name: name,
+  domain: 'upcal-admin.com',
   description: pkg.description,
   npmVersion: pkg.version,
   gitVersion: process.env.npm_package_gitHead,
