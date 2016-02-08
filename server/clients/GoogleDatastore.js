@@ -2,9 +2,11 @@
 
 // installed modules
 var gcloud = require('gcloud');
+var async = require('async');
 
 // local modules
 var C = require('../Constants');
+var log = require('../Logger');
 
 /*
  In Google Cloud Datastore, a "dataset" is like a "database" in an RDBMS.
@@ -66,18 +68,27 @@ function upsertEvent(event, done) {
 /**
  * For development only! Deletes all entities of kind KIND
  */
-function deleteAll() {
+function _deleteAll(callback) {
+  var callback = callback || function() {};
   var q = dataset.createQuery([KIND]);
+  log.error('Deleting all tags:');
   dataset.runQuery(q, function (err, entities) {
-    var keys = entities.map(function (entity) {
-      return entity.key
-    });
-    keys.forEach(function (key) {
-      dataset.delete(key, function () {});
-    });
+    if (err) {
+      callback(err);
+    } else {
+      var keys = entities.map(function (entity) {
+        return entity.key
+      });
+      async.each(keys, function(key, done) {
+        log.error(key.name);
+        dataset.delete(key, done);
+      }, callback);
+    }
   });
 }
+
 module.exports = {
+  _deleteAll: _deleteAll,
   upsertEvent: upsertEvent,
   listAllEvents: listAllEvents
 };
