@@ -19,11 +19,15 @@ function verifyAccessToken(accessToken, done) {
       done(err);
     } else {
       var email = json.email;
-      var domain = email.split('@')[1];
-      if (domain === C.domain) {
-        done();
+      if (email) {
+        var domain = email.split('@')[1];
+        if (domain === C.domain) {
+          done();
+        } else {
+          done(new Error('Bad Domain ' + domain))
+        }
       } else {
-        done(new Error('Bad Domain ' + domain))
+        done(new Error('No email present in token'));
       }
     }
   });
