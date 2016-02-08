@@ -24,23 +24,23 @@ var TOKEN_DIR = path.join(C.dataDir, 'credentials');
 var TOKEN_PATH = path.join(TOKEN_DIR, 'calendar.json');
 var PRIMARY_CALENDAR_SPEC = {
   id: 'primary',
-  tags: [ 'added' ]
+  tags: [ 'Added' ]
 };
 var CALENDAR_SPECS = [
   {
     name: 'National Health Observances',
     id: 'nt4onda377vop2r2ph07d8shig@group.calendar.google.com',
-    tags: [ 'health', 'observances' ]
+    tags: [ 'Health', 'Observances' ]
   },
   {
     name: 'US Holidays',
     id: 'en.usa#holiday@group.v.calendar.google.com',
-    tags: [ 'holidays' ]
+    tags: [ 'Holidays', 'Nationwide' ]
   },
   {
     name: 'Fashion Week',
     id: 'vvfgv249tf6u90hjc4e381g1a8@group.calendar.google.com',
-    tags: [ 'fashion', 'luxury' ]
+    tags: [ 'Fashion', 'Luxury' ]
   }
 ];
 
@@ -105,6 +105,11 @@ function authorize(callback) {
 }
 
 function toEvent(calendarSpec, event) {
+  var tags = [].concat.apply([], calendarSpec.tags);
+  if (event.location) {
+    tags.push(event.location);
+  }
+  console.log(tags);
   return {
     eventId: event.id,
     calendarId: calendarSpec.id,
@@ -114,7 +119,7 @@ function toEvent(calendarSpec, event) {
     location: event.location,
     startDate: event.start.date || event.start.dateTime,
     endDate: event.end.date || event.end.dateTime,
-    tags: calendarSpec.tags
+    tags: tags
   }
 }
 /**
@@ -230,7 +235,7 @@ function listAllEvents(callback) {
 }
 
 function _deleteAllEvents(callback) {
-  callback = callback || function() {};
+  callback = callback || function() {}
   log.error('Deleting all calendar items');
   authorize(function (err, client) {
     if (err) {
