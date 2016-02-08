@@ -24,7 +24,7 @@ var TOKEN_DIR = path.join(C.dataDir, 'credentials');
 var TOKEN_PATH = path.join(TOKEN_DIR, 'calendar.json');
 var PRIMARY_CALENDAR_SPEC = {
   id: 'primary',
-  tags: [ 'userCreated' ]
+  tags: [ 'added' ]
 };
 var CALENDAR_SPECS = [
   {
@@ -229,6 +229,33 @@ function listAllEvents(callback) {
   });
 }
 
+function _deleteAllEvents(callback) {
+  callback = callback || function() {};
+  log.error('Deleting all calendar items');
+  authorize(function (err, client) {
+    if (err) {
+      return callback(err);
+    }
+    CALENDAR_CLIENT.events.list({
+      auth: client,
+      calendarId: 'primary'
+    }, function (err, response) {
+      if (err) {
+        callback(err);
+      } else {
+        async.each(response.items, function(item, done) {
+          log.error(item.id);
+          CALENDAR_CLIENT.events.delete({
+            auth: client,
+            calendarId: 'primary',
+            eventId: item.id
+          }, done);
+        }, callback);
+      }
+    });
+  });
+}
+
 function addCalendar(calendarSpec, done) {
   authorize(function (err, client) {
     if (err) {
@@ -252,6 +279,7 @@ function addCalendars(done) {
 module.exports = {
   insertEvent: insertEvent,
   updateEvent: updateEvent,
+  _deleteAllEvents: _deleteAllEvents,
   listEvents: listEvents,
   listAllEvents: listAllEvents,
   addCalendars: addCalendars
