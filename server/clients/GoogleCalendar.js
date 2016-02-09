@@ -107,9 +107,13 @@ function authorize(callback) {
 function toEvent(calendarSpec, event) {
   var tags = [].concat.apply([], calendarSpec.tags);
   if (event.location) {
-    tags.push(event.location);
+    tags.push(event.location.split(',')[0].replace(' ', '_', 'g'));
   }
-  console.log(tags);
+  if (event.summary && event.summary.search(/[Hh]eart/) > -1) {
+    tags.push('Heart');
+    console.log('Heart')
+  }
+  //console.log(tags);
   return {
     eventId: event.id,
     calendarId: calendarSpec.id,
