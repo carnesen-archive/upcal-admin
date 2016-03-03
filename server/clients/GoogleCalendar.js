@@ -26,6 +26,25 @@ var PRIMARY_CALENDAR_SPEC = {
   id: 'primary',
   tags: [ 'Added' ]
 };
+
+/** ADD CALENDAR TO APPLICATION
+ *
+ * Follow the json format below.
+ * "name" is the Calendar Name
+ * "id" is the Google Calendar ID
+ * "tags" are any tags you want to automatically add to any events associated with calendar.
+ *
+ * To add new calendar's to a google calendar: https://support.google.com/calendar/answer/37100?hl=en
+ * To find a calendar's ID: https://support.appmachine.com/hc/en-us/articles/203645966-Find-your-Google-Calendar-ID-for-the-Events-block
+ *
+ * For example:
+ * {
+ *  name: 'Minnesota Twins',
+ *  id: 'ki6fjf5j1ocfavod017v6q43077gt2vu@import.calendar.google.com',
+ *  tags: ['baseball', 'sports']
+ * }
+ *
+ */
 var CALENDAR_SPECS = [
   {
     name: 'National Health Observances',
