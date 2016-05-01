@@ -24,6 +24,7 @@ var TOKEN_DIR = path.join(C.dataDir, 'credentials');
 var TOKEN_PATH = path.join(TOKEN_DIR, 'calendar.json');
 var PRIMARY_CALENDAR_SPEC = {
   id: 'primary',
+  name: 'Primary calendar for the upcal admin service user',
   tags: [ 'Added' ]
 };
 
@@ -45,23 +46,48 @@ var PRIMARY_CALENDAR_SPEC = {
  * }
  *
  */
-var CALENDAR_SPECS = [
+var calendarSpecs = [
   {
-    name: 'National Health Observances',
     id: 'nt4onda377vop2r2ph07d8shig@group.calendar.google.com',
     tags: [ 'Health', 'Observances' ]
   },
   {
-    name: 'US Holidays',
     id: 'en.usa#holiday@group.v.calendar.google.com',
     tags: [ 'Holidays', 'Nationwide' ]
   },
   {
-    name: 'Fashion Week',
     id: 'vvfgv249tf6u90hjc4e381g1a8@group.calendar.google.com',
     tags: [ 'Fashion', 'Luxury' ]
   }
 ];
+
+function fetchCalendarMetadata(done) {
+  authorize(function (err, client) {
+    if (err) {
+      return done(err);
+    }
+    var queryOpts = {
+      auth: client
+    };
+    CALENDAR_CLIENT.calendarList.list(queryOpts, function (err, ret) {
+      if (err) {
+        return done(err);
+      }
+      calendarSpecs.forEach(function(calendarSpec) {
+        var matchingCalendar = ret.items.find(function(item){
+          return item.id === calendarSpec.id;
+        }) || {};
+        calendarSpec.name = matchingCalendar.summary;
+      });
+    });
+  });
+}
+
+fetchCalendarMetadata(function (err) {
+  if (err) {
+    log.error('Problem fetching calendar metadata', err);
+  }
+});
 
 mkdirp.sync(TOKEN_DIR);
 
@@ -130,12 +156,11 @@ function toEvent(calendarSpec, event) {
   }
   if (event.summary && event.summary.search(/[Hh]eart/) > -1) {
     tags.push('Heart');
-    console.log('Heart')
   }
-  //console.log(tags);
   return {
     eventId: event.id,
     calendarId: calendarSpec.id,
+    calendarName: calendarSpec.name,
     htmlLink: event.htmlLink,
     summary: event.summary,
     description: event.description,
@@ -146,7 +171,7 @@ function toEvent(calendarSpec, event) {
   }
 }
 /**
- * Transforms the raw data coming from the Google Calendar API 
+ * Transforms the raw data coming from the Google Calendar API
  * @param calendarSpec
  * @param data
  * @returns {*}
@@ -246,7 +271,7 @@ function updateEvent(event, done) {
 
 // list all events in all calendars
 function listAllEvents(callback) {
-  var allCalendarSpecs = CALENDAR_SPECS.concat(PRIMARY_CALENDAR_SPEC);
+  var allCalendarSpecs = calendarSpecs.concat(PRIMARY_CALENDAR_SPEC);
   async.map(allCalendarSpecs, listEvents, function (err, ret) {
     if (err) {
       callback(err);
@@ -301,7 +326,7 @@ function addCalendar(calendarSpec, done) {
 
 function addCalendars(done) {
   done = done || function () {};
-  async.each(CALENDAR_SPECS, addCalendar, done)
+  async.each(calendarSpecs, addCalendar, done)
 }
 
 module.exports = {
